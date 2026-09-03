@@ -1,0 +1,141 @@
+name: Deploy
+
+# Стратегия окружений:
+#   push/merge в main   -> сборка образов -> деплой на STAGING
+#   push тега vX.Y.Z     -> сборка образов -> деплой на PRODUCTION
+# Секреты и (опционально) ручное подтверждение задаются через
+# GitHub Environments: Settings -> Environments (staging, production).
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Окружение для ручного деплоя"
+        type: choice
+        options: [staging, production]
+        default: staging
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # --------------------------------------------------------------------------
+  # 1. Определяем окружение и теги образов
+  # --------------------------------------------------------------------------
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      channel: ${{ steps.vars.outputs.channel }}
+      version: ${{ steps.vars.outputs.version }}
+      deploy_tag: ${{ steps.vars.outputs.deploy_tag }}
+    steps:
+      - id: vars
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            CH="${{ github.event.inputs.environment }}"
+            VER="manual-${GITHUB_SHA::7}"
+            DTAG="$CH"
+          elif [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            CH="production"
+            VER="${GITHUB_REF_NAME#v}"
+            DTAG="$VER"
+          else
+            CH="staging"
+            VER="sha-${GITHUB_SHA::7}"
+            DTAG="staging"
+          fi
+          echo "channel=$CH"        >> "$GITHUB_OUTPUT"
+          echo "version=$VER"       >> "$GITHUB_OUTPUT"
+          echo "deploy_tag=$DTAG"   >> "$GITHUB_OUTPUT"
+          echo "Окружение=$CH, version=$VER, deploy_tag=$DTAG"
+
+  # --------------------------------------------------------------------------
+  # 2. Сборка и публикация образов всех приложений в GHCR
+  # --------------------------------------------------------------------------
+  build:
+    needs: prepare
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [api, bot, admin, client]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & push ${{ matrix.app }}
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/${{ matrix.app }}/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/${{ matrix.app }}:${{ needs.prepare.outputs.channel }}
+            ghcr.io/${{ github.repository }}/${{ matrix.app }}:${{ needs.prepare.outputs.version }}
+          build-args: |
+            NUXT_PUBLIC_API_BASE_URL=${{ vars.NUXT_PUBLIC_API_BASE_URL }}
+            NUXT_PUBLIC_BOT_URL=${{ vars.NUXT_PUBLIC_BOT_URL }}
+          cache-from: type=gha,scope=${{ matrix.app }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.app }}
+
+  # --------------------------------------------------------------------------
+  # 3. Деплой на сервер по SSH (docker compose pull && up -d)
+  #    environment подтягивает секреты нужного окружения (и, при желании,
+  #    правило ручного подтверждения для production).
+  # --------------------------------------------------------------------------
+  deploy:
+    needs: [prepare, build]
+    runs-on: ubuntu-latest
+    environment: ${{ needs.prepare.outputs.channel }}
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy deploy compose to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DEPLOY_SSH_HOST }}
+          username: ${{ secrets.DEPLOY_SSH_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_SSH_PORT || 22 }}
+          source: docker-compose.deploy.yml
+          target: ${{ secrets.DEPLOY_PATH }}
+
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          IMAGE_PREFIX: ghcr.io/${{ github.repository }}
+          IMAGE_TAG: ${{ needs.prepare.outputs.deploy_tag }}
+          GHCR_USER: ${{ github.actor }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          host: ${{ secrets.DEPLOY_SSH_HOST }}
+          username: ${{ secrets.DEPLOY_SSH_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_SSH_PORT || 22 }}
+          envs: IMAGE_PREFIX,IMAGE_TAG,GHCR_USER,GHCR_TOKEN
+          script: |
+            set -e
+            cd "${{ secrets.DEPLOY_PATH }}"
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
+            export IMAGE_PREFIX IMAGE_TAG
+            docker compose -f docker-compose.deploy.yml pull
+            docker compose -f docker-compose.deploy.yml up -d --remove-orphans
+            docker image prune -f
+            docker logout ghcr.io

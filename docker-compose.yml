@@ -1,3 +1,5 @@
+# Локальная / серверная сборка из исходников (docker compose up -d --build).
+# Для деплоя готовых образов из GHCR см. docker-compose.deploy.yml.
 services:
   postgres:
     image: postgres:16-alpine
@@ -51,7 +53,18 @@ services:
     restart: unless-stopped
     env_file: .env
     ports:
-      - "3000:3000"
+      - "${ADMIN_PORT:-3000}:3000"
+    depends_on:
+      - api
+
+  client:
+    build:
+      context: .
+      dockerfile: apps/client/Dockerfile
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "${CLIENT_PORT:-3002}:3000"
     depends_on:
       - api
 
