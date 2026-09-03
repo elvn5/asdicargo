@@ -10,16 +10,17 @@
   },
   "dependencies": {
     "@app/theme": "workspace:*",
-    "@nuxt/ui": "^3.0.0",
-    "@pinia/nuxt": "^0.9.0",
+    "@nuxt/ui": "^4.0.0",
+    "@pinia/nuxt": "^0.11.0",
     "@vee-validate/zod": "^4.15.0",
-    "@vueuse/nuxt": "^12.4.0",
-    "pinia": "^2.3.0",
+    "@vueuse/nuxt": "^13.0.0",
+    "pinia": "^3.0.0",
+    "tailwindcss": "^4.0.0",
     "vee-validate": "^4.15.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "nuxt": "^3.16.0",
+    "nuxt": "^4.1.0",
     "typescript": "^5.7.2",
     "vue-tsc": "^2.2.0"
   }
