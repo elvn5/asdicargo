@@ -2,9 +2,9 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-01-01',
   devtools: { enabled: true },
   modules: ['@nuxt/ui', '@pinia/nuxt', '@vueuse/nuxt'],
-  css: [],
+  css: ['~/assets/css/main.css'],
   colorMode: {
-    preference: 'light',
+    preference: 'system', // по умолчанию следуем системе; переключатель ставит явное значение
     fallback: 'light',
   },
   runtimeConfig: {

@@ -73,12 +73,12 @@ onMounted(load);
   <div>
     <div class="mb-4 flex items-center justify-between">
       <h1 class="text-xl font-semibold">Адреса</h1>
-      <UButton @click="openCreate">Добавить</UButton>
+      <UButton icon="i-lucide-plus" @click="openCreate">Добавить</UButton>
     </div>
 
-    <div class="overflow-hidden rounded-lg border bg-white">
+    <div class="overflow-hidden rounded-lg border border-steel-200 bg-white dark:border-steel-800 dark:bg-steel-950">
       <table class="w-full text-left text-sm">
-        <thead class="bg-gray-50 text-gray-600">
+        <thead class="bg-steel-50 text-steel-600 dark:bg-steel-900 dark:text-steel-300">
           <tr>
             <th class="px-4 py-2">Название</th>
             <th class="px-4 py-2">Адрес</th>
@@ -87,45 +87,46 @@ onMounted(load);
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in items" :key="item.id" class="border-t">
+          <tr v-for="item in items" :key="item.id" class="border-t border-steel-200 dark:border-steel-800">
             <td class="px-4 py-2">{{ item.title }}</td>
-            <td class="px-4 py-2 text-gray-500">{{ item.fullAddress }}</td>
+            <td class="px-4 py-2 text-steel-500 dark:text-steel-400">{{ item.fullAddress }}</td>
             <td class="px-4 py-2">{{ item.isActive ? 'Да' : 'Нет' }}</td>
             <td class="px-4 py-2 text-right">
               <UButton size="xs" variant="ghost" @click="openEdit(item)">Изменить</UButton>
-              <UButton size="xs" variant="ghost" color="red" @click="remove(item)">Удалить</UButton>
+              <UButton size="xs" variant="ghost" color="error" @click="remove(item)">Удалить</UButton>
             </td>
           </tr>
           <tr v-if="!loading && items.length === 0">
-            <td colspan="4" class="px-4 py-6 text-center text-gray-400">Список пуст</td>
+            <td colspan="4" class="px-4 py-6 text-center text-steel-400 dark:text-steel-500">Список пуст</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <UModal v-model="isModalOpen">
-      <div class="p-4">
-        <h2 class="mb-4 text-lg font-semibold">{{ editingId ? 'Изменить адрес' : 'Новый адрес' }}</h2>
+    <UModal v-model:open="isModalOpen" :title="editingId ? 'Изменить адрес' : 'Новый адрес'">
+      <template #body>
         <div class="flex flex-col gap-3">
-          <UFormGroup label="Название">
-            <UInput v-model="form.title" />
-          </UFormGroup>
-          <UFormGroup label="Полный адрес">
-            <UTextarea v-model="form.fullAddress" />
-          </UFormGroup>
-          <UFormGroup label="Комментарий">
-            <UTextarea v-model="form.comment" />
-          </UFormGroup>
-          <UFormGroup label="Порядок сортировки">
-            <UInput v-model.number="form.sortOrder" type="number" />
-          </UFormGroup>
+          <UFormField label="Название">
+            <UInput v-model="form.title" class="w-full" />
+          </UFormField>
+          <UFormField label="Полный адрес">
+            <UTextarea v-model="form.fullAddress" class="w-full" />
+          </UFormField>
+          <UFormField label="Комментарий">
+            <UTextarea v-model="form.comment" class="w-full" />
+          </UFormField>
+          <UFormField label="Порядок сортировки">
+            <UInput v-model.number="form.sortOrder" type="number" class="w-full" />
+          </UFormField>
           <UCheckbox v-model="form.isActive" label="Активен (виден в боте)" />
         </div>
-        <div class="mt-4 flex justify-end gap-2">
-          <UButton variant="ghost" @click="isModalOpen = false">Отмена</UButton>
+      </template>
+      <template #footer>
+        <div class="flex w-full justify-end gap-2">
+          <UButton variant="ghost" color="neutral" @click="isModalOpen = false">Отмена</UButton>
           <UButton @click="save">Сохранить</UButton>
         </div>
-      </div>
+      </template>
     </UModal>
   </div>
 </template>

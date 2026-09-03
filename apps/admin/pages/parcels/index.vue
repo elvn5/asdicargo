@@ -22,8 +22,7 @@ const form = reactive({
 
 const userOptions = computed(() =>
   users.value.map((user: AppUser) => ({
-    label:
-      `${user.firstName ?? ''} ${user.username ? `@${user.username}` : user.telegramId}`.trim(),
+    label: `${user.firstName ?? ''} ${user.username ? `@${user.username}` : user.telegramId}`.trim(),
     value: user.id,
   })),
 );
@@ -111,12 +110,12 @@ onMounted(load);
   <div>
     <div class="mb-4 flex items-center justify-between">
       <h1 class="text-xl font-semibold">Посылки</h1>
-      <UButton :disabled="users.length === 0" @click="openCreate">Добавить</UButton>
+      <UButton :disabled="users.length === 0" icon="i-lucide-plus" @click="openCreate">Добавить</UButton>
     </div>
 
-    <div class="overflow-hidden rounded-lg border bg-white">
+    <div class="overflow-hidden rounded-lg border border-steel-200 bg-white dark:border-steel-800 dark:bg-steel-950">
       <table class="w-full text-left text-sm">
-        <thead class="bg-gray-50 text-gray-600">
+        <thead class="bg-steel-50 text-steel-600 dark:bg-steel-900 dark:text-steel-300">
           <tr>
             <th class="px-4 py-2">Трек-номер</th>
             <th class="px-4 py-2">Пользователь</th>
@@ -125,61 +124,57 @@ onMounted(load);
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in items" :key="item.id" class="border-t">
+          <tr v-for="item in items" :key="item.id" class="border-t border-steel-200 dark:border-steel-800">
             <td class="px-4 py-2">{{ item.trackNumber }}</td>
             <td class="px-4 py-2">{{ userLabel(item.userId) }}</td>
             <td class="px-4 py-2">{{ statusLabel(item.status) }}</td>
             <td class="px-4 py-2 text-right">
               <UButton size="xs" variant="ghost" @click="openEdit(item)">Изменить</UButton>
-              <UButton size="xs" variant="ghost" color="red" @click="remove(item)">Удалить</UButton>
+              <UButton size="xs" variant="ghost" color="error" @click="remove(item)">Удалить</UButton>
             </td>
           </tr>
           <tr v-if="!loading && items.length === 0">
-            <td colspan="4" class="px-4 py-6 text-center text-gray-400">Посылок нет</td>
+            <td colspan="4" class="px-4 py-6 text-center text-steel-400 dark:text-steel-500">Посылок нет</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <UModal v-model="isModalOpen">
-      <div class="p-4">
-        <h2 class="mb-4 text-lg font-semibold">{{ editingId ? 'Изменить посылку' : 'Новая посылка' }}</h2>
+    <UModal v-model:open="isModalOpen" :title="editingId ? 'Изменить посылку' : 'Новая посылка'">
+      <template #body>
         <div class="flex flex-col gap-3">
-          <UFormGroup label="Пользователь">
+          <UFormField label="Пользователь">
             <USelectMenu
               v-model="form.userId"
-              :options="userOptions"
-              value-attribute="value"
-              option-attribute="label"
+              :items="userOptions"
+              value-key="value"
               :disabled="Boolean(editingId)"
+              class="w-full"
             />
-          </UFormGroup>
-          <UFormGroup label="Трек-номер">
-            <UInput v-model="form.trackNumber" />
-          </UFormGroup>
-          <UFormGroup label="Описание">
-            <UTextarea v-model="form.description" />
-          </UFormGroup>
-          <UFormGroup label="Статус">
-            <USelectMenu
-              v-model="form.status"
-              :options="PARCEL_STATUS_OPTIONS"
-              value-attribute="value"
-              option-attribute="label"
-            />
-          </UFormGroup>
-          <UFormGroup label="Вес, кг">
-            <UInput v-model="form.weightKg" />
-          </UFormGroup>
-          <UFormGroup label="Комментарий">
-            <UTextarea v-model="form.comment" />
-          </UFormGroup>
+          </UFormField>
+          <UFormField label="Трек-номер">
+            <UInput v-model="form.trackNumber" class="w-full" />
+          </UFormField>
+          <UFormField label="Описание">
+            <UTextarea v-model="form.description" class="w-full" />
+          </UFormField>
+          <UFormField label="Статус">
+            <USelectMenu v-model="form.status" :items="PARCEL_STATUS_OPTIONS" value-key="value" class="w-full" />
+          </UFormField>
+          <UFormField label="Вес, кг">
+            <UInput v-model="form.weightKg" class="w-full" />
+          </UFormField>
+          <UFormField label="Комментарий">
+            <UTextarea v-model="form.comment" class="w-full" />
+          </UFormField>
         </div>
-        <div class="mt-4 flex justify-end gap-2">
-          <UButton variant="ghost" @click="isModalOpen = false">Отмена</UButton>
+      </template>
+      <template #footer>
+        <div class="flex w-full justify-end gap-2">
+          <UButton variant="ghost" color="neutral" @click="isModalOpen = false">Отмена</UButton>
           <UButton @click="save">Сохранить</UButton>
         </div>
-      </div>
+      </template>
     </UModal>
   </div>
 </template>

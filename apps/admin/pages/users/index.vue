@@ -24,9 +24,9 @@ onMounted(load);
   <div>
     <h1 class="mb-4 text-xl font-semibold">Пользователи</h1>
 
-    <div class="overflow-hidden rounded-lg border bg-white">
+    <div class="overflow-hidden rounded-lg border border-steel-200 bg-white dark:border-steel-800 dark:bg-steel-950">
       <table class="w-full text-left text-sm">
-        <thead class="bg-gray-50 text-gray-600">
+        <thead class="bg-steel-50 text-steel-600 dark:bg-steel-900 dark:text-steel-300">
           <tr>
             <th class="px-4 py-2">Имя</th>
             <th class="px-4 py-2">Username</th>
@@ -36,7 +36,7 @@ onMounted(load);
           </tr>
         </thead>
         <tbody>
-          <tr v-for="user in users" :key="user.id" class="border-t">
+          <tr v-for="user in users" :key="user.id" class="border-t border-steel-200 dark:border-steel-800">
             <td class="px-4 py-2">{{ [user.firstName, user.lastName].filter(Boolean).join(' ') || '—' }}</td>
             <td class="px-4 py-2">{{ user.username ? `@${user.username}` : '—' }}</td>
             <td class="px-4 py-2">{{ user.telegramId }}</td>
@@ -44,7 +44,7 @@ onMounted(load);
             <td class="px-4 py-2">{{ new Date(user.createdAt).toLocaleDateString('ru-RU') }}</td>
           </tr>
           <tr v-if="!loading && users.length === 0">
-            <td colspan="5" class="px-4 py-6 text-center text-gray-400">Пользователей нет</td>
+            <td colspan="5" class="px-4 py-6 text-center text-steel-400 dark:text-steel-500">Пользователей нет</td>
           </tr>
         </tbody>
       </table>

@@ -48,26 +48,26 @@ onMounted(load);
   <div class="max-w-xl">
     <h1 class="mb-4 text-xl font-semibold">Поддержка</h1>
 
-    <div class="flex flex-col gap-3 rounded-lg border bg-white p-4">
-      <UFormGroup label="Сообщение (показывается в боте)">
-        <UTextarea v-model="form.message" :rows="4" />
-      </UFormGroup>
-      <UFormGroup label="Телефон">
-        <UInput v-model="form.phone" />
-      </UFormGroup>
-      <UFormGroup label="Telegram-контакт">
-        <UInput v-model="form.telegramContact" placeholder="@username" />
-      </UFormGroup>
-      <UFormGroup label="Email">
-        <UInput v-model="form.email" />
-      </UFormGroup>
-      <UFormGroup label="Часы работы">
-        <UInput v-model="form.workingHours" />
-      </UFormGroup>
+    <div class="flex flex-col gap-3 rounded-lg border border-steel-200 bg-white p-4 dark:border-steel-800 dark:bg-steel-950">
+      <UFormField label="Сообщение (показывается в боте)">
+        <UTextarea v-model="form.message" :rows="4" class="w-full" />
+      </UFormField>
+      <UFormField label="Телефон">
+        <UInput v-model="form.phone" class="w-full" />
+      </UFormField>
+      <UFormField label="Telegram-контакт">
+        <UInput v-model="form.telegramContact" placeholder="@username" class="w-full" />
+      </UFormField>
+      <UFormField label="Email">
+        <UInput v-model="form.email" class="w-full" />
+      </UFormField>
+      <UFormField label="Часы работы">
+        <UInput v-model="form.workingHours" class="w-full" />
+      </UFormField>
 
       <div class="mt-2 flex items-center gap-2">
         <UButton :loading="saving" @click="save">Сохранить</UButton>
-        <span v-if="saved" class="text-sm text-green-600">Сохранено</span>
+        <span v-if="saved" class="text-sm text-primary-600 dark:text-primary-400">Сохранено</span>
       </div>
     </div>
   </div>
