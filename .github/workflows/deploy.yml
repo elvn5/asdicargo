@@ -125,7 +125,6 @@ jobs:
           : "${ADMIN_PASSWORD:?ADMIN_PASSWORD secret is missing}"
           : "${BOT_TOKEN:?BOT_TOKEN secret is missing}"
           : "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD secret is missing}"
-          umask 077
           {
             printf 'POSTGRES_USER=%s\n'            "${POSTGRES_USER:-parcel_bot}"
             printf 'POSTGRES_PASSWORD=%s\n'        "$POSTGRES_PASSWORD"
@@ -138,6 +137,7 @@ jobs:
             printf 'NUXT_PUBLIC_API_BASE_URL=%s\n' "$NUXT_PUBLIC_API_BASE_URL"
             printf 'NUXT_PUBLIC_BOT_URL=%s\n'      "$NUXT_PUBLIC_BOT_URL"
           } > .env
+          chmod 644 .env   # scp-action Docker-контейнер должен прочитать файл
 
       - name: Copy compose + release script to server
         uses: appleboy/scp-action@v0.1.7

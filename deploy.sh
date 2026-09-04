@@ -6,6 +6,7 @@
 # Для приватных образов GHCR: GHCR_USER, GHCR_TOKEN.
 set -euo pipefail
 cd "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+[ -f .env ] && chmod 600 .env || true   # секьюрим env на сервере
 
 IMAGE_PREFIX="ghcr.io/elvn5/asdicargo"
 COMPOSE_FILE="docker-compose.deploy.yml"
