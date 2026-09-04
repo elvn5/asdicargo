@@ -6,7 +6,8 @@
     "blog": "Blog"
   },
   "header": {
-    "openBot": "Open bot"
+    "openBot": "Open bot",
+    "menu": "Menu"
   },
   "footer": {
     "tagline": "Cargo and parcel delivery"

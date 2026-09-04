@@ -12,6 +12,16 @@ const links = computed(() => [
 
 const config = useRuntimeConfig();
 const botUrl = config.public.botUrl as string;
+
+// Мобильное меню
+const mobileOpen = ref(false);
+const route = useRoute();
+watch(
+  () => route.fullPath,
+  () => {
+    mobileOpen.value = false;
+  },
+);
 </script>
 
 <template>
@@ -44,8 +54,57 @@ const botUrl = config.public.botUrl as string;
           <UButton :to="botUrl" target="_blank" icon="i-lucide-send" color="primary">
             <span class="hidden sm:inline">{{ t('header.openBot') }}</span>
           </UButton>
+          <UButton
+            class="md:hidden"
+            color="neutral"
+            variant="ghost"
+            :icon="mobileOpen ? 'i-lucide-x' : 'i-lucide-menu'"
+            :aria-label="t('header.menu')"
+            :aria-expanded="mobileOpen"
+            @click="mobileOpen = !mobileOpen"
+          />
         </div>
       </div>
+
+      <Transition
+        enter-active-class="transition duration-200 ease-out"
+        enter-from-class="-translate-y-2 opacity-0"
+        enter-to-class="translate-y-0 opacity-100"
+        leave-active-class="transition duration-150 ease-in"
+        leave-from-class="translate-y-0 opacity-100"
+        leave-to-class="-translate-y-2 opacity-0"
+      >
+        <nav
+          v-if="mobileOpen"
+          class="border-t border-steel-200/70 bg-white/95 backdrop-blur dark:border-steel-800/70 dark:bg-steel-950/95 md:hidden"
+        >
+          <div class="mx-auto flex w-full max-w-6xl flex-col gap-1 px-4 py-3">
+            <UButton
+              v-for="link in links"
+              :key="link.to"
+              :to="link.to"
+              color="neutral"
+              variant="ghost"
+              size="lg"
+              block
+              @click="mobileOpen = false"
+            >
+              {{ link.label }}
+            </UButton>
+            <UButton
+              :to="botUrl"
+              target="_blank"
+              icon="i-lucide-send"
+              color="primary"
+              size="lg"
+              block
+              class="mt-1"
+            >
+              {{ t('header.openBot') }}
+            </UButton>
+          </div>
+        </nav>
+      </Transition>
     </header>
 
     <main class="flex-1">
