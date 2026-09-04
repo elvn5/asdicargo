@@ -63,3 +63,31 @@ export interface Parcel {
   comment: string | null;
   createdAt: string;
 }
+
+export type PostLanguage = 'ru' | 'ky' | 'en';
+export type PostStatus = 'draft' | 'published';
+
+export interface Post {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  content: string;
+  coverImageUrl: string | null;
+  language: PostLanguage;
+  status: PostStatus;
+  publishedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export const POST_LANGUAGE_OPTIONS: { value: PostLanguage; label: string }[] = [
+  { value: 'ru', label: 'Русский' },
+  { value: 'ky', label: 'Кыргызча' },
+  { value: 'en', label: 'English' },
+];
+
+export const POST_STATUS_OPTIONS: { value: PostStatus; label: string }[] = [
+  { value: 'draft', label: 'Черновик' },
+  { value: 'published', label: 'Опубликован' },
+];

@@ -3,6 +3,7 @@ import { AuthModule } from '@/auth/auth.module';
 import { BannedItemsModule } from '@/banned-items/banned-items.module';
 import { validateEnv } from '@/config/env.schema';
 import { ParcelsModule } from '@/parcels/parcels.module';
+import { PostsModule } from '@/posts/posts.module';
 import { SupportModule } from '@/support/support.module';
 import { UsersModule } from '@/users/users.module';
 import { entities } from '@app/database';
@@ -39,6 +40,7 @@ import { LoggerModule } from 'nestjs-pino';
     AddressesModule,
     SupportModule,
     ParcelsModule,
+    PostsModule,
     UsersModule,
   ],
 })

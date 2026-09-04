@@ -4,12 +4,13 @@ import { DataSource, type DataSourceOptions } from 'typeorm';
 import { Address } from './entities/address.entity';
 import { BannedItem } from './entities/banned-item.entity';
 import { Parcel } from './entities/parcel.entity';
+import { Post } from './entities/post.entity';
 import { SupportInfo } from './entities/support-info.entity';
 import { User } from './entities/user.entity';
 
 config();
 
-export const entities = [User, Parcel, Address, BannedItem, SupportInfo];
+export const entities = [User, Parcel, Address, BannedItem, SupportInfo, Post];
 
 export function buildDataSourceOptions(): DataSourceOptions {
   return {

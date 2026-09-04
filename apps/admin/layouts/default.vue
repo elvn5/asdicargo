@@ -10,6 +10,7 @@ const links = [
   { label: 'Поддержка', to: '/support' },
   { label: 'Посылки', to: '/parcels' },
   { label: 'Пользователи', to: '/users' },
+  { label: 'Блог', to: '/blog' },
 ];
 
 async function handleLogout(): Promise<void> {
@@ -29,7 +30,7 @@ async function handleLogout(): Promise<void> {
       <div class="mb-6 flex items-center justify-between gap-2">
         <h1 class="flex items-center gap-2 text-lg font-semibold">
           <span class="inline-block h-5 w-1.5 rounded-full bg-brand-500" aria-hidden="true" />
-          <span>Ас<span class="text-brand-600 dark:text-brand-400">Di</span> Cargo</span>
+          <span>As<span class="text-brand-600 dark:text-brand-400">Di</span> Cargo</span>
         </h1>
         <ThemeToggle />
       </div>
