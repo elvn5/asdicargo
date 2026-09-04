@@ -113,7 +113,8 @@ jobs:
           host: ${{ secrets.DEPLOY_SSH_HOST }}
           username: ${{ secrets.DEPLOY_SSH_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          port: 8379
+          passphrase: ${{ secrets.DEPLOY_SSH_PASSPHRASE }}
+          port: ${{ secrets.DEPLOY_SSH_PORT || 22 }}
           source: "docker-compose.deploy.yml,deploy.sh"
           target: /opt/asdicargo
 
@@ -127,7 +128,8 @@ jobs:
           host: ${{ secrets.DEPLOY_SSH_HOST }}
           username: ${{ secrets.DEPLOY_SSH_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          port: 8379
+          passphrase: ${{ secrets.DEPLOY_SSH_PASSPHRASE }}
+          port: ${{ secrets.DEPLOY_SSH_PORT || 22 }}
           envs: IMAGE_TAG,GHCR_USER,GHCR_TOKEN
           script: |
             set -e
