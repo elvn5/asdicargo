@@ -30,7 +30,7 @@ services:
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
     ports:
-      - "${API_PORT:-3001}:3001"
+      - "127.0.0.1:${API_PORT:-3001}:3001"
     depends_on:
       postgres:
         condition: service_healthy
@@ -51,7 +51,7 @@ services:
     restart: unless-stopped
     env_file: .env
     ports:
-      - "${ADMIN_PORT:-3000}:3000"
+      - "127.0.0.1:${ADMIN_PORT:-3000}:3000"
     depends_on:
       - api
 
@@ -63,7 +63,7 @@ services:
       # SSR внутри сети Docker обращается к api по имени сервиса.
       NUXT_API_INTERNAL_URL: "http://api:3001"
     ports:
-      - "${CLIENT_PORT:-3002}:3000"
+      - "127.0.0.1:${CLIENT_PORT:-3002}:3000"
     depends_on:
       - api
 
