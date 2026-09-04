@@ -10,8 +10,12 @@ async function bootstrap(): Promise<void> {
 
   app.useLogger(app.get(Logger));
   app.use(cookieParser());
+  const corsOrigins = (process.env.CORS_ORIGINS ?? process.env.ADMIN_ORIGIN ?? 'http://localhost:3000')
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
   app.enableCors({
-    origin: process.env.ADMIN_ORIGIN ?? 'http://localhost:3000',
+    origin: corsOrigins,
     credentials: true,
   });
 

@@ -107,20 +107,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Copy deploy compose to server
+      - name: Copy compose + release script to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.DEPLOY_SSH_HOST }}
           username: ${{ secrets.DEPLOY_SSH_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          port: ${{ secrets.DEPLOY_SSH_PORT || 22 }}
-          source: docker-compose.deploy.yml
-          target: ${{ secrets.DEPLOY_PATH }}
+          port: 8379
+          source: "docker-compose.deploy.yml,deploy.sh"
+          target: /opt/asdicargo
 
       - name: Deploy over SSH
         uses: appleboy/ssh-action@v1.2.0
         env:
-          IMAGE_PREFIX: ghcr.io/${{ github.repository }}
           IMAGE_TAG: ${{ needs.prepare.outputs.deploy_tag }}
           GHCR_USER: ${{ github.actor }}
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -128,14 +127,10 @@ jobs:
           host: ${{ secrets.DEPLOY_SSH_HOST }}
           username: ${{ secrets.DEPLOY_SSH_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          port: ${{ secrets.DEPLOY_SSH_PORT || 22 }}
-          envs: IMAGE_PREFIX,IMAGE_TAG,GHCR_USER,GHCR_TOKEN
+          port: 8379
+          envs: IMAGE_TAG,GHCR_USER,GHCR_TOKEN
           script: |
             set -e
-            cd "${{ secrets.DEPLOY_PATH }}"
-            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
-            export IMAGE_PREFIX IMAGE_TAG
-            docker compose -f docker-compose.deploy.yml pull
-            docker compose -f docker-compose.deploy.yml up -d --remove-orphans
-            docker image prune -f
-            docker logout ghcr.io
+            cd /opt/asdicargo
+            chmod +x deploy.sh
+            ./deploy.sh

@@ -59,6 +59,9 @@ services:
     image: ${IMAGE_PREFIX:-ghcr.io/elvn5/asdicargo}/client:${IMAGE_TAG:-staging}
     restart: unless-stopped
     env_file: .env
+    environment:
+      # SSR внутри сети Docker обращается к api по имени сервиса.
+      NUXT_API_INTERNAL_URL: "http://api:3001"
     ports:
       - "${CLIENT_PORT:-3002}:3000"
     depends_on:

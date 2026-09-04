@@ -18,6 +18,23 @@ services:
       timeout: 5s
       retries: 10
 
+  # Разовое применение миграций до старта приложений (schema synchronize:false).
+  # Использует образ api: в нём есть typeorm, pg и скомпилированные миграции.
+  migrate:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    env_file: .env
+    working_dir: /repo
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+    command: ["node", "apps/api/node_modules/typeorm/cli.js", "migration:run", "-d", "packages/database/dist/data-source.js"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
   api:
     build:
       context: .
@@ -27,11 +44,14 @@ services:
     environment:
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
+      CORS_ORIGINS: "http://localhost:3000,http://localhost:3002"
     ports:
       - "${API_PORT:-3001}:3001"
     depends_on:
       postgres:
         condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
 
   bot:
     build:
@@ -45,6 +65,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
 
   admin:
     build:
@@ -63,6 +85,10 @@ services:
       dockerfile: apps/client/Dockerfile
     restart: unless-stopped
     env_file: .env
+    environment:
+      # SSR внутри контейнера ходит к api по имени сервиса; браузер — на localhost.
+      NUXT_API_INTERNAL_URL: "http://api:3001"
+      NUXT_PUBLIC_API_BASE_URL: "http://localhost:3001"
     ports:
       - "${CLIENT_PORT:-3002}:3000"
     depends_on:
