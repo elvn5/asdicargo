@@ -21,10 +21,18 @@ const { data: posts } = await useFetch<PostListItem[]>(
 );
 
 const dtLocale = computed(
-  () => (({ ru: 'ru-RU', ky: 'ky-KG', en: 'en-US' }) as Record<string, string>)[locale.value] ?? 'ru-RU',
+  () =>
+    (({ ru: 'ru-RU', ky: 'ky-KG', en: 'en-US' }) as Record<string, string>)[locale.value] ??
+    'ru-RU',
 );
 function fmt(d: string | null): string {
-  return d ? new Date(d).toLocaleDateString(dtLocale.value, { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+  return d
+    ? new Date(d).toLocaleDateString(dtLocale.value, {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      })
+    : '';
 }
 
 useHead({

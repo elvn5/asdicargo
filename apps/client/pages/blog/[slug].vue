@@ -27,7 +27,9 @@ if (!post.value) {
 }
 
 const dtLocale = computed(
-  () => (({ ru: 'ru-RU', ky: 'ky-KG', en: 'en-US' }) as Record<string, string>)[locale.value] ?? 'ru-RU',
+  () =>
+    (({ ru: 'ru-RU', ky: 'ky-KG', en: 'en-US' }) as Record<string, string>)[locale.value] ??
+    'ru-RU',
 );
 const formattedDate = computed(() =>
   post.value?.publishedAt

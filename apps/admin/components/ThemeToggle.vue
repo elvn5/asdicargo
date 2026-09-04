@@ -16,8 +16,7 @@ async function toggle(event: MouseEvent): Promise<void> {
   const next: 'light' | 'dark' = isDark.value ? 'light' : 'dark';
 
   const prefersReducedMotion =
-    typeof window !== 'undefined' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // @ts-expect-error — startViewTransition ещё не во всех типах lib.dom
   if (typeof document === 'undefined' || !document.startViewTransition || prefersReducedMotion) {
@@ -27,7 +26,10 @@ async function toggle(event: MouseEvent): Promise<void> {
 
   const x = event.clientX;
   const y = event.clientY;
-  const endRadius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+  const endRadius = Math.hypot(
+    Math.max(x, window.innerWidth - x),
+    Math.max(y, window.innerHeight - y),
+  );
 
   // @ts-expect-error — startViewTransition ещё не во всех типах lib.dom
   const transition = document.startViewTransition(() => applyTheme(next));

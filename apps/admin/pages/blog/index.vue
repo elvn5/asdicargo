@@ -13,7 +13,11 @@ const statusLabel = (v: string) => POST_STATUS_OPTIONS.find((o) => o.value === v
 
 function formatDate(v: string | null): string {
   if (!v) return '—';
-  return new Date(v).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  return new Date(v).toLocaleDateString('ru-RU', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
 }
 
 async function load(): Promise<void> {

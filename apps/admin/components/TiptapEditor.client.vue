@@ -60,19 +60,64 @@ const groups = computed<Btn[][]>(() => {
   const e = editor.value;
   return [
     [
-      { icon: 'i-lucide-bold', title: 'Жирный', run: () => e?.chain().focus().toggleBold().run(), active: () => !!e?.isActive('bold') },
-      { icon: 'i-lucide-italic', title: 'Курсив', run: () => e?.chain().focus().toggleItalic().run(), active: () => !!e?.isActive('italic') },
-      { icon: 'i-lucide-strikethrough', title: 'Зачёркнутый', run: () => e?.chain().focus().toggleStrike().run(), active: () => !!e?.isActive('strike') },
+      {
+        icon: 'i-lucide-bold',
+        title: 'Жирный',
+        run: () => e?.chain().focus().toggleBold().run(),
+        active: () => !!e?.isActive('bold'),
+      },
+      {
+        icon: 'i-lucide-italic',
+        title: 'Курсив',
+        run: () => e?.chain().focus().toggleItalic().run(),
+        active: () => !!e?.isActive('italic'),
+      },
+      {
+        icon: 'i-lucide-strikethrough',
+        title: 'Зачёркнутый',
+        run: () => e?.chain().focus().toggleStrike().run(),
+        active: () => !!e?.isActive('strike'),
+      },
     ],
     [
-      { icon: 'i-lucide-heading-2', title: 'Заголовок H2', run: () => e?.chain().focus().toggleHeading({ level: 2 }).run(), active: () => !!e?.isActive('heading', { level: 2 }) },
-      { icon: 'i-lucide-heading-3', title: 'Заголовок H3', run: () => e?.chain().focus().toggleHeading({ level: 3 }).run(), active: () => !!e?.isActive('heading', { level: 3 }) },
+      {
+        icon: 'i-lucide-heading-2',
+        title: 'Заголовок H2',
+        run: () => e?.chain().focus().toggleHeading({ level: 2 }).run(),
+        active: () => !!e?.isActive('heading', { level: 2 }),
+      },
+      {
+        icon: 'i-lucide-heading-3',
+        title: 'Заголовок H3',
+        run: () => e?.chain().focus().toggleHeading({ level: 3 }).run(),
+        active: () => !!e?.isActive('heading', { level: 3 }),
+      },
     ],
     [
-      { icon: 'i-lucide-list', title: 'Маркированный список', run: () => e?.chain().focus().toggleBulletList().run(), active: () => !!e?.isActive('bulletList') },
-      { icon: 'i-lucide-list-ordered', title: 'Нумерованный список', run: () => e?.chain().focus().toggleOrderedList().run(), active: () => !!e?.isActive('orderedList') },
-      { icon: 'i-lucide-quote', title: 'Цитата', run: () => e?.chain().focus().toggleBlockquote().run(), active: () => !!e?.isActive('blockquote') },
-      { icon: 'i-lucide-code', title: 'Блок кода', run: () => e?.chain().focus().toggleCodeBlock().run(), active: () => !!e?.isActive('codeBlock') },
+      {
+        icon: 'i-lucide-list',
+        title: 'Маркированный список',
+        run: () => e?.chain().focus().toggleBulletList().run(),
+        active: () => !!e?.isActive('bulletList'),
+      },
+      {
+        icon: 'i-lucide-list-ordered',
+        title: 'Нумерованный список',
+        run: () => e?.chain().focus().toggleOrderedList().run(),
+        active: () => !!e?.isActive('orderedList'),
+      },
+      {
+        icon: 'i-lucide-quote',
+        title: 'Цитата',
+        run: () => e?.chain().focus().toggleBlockquote().run(),
+        active: () => !!e?.isActive('blockquote'),
+      },
+      {
+        icon: 'i-lucide-code',
+        title: 'Блок кода',
+        run: () => e?.chain().focus().toggleCodeBlock().run(),
+        active: () => !!e?.isActive('codeBlock'),
+      },
     ],
     [
       { icon: 'i-lucide-link', title: 'Ссылка', run: setLink, active: () => !!e?.isActive('link') },

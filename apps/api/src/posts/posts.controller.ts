@@ -1,16 +1,6 @@
 import { JwtAuthGuard } from '@/auth/jwt-auth.guard';
 import { ZodValidationPipe } from '@/common/zod-validation.pipe';
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  Query,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import {
   type CreatePostDto,
   type UpdatePostDto,

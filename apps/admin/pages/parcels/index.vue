@@ -22,7 +22,8 @@ const form = reactive({
 
 const userOptions = computed(() =>
   users.value.map((user: AppUser) => ({
-    label: `${user.firstName ?? ''} ${user.username ? `@${user.username}` : user.telegramId}`.trim(),
+    label:
+      `${user.firstName ?? ''} ${user.username ? `@${user.username}` : user.telegramId}`.trim(),
     value: user.id,
   })),
 );
