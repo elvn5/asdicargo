@@ -35,10 +35,16 @@ function fmt(d: string | null): string {
     : '';
 }
 
-useHead({
+useSeoMeta({
   title: () => `${t('blog.title')} — AsDi Cargo`,
-  meta: [{ name: 'description', content: () => t('blog.subtitle') }],
+  description: () => t('blog.subtitle'),
+  ogTitle: () => `${t('blog.title')} — AsDi Cargo`,
+  ogDescription: () => t('blog.subtitle'),
 });
+
+// hreflang для всех локалей списка блога
+const seoAlternates = useSeoAlternates();
+useHead(() => ({ link: seoAlternates.value }));
 </script>
 
 <template>

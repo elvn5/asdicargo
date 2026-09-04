@@ -10,6 +10,8 @@ export default defineNuxtConfig({
   i18n: {
     strategy: 'prefix_except_default',
     defaultLocale: 'ru',
+    // Абсолютный базовый URL сайта — нужен для canonical/hreflang/sitemap.
+    baseUrl: process.env.NUXT_PUBLIC_SITE_URL ?? 'https://asdicargo.com',
     locales: [
       { code: 'ru', language: 'ru-RU', name: 'Русский', file: 'ru.json' },
       { code: 'ky', language: 'ky-KG', name: 'Кыргызча', file: 'ky.json' },
@@ -28,6 +30,8 @@ export default defineNuxtConfig({
     public: {
       apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL ?? 'http://localhost:3001',
       botUrl: process.env.NUXT_PUBLIC_BOT_URL ?? 'https://t.me/asdicargo_bot',
+      // Канонический адрес сайта (для SEO-тегов и sitemap).
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL ?? 'https://asdicargo.com',
     },
   },
   typescript: {

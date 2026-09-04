@@ -49,6 +49,27 @@ useSeoMeta({
   ogType: 'article',
   ogImage: () => post.value?.coverImageUrl ?? '',
 });
+
+const siteUrl = String(config.public.siteUrl ?? 'https://asdicargo.com').replace(/\/$/, '');
+const articleLd = computed(() =>
+  post.value
+    ? JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: post.value.title,
+        description: post.value.excerpt ?? undefined,
+        image: post.value.coverImageUrl ?? undefined,
+        datePublished: post.value.publishedAt ?? undefined,
+        inLanguage: post.value.language,
+        mainEntityOfPage: siteUrl + route.path,
+        author: { '@type': 'Organization', name: 'AsDi Cargo' },
+        publisher: { '@type': 'Organization', name: 'AsDi Cargo', url: siteUrl },
+      })
+    : '',
+);
+useHead(() => ({
+  script: articleLd.value ? [{ type: 'application/ld+json', innerHTML: articleLd.value }] : [],
+}));
 </script>
 
 <template>

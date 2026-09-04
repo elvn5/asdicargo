@@ -1,10 +1,16 @@
 <script setup lang="ts">
 const { t } = useI18n();
 
-useHead({
+useSeoMeta({
   title: () => t('meta.title'),
-  meta: [{ name: 'description', content: () => t('meta.description') }],
+  description: () => t('meta.description'),
+  ogTitle: () => t('meta.title'),
+  ogDescription: () => t('meta.description'),
 });
+
+// hreflang для всех локалей главной
+const seoAlternates = useSeoAlternates();
+useHead(() => ({ link: seoAlternates.value }));
 
 const config = useRuntimeConfig();
 const botUrl = config.public.botUrl as string;
