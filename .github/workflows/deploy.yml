@@ -107,6 +107,38 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Generate .env from GitHub secrets
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CORS_ORIGINS: ${{ secrets.CORS_ORIGINS }}
+          NUXT_PUBLIC_API_BASE_URL: ${{ vars.NUXT_PUBLIC_API_BASE_URL }}
+          NUXT_PUBLIC_BOT_URL: ${{ vars.NUXT_PUBLIC_BOT_URL }}
+        run: |
+          # обязательные — падаем сразу, если секрет забыли завести
+          : "${JWT_SECRET:?JWT_SECRET secret is missing}"
+          : "${ADMIN_PASSWORD:?ADMIN_PASSWORD secret is missing}"
+          : "${BOT_TOKEN:?BOT_TOKEN secret is missing}"
+          : "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD secret is missing}"
+          umask 077
+          {
+            printf 'POSTGRES_USER=%s\n'            "${POSTGRES_USER:-parcel_bot}"
+            printf 'POSTGRES_PASSWORD=%s\n'        "$POSTGRES_PASSWORD"
+            printf 'POSTGRES_DB=%s\n'              "${POSTGRES_DB:-parcel_bot}"
+            printf 'JWT_SECRET=%s\n'               "$JWT_SECRET"
+            [ -n "$JWT_EXPIRES_IN" ] && printf 'JWT_EXPIRES_IN=%s\n' "$JWT_EXPIRES_IN"
+            printf 'ADMIN_PASSWORD=%s\n'           "$ADMIN_PASSWORD"
+            printf 'BOT_TOKEN=%s\n'                "$BOT_TOKEN"
+            [ -n "$CORS_ORIGINS" ] && printf 'CORS_ORIGINS=%s\n' "$CORS_ORIGINS"
+            printf 'NUXT_PUBLIC_API_BASE_URL=%s\n' "$NUXT_PUBLIC_API_BASE_URL"
+            printf 'NUXT_PUBLIC_BOT_URL=%s\n'      "$NUXT_PUBLIC_BOT_URL"
+          } > .env
+
       - name: Copy compose + release script to server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -115,7 +147,7 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           passphrase: ${{ secrets.DEPLOY_SSH_PASSPHRASE }}
           port: ${{ secrets.DEPLOY_SSH_PORT || 22 }}
-          source: "docker-compose.deploy.yml,deploy.sh"
+          source: "docker-compose.deploy.yml,deploy.sh,.env"
           target: /opt/asdicargo
 
       - name: Deploy over SSH
