@@ -35,13 +35,22 @@ async function toggle(event: MouseEvent): Promise<void> {
   const transition = document.startViewTransition(() => applyTheme(next));
 
   transition.ready.then(() => {
+    // Площадь круга растёт как r², поэтому при линейном/ease-in-out радиусе
+    // раскрытие ускоряется к концу и ощущается рывком. Растим радиус как √t —
+    // тогда ПЛОЩАДЬ увеличивается равномерно и анимация плавная от начала до конца.
+    const steps = 24;
+    const clip: string[] = [];
+    for (let i = 0; i <= steps; i++) {
+      const p = i / steps;
+      const radius = endRadius * Math.sqrt(p);
+      clip.push(`circle(${radius}px at ${x}px ${y}px)`);
+    }
+
     document.documentElement.animate(
+      { clipPath: clip },
       {
-        clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`],
-      },
-      {
-        duration: 450,
-        easing: 'ease-in-out',
+        duration: 500,
+        easing: 'linear',
         pseudoElement: '::view-transition-new(root)',
       },
     );
