@@ -4,6 +4,11 @@ import { useAuthStore } from '~/stores/auth';
 const auth = useAuthStore();
 const route = useRoute();
 
+// Версия задеплоенного образа (пусто в локальной разработке — тогда не показываем).
+const config = useRuntimeConfig();
+const version = String(config.public.appVersion ?? '');
+const versionLabel = /^\d/.test(version) ? `v${version}` : version;
+
 const links = [
   { label: 'Запрещенные товары', to: '/banned-items' },
   { label: 'Адреса', to: '/addresses' },
@@ -50,6 +55,10 @@ async function handleLogout(): Promise<void> {
       <UButton class="mt-6 w-full" color="neutral" variant="soft" icon="i-lucide-log-out" @click="handleLogout">
         Выйти
       </UButton>
+
+      <p v-if="versionLabel" class="mt-auto pt-6 text-center text-xs text-steel-400 dark:text-steel-600">
+        {{ versionLabel }}
+      </p>
     </aside>
 
     <main class="flex-1 p-6">

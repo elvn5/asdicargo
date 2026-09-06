@@ -13,6 +13,10 @@ const links = computed(() => [
 const config = useRuntimeConfig();
 const botUrl = config.public.botUrl as string;
 
+// Версия задеплоенного образа (пусто в локальной разработке — тогда не показываем).
+const version = String(config.public.appVersion ?? '');
+const versionLabel = /^\d/.test(version) ? `v${version}` : version;
+
 // Мобильное меню
 const mobileOpen = ref(false);
 const route = useRoute();
@@ -117,6 +121,12 @@ watch(
       >
         <span>© {{ new Date().getFullYear() }} AsDi Cargo</span>
         <span>{{ t('footer.tagline') }}</span>
+      </div>
+      <div
+        v-if="versionLabel"
+        class="border-t border-steel-100 px-4 py-2 text-center text-xs text-steel-400 dark:border-steel-900 dark:text-steel-600"
+      >
+        {{ versionLabel }}
       </div>
     </footer>
   </div>

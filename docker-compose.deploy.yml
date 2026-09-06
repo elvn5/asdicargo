@@ -50,6 +50,9 @@ services:
     image: ${IMAGE_PREFIX:-ghcr.io/elvn5/asdicargo}/admin:${IMAGE_TAG:-staging}
     restart: unless-stopped
     env_file: .env
+    environment:
+      # Версия для футера = тег задеплоенного образа.
+      NUXT_PUBLIC_APP_VERSION: ${IMAGE_TAG:-}
     ports:
       - "127.0.0.1:${ADMIN_PORT:-3000}:3000"
     depends_on:
@@ -62,6 +65,8 @@ services:
     environment:
       # SSR внутри сети Docker обращается к api по имени сервиса.
       NUXT_API_INTERNAL_URL: "http://api:3001"
+      # Версия для футера = тег задеплоенного образа.
+      NUXT_PUBLIC_APP_VERSION: ${IMAGE_TAG:-}
     ports:
       - "127.0.0.1:${CLIENT_PORT:-3002}:3000"
     depends_on:
