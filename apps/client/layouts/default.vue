@@ -2,12 +2,15 @@
 const { t } = useI18n();
 const localePath = useLocalePath();
 
-// Якорные пункты ведут на главную с якорем, чтобы работать и со страниц блога.
+// Каждый пункт ведёт на отдельную cargo-страницу.
 const links = computed(() => [
-  { label: t('nav.services'), to: `${localePath('/')}#services` },
-  { label: t('nav.how'), to: `${localePath('/')}#how` },
-  { label: t('nav.contacts'), to: `${localePath('/')}#contacts` },
-  { label: t('nav.blog'), to: localePath('/blog') },
+  { label: t('nav.services'), to: localePath('/cargo-uslugi') },
+  { label: t('nav.contacts'), to: localePath('/cargo-kontakty') },
+  { label: t('nav.blog'), to: localePath('/cargo-blog') },
+  { label: t('nav.directions'), to: localePath('/cargo-napravleniya') },
+  { label: t('nav.documents'), to: localePath('/cargo-dokumenti') },
+  { label: t('nav.calculator'), to: localePath('/cargo-kalkulyator') },
+  { label: t('nav.faq'), to: localePath('/cargo-faq') },
 ]);
 
 const config = useRuntimeConfig();

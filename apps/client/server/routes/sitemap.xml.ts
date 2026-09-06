@@ -15,7 +15,16 @@ const LOCALES = [
 ];
 
 // Пути относительно префикса локали. '' -> корень.
-const STATIC_PATHS = ['', '/blog'];
+const STATIC_PATHS = [
+  '',
+  '/cargo-uslugi',
+  '/cargo-napravleniya',
+  '/cargo-kalkulyator',
+  '/cargo-dokumenti',
+  '/cargo-faq',
+  '/cargo-kontakty',
+  '/cargo-blog',
+];
 
 function xmlEscape(value: string): string {
   return value
@@ -48,7 +57,7 @@ export default defineEventHandler(async (event) => {
         });
         for (const post of posts ?? []) {
           urls.push({
-            loc: `${siteUrl}${locale.prefix}/blog/${post.slug}`,
+            loc: `${siteUrl}${locale.prefix}/cargo-blog/${post.slug}`,
             lastmod: post.publishedAt ? new Date(post.publishedAt).toISOString() : undefined,
           });
         }

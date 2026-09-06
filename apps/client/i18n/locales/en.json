@@ -3,7 +3,11 @@
     "services": "Services",
     "how": "How it works",
     "contacts": "Contacts",
-    "blog": "Blog"
+    "blog": "Blog",
+    "directions": "Направления",
+    "documents": "Документы",
+    "calculator": "Калькулятор стоимости",
+    "faq": "Вопрос-Ответ"
   },
   "header": {
     "openBot": "Open bot",
@@ -78,5 +82,12 @@
     "readMore": "Read",
     "empty": "No posts yet.",
     "back": "← Back to blog"
+  },
+  "calculator": {
+    "title": "Калькулятор стоимости",
+    "subtitle": "Рассчитайте примерную стоимость доставки вашего груза.",
+    "soon": "Калькулятор скоро появится",
+    "hint": "Мы готовим онлайн-расчёт стоимости. Пока рассчитать доставку можно в Telegram-боте.",
+    "cta": "Рассчитать в Telegram"
   }
 }

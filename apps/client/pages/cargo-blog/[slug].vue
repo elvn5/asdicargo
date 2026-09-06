@@ -75,7 +75,7 @@ useHead(() => ({
 <template>
   <div class="mx-auto w-full max-w-3xl px-4 py-12">
     <NuxtLink
-      :to="localePath('/blog')"
+      :to="localePath('/cargo-blog')"
       class="text-sm text-steel-500 transition hover:text-brand-600 dark:text-steel-400"
     >
       {{ t('blog.back') }}

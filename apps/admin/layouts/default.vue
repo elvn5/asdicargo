@@ -16,6 +16,7 @@ const links = [
   { label: 'Посылки', to: '/parcels' },
   { label: 'Пользователи', to: '/users' },
   { label: 'Блог', to: '/blog' },
+  { label: 'Страницы', to: '/pages' },
 ];
 
 async function handleLogout(): Promise<void> {

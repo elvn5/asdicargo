@@ -91,3 +91,13 @@ export const POST_STATUS_OPTIONS: { value: PostStatus; label: string }[] = [
   { value: 'draft', label: 'Черновик' },
   { value: 'published', label: 'Опубликован' },
 ];
+
+export interface SitePage {
+  id: string;
+  slug: string;
+  title: string;
+  content: string;
+  published: boolean;
+  createdAt: string;
+  updatedAt: string;
+}

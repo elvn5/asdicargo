@@ -5,12 +5,13 @@ import { Address } from './entities/address.entity';
 import { BannedItem } from './entities/banned-item.entity';
 import { Parcel } from './entities/parcel.entity';
 import { Post } from './entities/post.entity';
+import { SitePage } from './entities/site-page.entity';
 import { SupportInfo } from './entities/support-info.entity';
 import { User } from './entities/user.entity';
 
 config();
 
-export const entities = [User, Parcel, Address, BannedItem, SupportInfo, Post];
+export const entities = [User, Parcel, Address, BannedItem, SupportInfo, Post, SitePage];
 
 export function buildDataSourceOptions(): DataSourceOptions {
   return {

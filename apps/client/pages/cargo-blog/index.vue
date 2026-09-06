@@ -64,7 +64,7 @@ useHead(() => ({ link: seoAlternates.value }));
         :key="post.id"
         class="group overflow-hidden rounded-2xl border border-steel-200 bg-white transition hover:shadow-lg dark:border-steel-800 dark:bg-steel-900"
       >
-        <NuxtLink :to="localePath(`/blog/${post.slug}`)" class="flex h-full flex-col">
+        <NuxtLink :to="localePath(`/cargo-blog/${post.slug}`)" class="flex h-full flex-col">
           <img
             v-if="post.coverImageUrl"
             :src="post.coverImageUrl"
