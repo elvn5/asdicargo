@@ -1,10 +1,14 @@
 name: Deploy
 
 # Стратегия окружений:
-#   push/merge в main   -> сборка образов -> деплой на STAGING
+#   push/merge в main   -> сборка образов -> деплой на STAGING (test.*)
 #   push тега vX.Y.Z     -> сборка образов -> деплой на PRODUCTION
-# Секреты и (опционально) ручное подтверждение задаются через
-# GitHub Environments: Settings -> Environments (staging, production).
+# Оба окружения живут на ОДНОМ сервере, но полностью изолированы:
+#   - разные каталоги деплоя  (/opt/asdicargo  vs  /opt/asdicargo-staging)
+#   - разные compose-проекты  (asdicargo       vs  asdicargo-staging)
+#     => отдельные тома БД, сети и контейнеры
+#   - разные порты на 127.0.0.1 (nginx на хосте проксирует нужные домены)
+# Секреты и переменные задаются через GitHub Environments (staging, production).
 on:
   push:
     branches: [main]
@@ -23,7 +27,7 @@ concurrency:
 
 jobs:
   # --------------------------------------------------------------------------
-  # 1. Определяем окружение и теги образов
+  # 1. Определяем окружение, теги образов, каталог/проект/порты деплоя
   # --------------------------------------------------------------------------
   prepare:
     runs-on: ubuntu-latest
@@ -31,6 +35,11 @@ jobs:
       channel: ${{ steps.vars.outputs.channel }}
       version: ${{ steps.vars.outputs.version }}
       deploy_tag: ${{ steps.vars.outputs.deploy_tag }}
+      deploy_dir: ${{ steps.vars.outputs.deploy_dir }}
+      project: ${{ steps.vars.outputs.project }}
+      api_port: ${{ steps.vars.outputs.api_port }}
+      admin_port: ${{ steps.vars.outputs.admin_port }}
+      client_port: ${{ steps.vars.outputs.client_port }}
     steps:
       - id: vars
         run: |
@@ -47,17 +56,38 @@ jobs:
             VER="sha-${GITHUB_SHA::7}"
             DTAG="staging"
           fi
-          echo "channel=$CH"        >> "$GITHUB_OUTPUT"
-          echo "version=$VER"       >> "$GITHUB_OUTPUT"
-          echo "deploy_tag=$DTAG"   >> "$GITHUB_OUTPUT"
-          echo "Окружение=$CH, version=$VER, deploy_tag=$DTAG"
+
+          # Каталог деплоя, имя compose-проекта и порты зависят от окружения.
+          if [[ "$CH" == "production" ]]; then
+            DDIR="/opt/asdicargo";         PROJ="asdicargo"
+            AP=3001; ADP=3000; CP=3002
+          else
+            DDIR="/opt/asdicargo-staging"; PROJ="asdicargo-staging"
+            AP=4001; ADP=4000; CP=4002
+          fi
+
+          {
+            echo "channel=$CH"
+            echo "version=$VER"
+            echo "deploy_tag=$DTAG"
+            echo "deploy_dir=$DDIR"
+            echo "project=$PROJ"
+            echo "api_port=$AP"
+            echo "admin_port=$ADP"
+            echo "client_port=$CP"
+          } >> "$GITHUB_OUTPUT"
+          echo "Окружение=$CH version=$VER deploy_tag=$DTAG dir=$DDIR proj=$PROJ ports=$AP/$ADP/$CP"
 
   # --------------------------------------------------------------------------
   # 2. Сборка и публикация образов всех приложений в GHCR
+  #    environment: подтягивает переменные нужного окружения, чтобы
+  #    NUXT_PUBLIC_API_BASE_URL (вшивается в client/admin на этапе сборки)
+  #    указывал на правильный домен API для staging/production.
   # --------------------------------------------------------------------------
   build:
     needs: prepare
     runs-on: ubuntu-latest
+    environment: ${{ needs.prepare.outputs.channel }}
     permissions:
       contents: read
       packages: write
@@ -139,6 +169,21 @@ jobs:
           } > .env
           chmod 644 .env   # scp-action Docker-контейнер должен прочитать файл
 
+      - name: Ensure deploy dir exists
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          DEPLOY_DIR: ${{ needs.prepare.outputs.deploy_dir }}
+        with:
+          host: ${{ secrets.DEPLOY_SSH_HOST }}
+          username: ${{ secrets.DEPLOY_SSH_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          passphrase: ${{ secrets.DEPLOY_SSH_PASSPHRASE }}
+          port: ${{ secrets.DEPLOY_SSH_PORT || 22 }}
+          envs: DEPLOY_DIR
+          script: |
+            set -e
+            mkdir -p "$DEPLOY_DIR"
+
       - name: Copy compose + release script to server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -148,12 +193,17 @@ jobs:
           passphrase: ${{ secrets.DEPLOY_SSH_PASSPHRASE }}
           port: ${{ secrets.DEPLOY_SSH_PORT || 22 }}
           source: "docker-compose.deploy.yml,deploy.sh,.env"
-          target: /opt/asdicargo
+          target: ${{ needs.prepare.outputs.deploy_dir }}
 
       - name: Deploy over SSH
         uses: appleboy/ssh-action@v1.2.0
         env:
           IMAGE_TAG: ${{ needs.prepare.outputs.deploy_tag }}
+          COMPOSE_PROJECT_NAME: ${{ needs.prepare.outputs.project }}
+          DEPLOY_DIR: ${{ needs.prepare.outputs.deploy_dir }}
+          API_PORT: ${{ needs.prepare.outputs.api_port }}
+          ADMIN_PORT: ${{ needs.prepare.outputs.admin_port }}
+          CLIENT_PORT: ${{ needs.prepare.outputs.client_port }}
           GHCR_USER: ${{ github.actor }}
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -162,9 +212,9 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           passphrase: ${{ secrets.DEPLOY_SSH_PASSPHRASE }}
           port: ${{ secrets.DEPLOY_SSH_PORT || 22 }}
-          envs: IMAGE_TAG,GHCR_USER,GHCR_TOKEN
+          envs: IMAGE_TAG,COMPOSE_PROJECT_NAME,DEPLOY_DIR,API_PORT,ADMIN_PORT,CLIENT_PORT,GHCR_USER,GHCR_TOKEN
           script: |
             set -e
-            cd /opt/asdicargo
+            cd "$DEPLOY_DIR"
             chmod +x deploy.sh
             ./deploy.sh

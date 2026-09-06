@@ -93,3 +93,75 @@ IMAGE_PREFIX=ghcr.io/elvn5/asdicargo IMAGE_TAG=0.9.0 \
 
 `docker compose up -d --build` собирает все образы из исходников локально
 (см. `docker-compose.yml`).
+
+## Два окружения на одном сервере: production + staging (test.*)
+
+Production и staging живут на одном VPS, но полностью изолированы через
+разные compose-проекты, каталоги, тома БД и порты. `deploy.yml` сам
+подставляет нужные значения по каналу:
+
+| Параметр            | production                | staging                          |
+|---------------------|---------------------------|----------------------------------|
+| Триггер             | тег `vX.Y.Z`              | push в `main` / dispatch=staging |
+| Каталог на сервере  | `/opt/asdicargo`          | `/opt/asdicargo-staging`         |
+| compose-проект      | `asdicargo`               | `asdicargo-staging`              |
+| Порты (127.0.0.1)   | api 3001, admin 3000, client 3002 | api 4001, admin 4000, client 4002 |
+| Домены              | asdicargo.com, admin., api. | test.asdicargo.com, test.admin., test.api. |
+| Образ (IMAGE_TAG)   | версия `X.Y.Z`            | `staging`                        |
+
+Разные `COMPOSE_PROJECT_NAME` дают отдельные тома (`asdicargo_postgres_data`
+vs `asdicargo-staging_postgres_data`), сети и контейнеры — БД не пересекаются.
+
+### Разовая настройка сервера (для staging)
+
+1. **DNS** — A-записи на IP сервера:
+   `test`, `test.admin`, `test.api` → <IP>.
+
+2. **nginx** — `/etc/nginx/conf.d/asdicargo-staging.conf` (3 server-блока,
+   как для прода, но на staging-порты):
+
+   ```nginx
+   server {
+       listen 80; server_name test.asdicargo.com;
+       location / { proxy_pass http://127.0.0.1:4002; include /etc/nginx/proxy_params; }
+   }
+   server {
+       listen 80; server_name test.admin.asdicargo.com;
+       client_max_body_size 25m;
+       location / { proxy_pass http://127.0.0.1:4000; include /etc/nginx/proxy_params; }
+   }
+   server {
+       listen 80; server_name test.api.asdicargo.com;
+       client_max_body_size 25m;
+       location / { proxy_pass http://127.0.0.1:4001; include /etc/nginx/proxy_params; }
+   }
+   ```
+   (если `proxy_params` нет — скопируйте proxy_set_header-строки из прод-конфига).
+   Затем `nginx -t && systemctl reload nginx`.
+
+3. **TLS** — Let's Encrypt для staging-доменов:
+   ```bash
+   certbot --nginx -d test.asdicargo.com -d test.admin.asdicargo.com -d test.api.asdicargo.com
+   ```
+
+4. **GitHub Environments** (Settings → Environments):
+   - **production**: variable `NUXT_PUBLIC_API_BASE_URL=https://api.asdicargo.com`,
+     secret `CORS_ORIGINS=https://asdicargo.com,https://admin.asdicargo.com`,
+     плюс все app-секреты (JWT_SECRET, ADMIN_PASSWORD, BOT_TOKEN, POSTGRES_PASSWORD, …).
+   - **staging**: variable `NUXT_PUBLIC_API_BASE_URL=https://test.api.asdicargo.com`,
+     secret `CORS_ORIGINS=https://test.asdicargo.com,https://test.admin.asdicargo.com`,
+     плюс свои app-секреты.
+   - `DEPLOY_SSH_*` — общие (repo-level), сервер один.
+   - ⚠️ **BOT_TOKEN**: один Telegram-бот не может работать в двух стеках
+     одновременно (конфликт polling). Заведите ОТДЕЛЬНОГО тест-бота и его
+     токен положите в staging-environment (иначе прод-бот и staging-бот
+     будут отбивать апдейты друг у друга).
+   - `NUXT_PUBLIC_API_BASE_URL` вшивается в client/admin на этапе СБОРКИ,
+     поэтому job `build` теперь тоже имеет `environment:` — менять домен без
+     пересборки образа нельзя.
+
+### Порядок первого запуска staging
+DNS → nginx (http) → push в `main` (соберёт и задеплоит staging-стек,
+каталог создастся автоматически) → certbot (после того как домены отвечают
+по http) → при необходимости повторный push, чтобы образы пересобрались с
+https-доменом API.
