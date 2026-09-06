@@ -11,7 +11,7 @@ export default defineNuxtConfig({
     strategy: 'prefix_except_default',
     defaultLocale: 'ru',
     // Абсолютный базовый URL сайта — нужен для canonical/hreflang/sitemap.
-    baseUrl: process.env.NUXT_PUBLIC_SITE_URL ?? 'https://asdicargo.com',
+    baseUrl: process.env.NUXT_PUBLIC_SITE_URL ?? 'https://example.com',
     locales: [
       { code: 'ru', language: 'ru-RU', name: 'Русский', file: 'ru.json' },
       { code: 'ky', language: 'ky-KG', name: 'Кыргызча', file: 'ky.json' },
@@ -31,9 +31,9 @@ export default defineNuxtConfig({
       apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL ?? 'http://localhost:3001',
       // Версия задеплоенного образа для футера (задаётся в рантайме через NUXT_PUBLIC_APP_VERSION).
       appVersion: process.env.NUXT_PUBLIC_APP_VERSION ?? '',
-      botUrl: process.env.NUXT_PUBLIC_BOT_URL ?? 'https://t.me/asdicargo_bot',
+      botUrl: process.env.NUXT_PUBLIC_BOT_URL ?? 'https://t.me/acme_bot',
       // Канонический адрес сайта (для SEO-тегов и sitemap).
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL ?? 'https://asdicargo.com',
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL ?? 'https://example.com',
     },
   },
   typescript: {

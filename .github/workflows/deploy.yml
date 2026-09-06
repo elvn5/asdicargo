@@ -4,8 +4,8 @@ name: Deploy
 #   push/merge в main   -> сборка образов -> деплой на STAGING (test.*)
 #   push тега vX.Y.Z     -> сборка образов -> деплой на PRODUCTION
 # Оба окружения живут на ОДНОМ сервере, но полностью изолированы:
-#   - разные каталоги деплоя  (/opt/asdicargo  vs  /opt/asdicargo-staging)
-#   - разные compose-проекты  (asdicargo       vs  asdicargo-staging)
+#   - разные каталоги деплоя  (/opt/acme  vs  /opt/acme-staging)
+#   - разные compose-проекты  (acme       vs  acme-staging)
 #     => отдельные тома БД, сети и контейнеры
 #   - разные порты на 127.0.0.1 (nginx на хосте проксирует нужные домены)
 # Секреты и переменные задаются через GitHub Environments (staging, production).
@@ -59,10 +59,10 @@ jobs:
 
           # Каталог деплоя, имя compose-проекта и порты зависят от окружения.
           if [[ "$CH" == "production" ]]; then
-            DDIR="/opt/asdicargo";         PROJ="asdicargo"
+            DDIR="/opt/acme";         PROJ="acme"
             AP=3001; ADP=3000; CP=3002
           else
-            DDIR="/opt/asdicargo-staging"; PROJ="asdicargo-staging"
+            DDIR="/opt/acme-staging"; PROJ="acme-staging"
             AP=4001; ADP=4000; CP=4002
           fi
 

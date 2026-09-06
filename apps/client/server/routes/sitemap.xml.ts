@@ -1,7 +1,7 @@
 /**
  * Динамический sitemap.xml: статические страницы во всех локалях + опубликованные
  * посты блога (тянутся из API по внутреннему URL). Отдаётся Nitro-сервером Nuxt,
- * доступен по https://asdicargo.com/sitemap.xml (проксируется nginx на клиент).
+ * доступен по https://example.com/sitemap.xml (проксируется nginx на клиент).
  */
 interface PostSitemapItem {
   slug: string;
@@ -28,7 +28,7 @@ function xmlEscape(value: string): string {
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
-  const siteUrl = String(config.public.siteUrl ?? 'https://asdicargo.com').replace(/\/$/, '');
+  const siteUrl = String(config.public.siteUrl ?? 'https://example.com').replace(/\/$/, '');
   const apiBase = String(config.apiInternalUrl ?? 'http://localhost:3001').replace(/\/$/, '');
 
   const urls: Array<{ loc: string; lastmod?: string }> = [];

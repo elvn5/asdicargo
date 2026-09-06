@@ -119,7 +119,7 @@ watch(
       <div
         class="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-2 px-4 py-6 text-sm text-steel-500 dark:text-steel-400 sm:flex-row"
       >
-        <span>© {{ new Date().getFullYear() }} AsDi Cargo</span>
+        <span>© {{ new Date().getFullYear() }} Acme</span>
         <span>{{ t('footer.tagline') }}</span>
       </div>
       <div

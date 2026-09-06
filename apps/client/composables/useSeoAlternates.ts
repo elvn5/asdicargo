@@ -8,7 +8,7 @@ export function useSeoAlternates() {
   const { locales } = useI18n();
   const switchLocalePath = useSwitchLocalePath();
   const runtimeConfig = useRuntimeConfig();
-  const siteUrl = String(runtimeConfig.public.siteUrl ?? 'https://asdicargo.com').replace(/\/$/, '');
+  const siteUrl = String(runtimeConfig.public.siteUrl ?? 'https://example.com').replace(/\/$/, '');
 
   return computed(() => {
     const list = locales.value as Array<{ code: string; language: string }>;

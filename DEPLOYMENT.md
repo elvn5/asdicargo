@@ -31,7 +31,7 @@ Settings → Environments → создать **`staging`** и **`production`**.
 | `DEPLOY_SSH_USER`  | SSH-пользователь                                       |
 | `DEPLOY_SSH_KEY`   | приватный SSH-ключ (весь PEM-файл)                     |
 | `DEPLOY_SSH_PORT`  | порт SSH (необязательно, по умолчанию `22`)            |
-| `DEPLOY_PATH`      | папка на сервере с `.env` (напр. `/opt/asdicargo`)     |
+| `DEPLOY_PATH`      | папка на сервере с `.env` (напр. `/opt/acme`)     |
 
 `GITHUB_TOKEN` создаётся автоматически и используется и для публикации
 образов в GHCR, и для их скачивания на сервере — отдельно ничего не нужно.
@@ -50,7 +50,7 @@ Settings → Environments → создать **`staging`** и **`production`**.
 ## Что нужно на сервере
 
 1. Установлены Docker и плагин Docker Compose (`docker compose version`).
-2. Папка `DEPLOY_PATH` (напр. `/opt/asdicargo`), а в ней файл `.env`
+2. Папка `DEPLOY_PATH` (напр. `/opt/acme`), а в ней файл `.env`
    со всеми переменными (см. `.env.example`). Для фронтендов важно, чтобы
    `NUXT_PUBLIC_API_BASE_URL` указывал на **публичный** адрес API.
 3. Файл `docker-compose.deploy.yml` попадает на сервер автоматически —
@@ -78,7 +78,7 @@ Postgres наружу не публикуется.
 
 ```bash
 cd $DEPLOY_PATH
-IMAGE_PREFIX=ghcr.io/elvn5/asdicargo IMAGE_TAG=0.9.0 \
+IMAGE_PREFIX=ghcr.io/your-org/acme IMAGE_TAG=0.9.0 \
   docker compose -f docker-compose.deploy.yml up -d
 ```
 
@@ -103,35 +103,35 @@ Production и staging живут на одном VPS, но полностью и
 | Параметр            | production                | staging                          |
 |---------------------|---------------------------|----------------------------------|
 | Триггер             | тег `vX.Y.Z`              | push в `main` / dispatch=staging |
-| Каталог на сервере  | `/opt/asdicargo`          | `/opt/asdicargo-staging`         |
-| compose-проект      | `asdicargo`               | `asdicargo-staging`              |
+| Каталог на сервере  | `/opt/acme`          | `/opt/acme-staging`         |
+| compose-проект      | `acme`               | `acme-staging`              |
 | Порты (127.0.0.1)   | api 3001, admin 3000, client 3002 | api 4001, admin 4000, client 4002 |
-| Домены              | asdicargo.com, admin., api. | test.asdicargo.com, test.admin., test.api. |
+| Домены              | example.com, admin., api. | test.example.com, test.admin., test.api. |
 | Образ (IMAGE_TAG)   | версия `X.Y.Z`            | `staging`                        |
 
-Разные `COMPOSE_PROJECT_NAME` дают отдельные тома (`asdicargo_postgres_data`
-vs `asdicargo-staging_postgres_data`), сети и контейнеры — БД не пересекаются.
+Разные `COMPOSE_PROJECT_NAME` дают отдельные тома (`acme_postgres_data`
+vs `acme-staging_postgres_data`), сети и контейнеры — БД не пересекаются.
 
 ### Разовая настройка сервера (для staging)
 
 1. **DNS** — A-записи на IP сервера:
    `test`, `test.admin`, `test.api` → <IP>.
 
-2. **nginx** — `/etc/nginx/conf.d/asdicargo-staging.conf` (3 server-блока,
+2. **nginx** — `/etc/nginx/conf.d/acme-staging.conf` (3 server-блока,
    как для прода, но на staging-порты):
 
    ```nginx
    server {
-       listen 80; server_name test.asdicargo.com;
+       listen 80; server_name test.example.com;
        location / { proxy_pass http://127.0.0.1:4002; include /etc/nginx/proxy_params; }
    }
    server {
-       listen 80; server_name test.admin.asdicargo.com;
+       listen 80; server_name test.admin.example.com;
        client_max_body_size 25m;
        location / { proxy_pass http://127.0.0.1:4000; include /etc/nginx/proxy_params; }
    }
    server {
-       listen 80; server_name test.api.asdicargo.com;
+       listen 80; server_name test.api.example.com;
        client_max_body_size 25m;
        location / { proxy_pass http://127.0.0.1:4001; include /etc/nginx/proxy_params; }
    }
@@ -141,15 +141,15 @@ vs `asdicargo-staging_postgres_data`), сети и контейнеры — БД
 
 3. **TLS** — Let's Encrypt для staging-доменов:
    ```bash
-   certbot --nginx -d test.asdicargo.com -d test.admin.asdicargo.com -d test.api.asdicargo.com
+   certbot --nginx -d test.example.com -d test.admin.example.com -d test.api.example.com
    ```
 
 4. **GitHub Environments** (Settings → Environments):
-   - **production**: variable `NUXT_PUBLIC_API_BASE_URL=https://api.asdicargo.com`,
-     secret `CORS_ORIGINS=https://asdicargo.com,https://admin.asdicargo.com`,
+   - **production**: variable `NUXT_PUBLIC_API_BASE_URL=https://api.example.com`,
+     secret `CORS_ORIGINS=https://example.com,https://admin.example.com`,
      плюс все app-секреты (JWT_SECRET, ADMIN_PASSWORD, BOT_TOKEN, POSTGRES_PASSWORD, …).
-   - **staging**: variable `NUXT_PUBLIC_API_BASE_URL=https://test.api.asdicargo.com`,
-     secret `CORS_ORIGINS=https://test.asdicargo.com,https://test.admin.asdicargo.com`,
+   - **staging**: variable `NUXT_PUBLIC_API_BASE_URL=https://test.api.example.com`,
+     secret `CORS_ORIGINS=https://test.example.com,https://test.admin.example.com`,
      плюс свои app-секреты.
    - `DEPLOY_SSH_*` — общие (repo-level), сервер один.
    - ⚠️ **BOT_TOKEN**: один Telegram-бот не может работать в двух стеках

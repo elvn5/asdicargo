@@ -36,9 +36,9 @@ function fmt(d: string | null): string {
 }
 
 useSeoMeta({
-  title: () => `${t('blog.title')} — AsDi Cargo`,
+  title: () => `${t('blog.title')} — Acme`,
   description: () => t('blog.subtitle'),
-  ogTitle: () => `${t('blog.title')} — AsDi Cargo`,
+  ogTitle: () => `${t('blog.title')} — Acme`,
   ogDescription: () => t('blog.subtitle'),
 });
 

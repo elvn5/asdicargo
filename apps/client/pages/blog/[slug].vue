@@ -42,7 +42,7 @@ const formattedDate = computed(() =>
 );
 
 useSeoMeta({
-  title: () => (post.value ? `${post.value.title} — AsDi Cargo` : 'AsDi Cargo'),
+  title: () => (post.value ? `${post.value.title} — Acme` : 'Acme'),
   description: () => post.value?.excerpt ?? '',
   ogTitle: () => post.value?.title ?? '',
   ogDescription: () => post.value?.excerpt ?? '',
@@ -50,7 +50,7 @@ useSeoMeta({
   ogImage: () => post.value?.coverImageUrl ?? '',
 });
 
-const siteUrl = String(config.public.siteUrl ?? 'https://asdicargo.com').replace(/\/$/, '');
+const siteUrl = String(config.public.siteUrl ?? 'https://example.com').replace(/\/$/, '');
 const articleLd = computed(() =>
   post.value
     ? JSON.stringify({
@@ -62,8 +62,8 @@ const articleLd = computed(() =>
         datePublished: post.value.publishedAt ?? undefined,
         inLanguage: post.value.language,
         mainEntityOfPage: siteUrl + route.path,
-        author: { '@type': 'Organization', name: 'AsDi Cargo' },
-        publisher: { '@type': 'Organization', name: 'AsDi Cargo', url: siteUrl },
+        author: { '@type': 'Organization', name: 'Acme' },
+        publisher: { '@type': 'Organization', name: 'Acme', url: siteUrl },
       })
     : '',
 );

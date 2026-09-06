@@ -16,7 +16,7 @@
     "badge": "Delivery from abroad",
     "titleLead": "Your parcels —",
     "titleAccent": "under reliable protection",
-    "subtitle": "AsDi Cargo receives, ships and hands over your cargo. Ordering and tracking — right in Telegram.",
+    "subtitle": "Acme receives, ships and hands over your cargo. Ordering and tracking — right in Telegram.",
     "ctaStart": "Start in Telegram",
     "ctaHow": "How it works",
     "cardReady": "Ready for pickup",
@@ -69,12 +69,12 @@
     "button": "Open the Telegram bot"
   },
   "meta": {
-    "title": "Cargo China, Russia — Kyrgyzstan · delivery | AsDi Cargo",
-    "description": "AsDi Cargo — cargo and delivery: from China to Kyrgyzstan, from Russia to Kyrgyzstan and from Kyrgyzstan to Russia. Tracking and ordering via a Telegram bot."
+    "title": "Cargo China, Russia — Kyrgyzstan · delivery | Acme",
+    "description": "Acme — cargo and delivery: from China to Kyrgyzstan, from Russia to Kyrgyzstan and from Kyrgyzstan to Russia. Tracking and ordering via a Telegram bot."
   },
   "blog": {
     "title": "Blog",
-    "subtitle": "News, tips and updates from AsDi Cargo.",
+    "subtitle": "News, tips and updates from Acme.",
     "readMore": "Read",
     "empty": "No posts yet.",
     "back": "← Back to blog"

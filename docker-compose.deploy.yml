@@ -23,7 +23,7 @@ services:
       retries: 10
 
   api:
-    image: ${IMAGE_PREFIX:-ghcr.io/elvn5/asdicargo}/api:${IMAGE_TAG:-staging}
+    image: ${IMAGE_PREFIX:-ghcr.io/your-org/acme}/api:${IMAGE_TAG:-staging}
     restart: unless-stopped
     env_file: .env
     environment:
@@ -36,7 +36,7 @@ services:
         condition: service_healthy
 
   bot:
-    image: ${IMAGE_PREFIX:-ghcr.io/elvn5/asdicargo}/bot:${IMAGE_TAG:-staging}
+    image: ${IMAGE_PREFIX:-ghcr.io/your-org/acme}/bot:${IMAGE_TAG:-staging}
     restart: unless-stopped
     env_file: .env
     environment:
@@ -47,7 +47,7 @@ services:
         condition: service_healthy
 
   admin:
-    image: ${IMAGE_PREFIX:-ghcr.io/elvn5/asdicargo}/admin:${IMAGE_TAG:-staging}
+    image: ${IMAGE_PREFIX:-ghcr.io/your-org/acme}/admin:${IMAGE_TAG:-staging}
     restart: unless-stopped
     env_file: .env
     environment:
@@ -59,7 +59,7 @@ services:
       - api
 
   client:
-    image: ${IMAGE_PREFIX:-ghcr.io/elvn5/asdicargo}/client:${IMAGE_TAG:-staging}
+    image: ${IMAGE_PREFIX:-ghcr.io/your-org/acme}/client:${IMAGE_TAG:-staging}
     restart: unless-stopped
     env_file: .env
     environment:

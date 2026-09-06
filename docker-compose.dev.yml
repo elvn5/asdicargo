@@ -5,7 +5,7 @@
 # node_modules и pnpm-store живут в ИМЕНОВАННЫХ томах и не смешиваются с
 # node_modules на macOS (разные бинарники). Нужен файл .env в корне
 # (скопируй из .env.example и заполни BOT_TOKEN, JWT_SECRET, ADMIN_PASSWORD).
-name: asdicargo-dev
+name: acme-dev
 
 x-app: &app
   build:
