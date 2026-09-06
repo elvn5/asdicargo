@@ -36,6 +36,12 @@ export default defineNuxtConfig({
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL ?? 'https://asdicargo.com',
     },
   },
+  // Предсжатие статики (CSS/JS/шрифты) в .gz и .br на этапе билда.
+  // Nitro сам отдаёт нужный вариант по Accept-Encoding — 210 КБ CSS
+  // превращаются в ~22 КБ (brotli) по сети без изменения nginx.
+  nitro: {
+    compressPublicAssets: { gzip: true, brotli: true },
+  },
   typescript: {
     strict: true,
   },
