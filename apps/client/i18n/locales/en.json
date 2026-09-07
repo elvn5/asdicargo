@@ -14,14 +14,28 @@
     "menu": "Menu"
   },
   "footer": {
-    "tagline": "Cargo and parcel delivery"
+    "description": "We specialize in consolidated freight transportation between Kyrgyzstan and Russia.",
+    "servicesTitle": "Services",
+    "s1": "International road transport",
+    "s2": "Consolidated cargo",
+    "s3": "\"Turnkey\"",
+    "companyTitle": "Company",
+    "about": "About us",
+    "reviews": "Reviews",
+    "faq": "FAQ",
+    "documents": "Documents",
+    "blog": "Blog",
+    "contacts": "Contacts",
+    "contactsTitle": "Contacts",
+    "address": "Kyrgyzstan, Bishkek, Aibek-Ata st. 1/2",
+    "copyright": "AsDi Cargo — consolidated cargo delivery © 2020–2026 LLC \"AsDi Cargo\". All rights reserved."
   },
   "hero": {
-    "badge": "Delivery from abroad",
+    "badge": "Consolidated cargo — our specialization",
     "titleLead": "Your parcels —",
     "titleAccent": "under reliable protection",
-    "subtitle": "AsDi Cargo receives, ships and hands over your cargo. Ordering and tracking — right in Telegram.",
-    "ctaStart": "Start in Telegram",
+    "subtitle": "AsDi Cargo specializes in consolidated (groupage) freight transportation between Kyrgyzstan and Russia.\n\nIf you have a small or medium cargo volume and don't need to pay for an entire truck — we'll combine your freight with other shipments in one vehicle.\n\nYou only pay for the space your cargo occupies, and we handle the entire transportation process.",
+    "ctaStart": "Free consultation",
     "ctaHow": "How it works",
     "cardReady": "Ready for pickup",
     "cardBadge": "In transit → Pickup",
@@ -89,5 +103,9 @@
     "soon": "Калькулятор скоро появится",
     "hint": "Мы готовим онлайн-расчёт стоимости. Пока рассчитать доставку можно в Telegram-боте.",
     "cta": "Рассчитать в Telegram"
+  },
+  "cookie": {
+    "text": "We use cookies to improve your experience. By continuing to use this site, you agree to our use of cookies.",
+    "accept": "Accept"
   }
 }

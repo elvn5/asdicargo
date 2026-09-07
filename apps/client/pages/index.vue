@@ -15,18 +15,7 @@ useHead(() => ({ link: seoAlternates.value }));
 const config = useRuntimeConfig();
 const botUrl = config.public.botUrl as string;
 
-const services = [
-  { icon: 'i-lucide-package', key: 'receive' },
-  { icon: 'i-lucide-truck', key: 'delivery' },
-  { icon: 'i-lucide-map-pin', key: 'pickup' },
-] as const;
 
-const steps = [
-  { n: '01', key: 's1' },
-  { n: '02', key: 's2' },
-  { n: '03', key: 's3' },
-  { n: '04', key: 's4' },
-] as const;
 
 const statuses = ['created', 'warehouse', 'transit', 'ready'] as const;
 </script>
@@ -45,14 +34,13 @@ const statuses = ['created', 'warehouse', 'transit', 'ready'] as const;
             {{ $t('hero.titleLead') }}
             <span class="text-brand-600 dark:text-brand-400">{{ $t('hero.titleAccent') }}</span>
           </h1>
-          <p class="mt-4 max-w-md text-lg text-steel-600 dark:text-steel-300">
+          <p class="mt-4 max-w-md whitespace-pre-line text-lg text-steel-600 dark:text-steel-300">
             {{ $t('hero.subtitle') }}
           </p>
           <div class="mt-8 flex flex-wrap gap-3">
-            <UButton :to="botUrl" target="_blank" size="lg" icon="i-lucide-send" color="primary">
+            <UButton :to="botUrl" target="_blank" size="lg" icon="i-lucide-message-circle" color="primary">
               {{ $t('hero.ctaStart') }}
             </UButton>
-            <UButton to="#how" size="lg" color="neutral" variant="outline">{{ $t('hero.ctaHow') }}</UButton>
           </div>
         </div>
 
@@ -81,46 +69,7 @@ const statuses = ['created', 'warehouse', 'transit', 'ready'] as const;
       </div>
     </section>
 
-    <!-- Services -->
-    <section id="services" class="mx-auto w-full max-w-6xl px-4 py-16">
-      <h2 class="text-2xl font-bold sm:text-3xl">{{ $t('services.heading') }}</h2>
-      <p class="mt-2 text-steel-600 dark:text-steel-300">{{ $t('services.sub') }}</p>
-      <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        <UCard v-for="service in services" :key="service.key">
-          <span class="flex size-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-400">
-            <UIcon :name="service.icon" class="size-6" />
-          </span>
-          <h3 class="mt-4 text-lg font-semibold">{{ $t(`services.${service.key}.title`) }}</h3>
-          <p class="mt-1 text-sm text-steel-600 dark:text-steel-300">{{ $t(`services.${service.key}.text`) }}</p>
-        </UCard>
-      </div>
-    </section>
 
-    <!-- How it works -->
-    <section id="how" class="border-y border-steel-200 bg-steel-50 dark:border-steel-800 dark:bg-steel-900/40">
-      <div class="mx-auto w-full max-w-6xl px-4 py-16">
-        <h2 class="text-2xl font-bold sm:text-3xl">{{ $t('how.heading') }}</h2>
-        <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <div v-for="step in steps" :key="step.n" class="relative">
-            <span class="text-4xl font-bold text-brand-500/30 dark:text-brand-400/30">{{ step.n }}</span>
-            <h3 class="mt-2 text-lg font-semibold">{{ $t(`how.${step.key}.title`) }}</h3>
-            <p class="mt-1 text-sm text-steel-600 dark:text-steel-300">{{ $t(`how.${step.key}.text`) }}</p>
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- CTA / Contacts -->
-    <section id="contacts" class="mx-auto w-full max-w-6xl px-4 py-20">
-      <div
-        class="flex flex-col items-center gap-6 rounded-2xl bg-brand-600 px-6 py-12 text-center text-white dark:bg-brand-700"
-      >
-        <h2 class="max-w-xl text-2xl font-bold sm:text-3xl">{{ $t('cta.heading') }}</h2>
-        <p class="max-w-lg text-brand-50/90">{{ $t('cta.text') }}</p>
-        <UButton :to="botUrl" target="_blank" size="lg" color="neutral" variant="solid" icon="i-lucide-send">
-          {{ $t('cta.button') }}
-        </UButton>
-      </div>
-    </section>
   </div>
 </template>
