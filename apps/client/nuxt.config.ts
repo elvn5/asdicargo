@@ -34,6 +34,8 @@ export default defineNuxtConfig({
       botUrl: process.env.NUXT_PUBLIC_BOT_URL ?? 'https://t.me/asdicargo_bot',
       // Канонический адрес сайта (для SEO-тегов и sitemap).
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL ?? 'https://asdicargo.com',
+      // Окружение сайта: 'production' индексируется, любое другое (staging) — нет.
+      siteEnv: process.env.NUXT_PUBLIC_SITE_ENV ?? 'production',
       // Имя Telegram-бота (без @) для Telegram Login Widget.
       telegramBotUsername: process.env.NUXT_PUBLIC_TELEGRAM_BOT_USERNAME ?? '',
     },

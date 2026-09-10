@@ -4,6 +4,8 @@ const route = useRoute();
 const runtimeConfig = useRuntimeConfig();
 const siteUrl = String(runtimeConfig.public.siteUrl ?? 'https://asdicargo.com').replace(/\/$/, '');
 const botUrl = String(runtimeConfig.public.botUrl ?? 'https://t.me/asdicargo_bot');
+// Индексируем только production; staging и прочие окружения закрываем от поисковиков.
+const isProductionSite = String(runtimeConfig.public.siteEnv ?? 'production') === 'production';
 
 const currentLanguage = computed(() => {
   const list = locales.value as Array<{ code: string; language: string }>;
@@ -32,6 +34,8 @@ useHead(() => ({
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: siteUrl + route.path },
     { name: 'twitter:card', content: 'summary_large_image' },
+    // На не-production закрываем от индексации на уровне мета-тега.
+    ...(isProductionSite ? [] : [{ name: 'robots', content: 'noindex, nofollow' }]),
   ],
   script: [
     { type: 'application/ld+json', innerHTML: organizationLd.value },
