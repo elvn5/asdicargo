@@ -100,9 +100,21 @@
   "calculator": {
     "title": "Калькулятор стоимости",
     "subtitle": "Рассчитайте примерную стоимость доставки вашего груза.",
-    "soon": "Калькулятор скоро появится",
-    "hint": "Мы готовим онлайн-расчёт стоимости. Пока рассчитать доставку можно в Telegram-боте.",
-    "cta": "Рассчитать в Telegram"
+    "weight": "Вес груза",
+    "weightUnit": "кг",
+    "volume": "Объём груза",
+    "volumeUnit": "м³",
+    "result": "Стоимость доставки",
+    "byWeight": "Расчёт по весу",
+    "byVolume": "Расчёт по объёму (кубатуре)",
+    "density": "Плотность груза",
+    "densityUnit": "кг/м³",
+    "enterValues": "Введите вес и объём, чтобы увидеть стоимость.",
+    "note": "Если в одном кубе меньше 200 кг, стоимость считается по объёму.",
+    "rateWeight": "1 кг — 50 сом",
+    "rateVolume": "1 м³ — 10 000 сом",
+    "som": "сом",
+    "cta": "Оформить в Telegram"
   },
   "cookie": {
     "text": "We use cookies to improve your experience. By continuing to use this site, you agree to our use of cookies.",

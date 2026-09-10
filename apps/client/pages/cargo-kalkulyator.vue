@@ -12,6 +12,33 @@ useSeoMeta({
 
 const seoAlternates = useSeoAlternates();
 useHead(() => ({ link: seoAlternates.value }));
+
+// Тарифы
+const WEIGHT_RATE = 50; // сом за 1 кг
+const VOLUME_RATE = 10_000; // сом за 1 м³
+
+const weight = ref<number>(0);
+const volume = ref<number>(0);
+
+const w = computed(() => (Number.isFinite(weight.value) && weight.value > 0 ? weight.value : 0));
+const v = computed(() => (Number.isFinite(volume.value) && volume.value > 0 ? volume.value : 0));
+
+const hasInput = computed(() => w.value > 0 || v.value > 0);
+
+const byWeight = computed(() => w.value * WEIGHT_RATE);
+const byVolume = computed(() => v.value * VOLUME_RATE);
+
+// Плотность груза (кг/м³); null, если объём не указан
+const density = computed(() => (v.value > 0 ? w.value / v.value : null));
+
+// Если в кубе меньше 200 кг (плотность < 200) — считаем по объёму, иначе по весу.
+// Это эквивалентно выбору большей из двух стоимостей.
+const useVolume = computed(() => byVolume.value > byWeight.value);
+
+const total = computed(() => Math.max(byWeight.value, byVolume.value));
+
+const numberFmt = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 });
+const fmt = (n: number) => numberFmt.format(Math.round(n));
 </script>
 
 <template>
@@ -20,16 +47,76 @@ useHead(() => ({ link: seoAlternates.value }));
     <p class="mt-3 text-steel-600 dark:text-steel-300">{{ t('calculator.subtitle') }}</p>
 
     <div
-      class="mt-8 flex flex-col items-start gap-4 rounded-2xl border border-steel-200 bg-steel-50 p-6 dark:border-steel-800 dark:bg-steel-900/40"
+      class="mt-8 rounded-2xl border border-steel-200 bg-steel-50 p-6 dark:border-steel-800 dark:bg-steel-900/40"
     >
-      <div class="flex items-center gap-3">
-        <span class="flex size-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-400">
-          <UIcon name="i-lucide-calculator" class="size-6" />
-        </span>
-        <p class="font-medium">{{ t('calculator.soon') }}</p>
+      <div class="grid gap-5 sm:grid-cols-2">
+        <UFormField :label="`${t('calculator.weight')}, ${t('calculator.weightUnit')}`" name="weight">
+          <UInputNumber
+            v-model="weight"
+            :min="0"
+            :step="1"
+            size="lg"
+            class="w-full"
+          />
+        </UFormField>
+
+        <UFormField :label="`${t('calculator.volume')}, ${t('calculator.volumeUnit')}`" name="volume">
+          <UInputNumber
+            v-model="volume"
+            :min="0"
+            :step="0.1"
+            size="lg"
+            class="w-full"
+          />
+        </UFormField>
       </div>
-      <p class="text-sm text-steel-600 dark:text-steel-300">{{ t('calculator.hint') }}</p>
-      <UButton :to="botUrl" target="_blank" size="lg" icon="i-lucide-send" color="primary">
+
+      <!-- Тарифы -->
+      <div class="mt-5 flex flex-wrap gap-x-6 gap-y-1 text-sm text-steel-600 dark:text-steel-300">
+        <span>{{ t('calculator.rateWeight') }}</span>
+        <span>{{ t('calculator.rateVolume') }}</span>
+      </div>
+
+      <!-- Результат -->
+      <div
+        class="mt-6 rounded-xl border border-steel-200 bg-white p-5 dark:border-steel-800 dark:bg-steel-950"
+      >
+        <template v-if="hasInput">
+          <p class="text-sm text-steel-500">{{ t('calculator.result') }}</p>
+          <p class="mt-1 text-3xl font-bold text-brand-600 dark:text-brand-400">
+            {{ fmt(total) }} <span class="text-xl font-semibold">{{ t('calculator.som') }}</span>
+          </p>
+
+          <div class="mt-4 flex flex-wrap items-center gap-2">
+            <span
+              class="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700 dark:bg-brand-950 dark:text-brand-300"
+            >
+              <UIcon
+                :name="useVolume ? 'i-lucide-box' : 'i-lucide-weight'"
+                class="size-4"
+              />
+              {{ useVolume ? t('calculator.byVolume') : t('calculator.byWeight') }}
+            </span>
+            <span v-if="density !== null" class="text-sm text-steel-500">
+              {{ t('calculator.density') }}: {{ numberFmt.format(Math.round(density)) }}
+              {{ t('calculator.densityUnit') }}
+            </span>
+          </div>
+        </template>
+
+        <p v-else class="text-steel-500">{{ t('calculator.enterValues') }}</p>
+      </div>
+
+      <p class="mt-4 text-sm text-steel-500">{{ t('calculator.note') }}</p>
+
+      <UButton
+        :to="botUrl"
+        target="_blank"
+        size="lg"
+        icon="i-lucide-send"
+        color="primary"
+        class="mt-6"
+      >
         {{ t('calculator.cta') }}
       </UButton>
     </div>
