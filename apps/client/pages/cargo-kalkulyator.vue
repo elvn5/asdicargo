@@ -20,6 +20,9 @@ const VOLUME_RATE = 10_000; // сом за 1 м³
 const weight = ref<number>(0);
 const volume = ref<number>(0);
 
+// Ручной режим: «в одном кубе меньше 200 кг» — считать строго по объёму (кубатуре)
+const forceVolume = ref<boolean>(false);
+
 const w = computed(() => (Number.isFinite(weight.value) && weight.value > 0 ? weight.value : 0));
 const v = computed(() => (Number.isFinite(volume.value) && volume.value > 0 ? volume.value : 0));
 
@@ -31,11 +34,14 @@ const byVolume = computed(() => v.value * VOLUME_RATE);
 // Плотность груза (кг/м³); null, если объём не указан
 const density = computed(() => (v.value > 0 ? w.value / v.value : null));
 
-// Если в кубе меньше 200 кг (плотность < 200) — считаем по объёму, иначе по весу.
-// Это эквивалентно выбору большей из двух стоимостей.
-const useVolume = computed(() => byVolume.value > byWeight.value);
+// Если чекбокс отмечен — считаем строго по объёму (кубатуре).
+// Если нет — автоматически: реактивно берём большую из двух стоимостей
+// (что эквивалентно правилу «меньше 200 кг в кубе → по объёму»).
+const useVolume = computed(() =>
+  forceVolume.value ? true : byVolume.value > byWeight.value,
+);
 
-const total = computed(() => Math.max(byWeight.value, byVolume.value));
+const total = computed(() => (useVolume.value ? byVolume.value : byWeight.value));
 
 const numberFmt = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 });
 const fmt = (n: number) => numberFmt.format(Math.round(n));
@@ -76,6 +82,13 @@ const fmt = (n: number) => numberFmt.format(Math.round(n));
         <span>{{ t('calculator.rateWeight') }}</span>
         <span>{{ t('calculator.rateVolume') }}</span>
       </div>
+
+      <!-- Режим расчёта -->
+      <UCheckbox
+        v-model="forceVolume"
+        :label="t('calculator.lessThan200')"
+        class="mt-5"
+      />
 
       <!-- Результат -->
       <div

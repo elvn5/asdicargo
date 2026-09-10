@@ -114,7 +114,8 @@
     "rateWeight": "1 кг — 50 сом",
     "rateVolume": "1 м³ — 10 000 сом",
     "som": "сом",
-    "cta": "Оформить в Telegram"
+    "cta": "Оформить в Telegram",
+    "lessThan200": "В одном кубе меньше 200 кг"
   },
   "cookie": {
     "text": "We use cookies to improve your experience. By continuing to use this site, you agree to our use of cookies.",

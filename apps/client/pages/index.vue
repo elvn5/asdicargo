@@ -24,8 +24,15 @@ const statuses = ['created', 'warehouse', 'transit', 'ready'] as const;
   <div>
     <!-- Hero -->
     <section class="relative overflow-hidden">
+      <!-- Базовый фон -->
       <div
-        class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-brand-50 via-white to-steel-50 dark:from-steel-950 dark:via-steel-950 dark:to-steel-900"
+        class="pointer-events-none absolute inset-0 -z-20 bg-gradient-to-br from-brand-50 via-white to-steel-50 dark:from-steel-950 dark:via-steel-950 dark:to-steel-900"
+      />
+      <!-- 3D-сцена: фуры AsDi курсируют между Кыргызстаном и Россией -->
+      <HeroTruckScene />
+      <!-- Затемнение для читаемости текста -->
+      <div
+        class="pointer-events-none absolute inset-0 -z-[1] bg-gradient-to-r from-white via-white/60 to-transparent dark:from-steel-950 dark:via-steel-950/55 dark:to-transparent"
       />
       <div class="mx-auto grid w-full max-w-6xl gap-10 px-4 py-20 md:grid-cols-2 md:items-center">
         <div>
