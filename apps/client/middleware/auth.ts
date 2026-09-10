@@ -1,17 +1,17 @@
-import { useAuthStore } from '~/stores/auth';
-
 /**
- * Защищает страницы личного кабинета: если сессии нет — редирект на вход.
+ * Защита страниц личного кабинета. Проверка выполняется на клиенте
+ * (сессия определяется там же, где живёт cookie); на сервере пропускаем.
  * Подключается на странице через definePageMeta({ middleware: 'auth' }).
  */
 export default defineNuxtRouteMiddleware(async (to) => {
+  if (import.meta.server) return;
+
   const auth = useAuthStore();
   await auth.fetchMe();
 
   if (!auth.isAuthenticated) {
-    const localePath = useLocalePath();
     return navigateTo({
-      path: localePath('/login'),
+      path: useLocalePath()('/login'),
       query: { redirect: to.fullPath },
     });
   }

@@ -31,9 +31,8 @@ watch(
   },
 );
 
-// Пользовательская сессия сайта: подтягиваем профиль (SSR пробрасывает cookie).
+// Сессия сайта: инициализируется клиентским плагином plugins/auth.client.ts.
 const auth = useAuthStore();
-await auth.fetchMe();
 </script>
 
 <template>
@@ -63,25 +62,39 @@ await auth.fetchMe();
         <div class="flex items-center gap-2">
           <LangSwitcher />
           <ThemeToggle />
-          <NuxtLink
-            v-if="auth.isAuthenticated"
-            :to="localePath('/account')"
-            class="hidden items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-steel-600 transition hover:text-brand-500 sm:flex dark:text-steel-300 dark:hover:text-brand-400"
-          >
-            <UAvatar :src="auth.user?.avatarUrl ?? undefined" :alt="auth.displayName" size="2xs" icon="i-lucide-user" />
-            <span class="max-w-[8rem] truncate">{{ auth.displayName }}</span>
-          </NuxtLink>
-          <UButton
-            v-else
-            :to="localePath('/login')"
-            color="neutral"
-            variant="ghost"
-            size="sm"
-            icon="i-lucide-log-in"
-            class="hidden sm:inline-flex"
-          >
-            {{ t('auth.loginButton') }}
-          </UButton>
+          <ClientOnly>
+            <NuxtLink
+              v-if="auth.isAuthenticated"
+              :to="localePath('/account')"
+              class="hidden items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-steel-600 transition hover:text-brand-500 sm:flex dark:text-steel-300 dark:hover:text-brand-400"
+            >
+              <UAvatar :src="auth.user?.avatarUrl ?? undefined" :alt="auth.displayName" size="2xs" icon="i-lucide-user" />
+              <span class="max-w-[8rem] truncate">{{ auth.displayName }}</span>
+            </NuxtLink>
+            <UButton
+              v-else
+              :to="localePath('/login')"
+              color="neutral"
+              variant="ghost"
+              size="sm"
+              icon="i-lucide-log-in"
+              class="hidden sm:inline-flex"
+            >
+              {{ t('auth.loginButton') }}
+            </UButton>
+            <template #fallback>
+              <UButton
+                :to="localePath('/login')"
+                color="neutral"
+                variant="ghost"
+                size="sm"
+                icon="i-lucide-log-in"
+                class="hidden sm:inline-flex"
+              >
+                {{ t('auth.loginButton') }}
+              </UButton>
+            </template>
+          </ClientOnly>
           <UButton :to="botUrl" target="_blank" icon="i-lucide-send" color="primary">
             <span class="hidden sm:inline">{{ t('header.openBot') }}</span>
           </UButton>
@@ -133,30 +146,45 @@ await auth.fetchMe();
             >
               {{ t('header.openBot') }}
             </UButton>
-            <UButton
-              v-if="auth.isAuthenticated"
-              :to="localePath('/account')"
-              color="neutral"
-              variant="soft"
-              size="lg"
-              icon="i-lucide-user"
-              block
-              @click="mobileOpen = false"
-            >
-              {{ auth.displayName }}
-            </UButton>
-            <UButton
-              v-else
-              :to="localePath('/login')"
-              color="neutral"
-              variant="soft"
-              size="lg"
-              icon="i-lucide-log-in"
-              block
-              @click="mobileOpen = false"
-            >
-              {{ t('auth.loginButton') }}
-            </UButton>
+            <ClientOnly>
+              <UButton
+                v-if="auth.isAuthenticated"
+                :to="localePath('/account')"
+                color="neutral"
+                variant="soft"
+                size="lg"
+                icon="i-lucide-user"
+                block
+                @click="mobileOpen = false"
+              >
+                {{ auth.displayName }}
+              </UButton>
+              <UButton
+                v-else
+                :to="localePath('/login')"
+                color="neutral"
+                variant="soft"
+                size="lg"
+                icon="i-lucide-log-in"
+                block
+                @click="mobileOpen = false"
+              >
+                {{ t('auth.loginButton') }}
+              </UButton>
+              <template #fallback>
+                <UButton
+                  :to="localePath('/login')"
+                  color="neutral"
+                  variant="soft"
+                  size="lg"
+                  icon="i-lucide-log-in"
+                  block
+                  @click="mobileOpen = false"
+                >
+                  {{ t('auth.loginButton') }}
+                </UButton>
+              </template>
+            </ClientOnly>
           </div>
         </nav>
       </Transition>

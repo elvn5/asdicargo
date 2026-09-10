@@ -1,3 +1,4 @@
+// Публичный профиль пользователя, возвращаемый API (/account/*).
 export interface AuthUser {
   id: string;
   email: string | null;
@@ -9,7 +10,7 @@ export interface AuthUser {
   createdAt: string;
 }
 
-// Полезная нагрузка Telegram Login Widget.
+// Полезная нагрузка Telegram Login Widget (data-onauth).
 export interface TelegramAuthData {
   id: number;
   first_name?: string;

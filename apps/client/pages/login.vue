@@ -2,8 +2,8 @@
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
 import { z } from 'zod';
-import { ApiError } from '~/shared/api/client';
-import type { TelegramAuthData } from '~/shared/api/types';
+import { ApiError } from '~/composables/useApi';
+import type { TelegramAuthData } from '~/types/api';
 import { useAuthStore } from '~/stores/auth';
 
 const { t } = useI18n();

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { TelegramAuthData } from '~/shared/api/types';
+import type { TelegramAuthData } from '~/types/api';
 
 const props = withDefaults(
   defineProps<{
