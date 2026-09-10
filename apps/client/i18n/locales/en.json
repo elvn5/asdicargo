@@ -121,5 +121,35 @@
   "cookie": {
     "text": "We use cookies to improve your experience. By continuing to use this site, you agree to our use of cookies.",
     "accept": "Accept"
+  },
+  "auth": {
+    "loginTitle": "Sign in",
+    "loginSubtitle": "Sign in to your account",
+    "registerTitle": "Sign up",
+    "registerSubtitle": "Create your AsDi Cargo account",
+    "accountTitle": "My account",
+    "email": "Email",
+    "password": "Password",
+    "passwordConfirm": "Confirm password",
+    "firstName": "First name",
+    "loginButton": "Sign in",
+    "registerButton": "Sign up",
+    "logout": "Sign out",
+    "or": "or",
+    "noAccount": "No account?",
+    "registerLink": "Sign up",
+    "haveAccount": "Already have an account?",
+    "loginLink": "Sign in",
+    "usernameLabel": "Username",
+    "connected": "Connected",
+    "errEmail": "Invalid email",
+    "errPasswordRequired": "Enter your password",
+    "errPasswordMin": "At least 8 characters",
+    "errPasswordMatch": "Passwords do not match",
+    "errNameRequired": "Enter your name",
+    "errInvalidCredentials": "Invalid email or password",
+    "errEmailTaken": "A user with this email already exists",
+    "errProvider": "Sign-in failed. Please try again",
+    "errNetwork": "Network error. Please try later"
   }
 }

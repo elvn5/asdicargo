@@ -7,6 +7,10 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import type { Request } from 'express';
 
+/**
+ * Guard админ-панели. Проверяет cookie admin_token и роль admin,
+ * чтобы пользовательский токен сайта (role: 'user') не давал доступ к админке.
+ */
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(private readonly jwtService: JwtService) {}
@@ -20,9 +24,15 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     try {
-      this.jwtService.verify(token);
+      const payload = this.jwtService.verify<{ role?: string }>(token);
+      if (payload.role !== 'admin') {
+        throw new UnauthorizedException('Insufficient permissions');
+      }
       return true;
-    } catch {
+    } catch (error) {
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      }
       throw new UnauthorizedException('Invalid or expired session');
     }
   }

@@ -1,7 +1,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-01',
   devtools: { enabled: true },
-  modules: ['@nuxt/ui', '@vueuse/nuxt', '@nuxtjs/i18n'],
+  modules: ['@nuxt/ui', '@pinia/nuxt', '@vueuse/nuxt', '@nuxtjs/i18n'],
   css: ['~/assets/css/main.css'],
   colorMode: {
     preference: 'system', // по умолчанию следуем системе; переключатель ставит явное значение
@@ -34,6 +34,8 @@ export default defineNuxtConfig({
       botUrl: process.env.NUXT_PUBLIC_BOT_URL ?? 'https://t.me/asdicargo_bot',
       // Канонический адрес сайта (для SEO-тегов и sitemap).
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL ?? 'https://asdicargo.com',
+      // Имя Telegram-бота (без @) для Telegram Login Widget.
+      telegramBotUsername: process.env.NUXT_PUBLIC_TELEGRAM_BOT_USERNAME ?? '',
     },
   },
   // Предсжатие статики (CSS/JS/шрифты) в .gz и .br на этапе билда.

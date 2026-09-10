@@ -121,5 +121,35 @@
   "cookie": {
     "text": "Биз сайттын иштешин жакшыртуу үчүн cookie файлдарын колдонобуз. Сайтты колдонууну улантуу менен, аларды колдонууга макулдугуңузду билдиресиз.",
     "accept": "Кабыл алуу"
+  },
+  "auth": {
+    "loginTitle": "Кирүү",
+    "loginSubtitle": "Жеке кабинетке кириңиз",
+    "registerTitle": "Катталуу",
+    "registerSubtitle": "AsDi Cargo аккаунтун түзүңүз",
+    "accountTitle": "Жеке кабинет",
+    "email": "E-mail",
+    "password": "Сырсөз",
+    "passwordConfirm": "Сырсөздү кайталаңыз",
+    "firstName": "Аты",
+    "loginButton": "Кирүү",
+    "registerButton": "Катталуу",
+    "logout": "Чыгуу",
+    "or": "же",
+    "noAccount": "Аккаунт жокпу?",
+    "registerLink": "Катталуу",
+    "haveAccount": "Аккаунт барбы?",
+    "loginLink": "Кирүү",
+    "usernameLabel": "Колдонуучунун аты",
+    "connected": "Байланышкан",
+    "errEmail": "E-mail туура эмес",
+    "errPasswordRequired": "Сырсөздү киргизиңиз",
+    "errPasswordMin": "Кеминде 8 белги",
+    "errPasswordMatch": "Сырсөздөр дал келген жок",
+    "errNameRequired": "Атыңызды киргизиңиз",
+    "errInvalidCredentials": "E-mail же сырсөз туура эмес",
+    "errEmailTaken": "Мындай e-mail менен колдонуучу бар",
+    "errProvider": "Кире алган жок. Кайра аракет кылыңыз",
+    "errNetwork": "Тармак катасы. Кийинчерээк аракет кылыңыз"
   }
 }

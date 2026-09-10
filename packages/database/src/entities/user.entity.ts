@@ -9,14 +9,36 @@ import {
 } from 'typeorm';
 import { Parcel } from './parcel.entity';
 
+/**
+ * Способ, которым пользователь завёл аккаунт / вошёл в последний раз.
+ * telegram — через бота или Telegram Login Widget на сайте;
+ * email — регистрация по e-mail и паролю.
+ */
+export type AuthProvider = 'telegram' | 'email';
+
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Index({ unique: true })
-  @Column({ type: 'bigint' })
-  telegramId!: string;
+  // telegramId больше не обязателен: пользователи сайта могут регистрироваться
+  // по e-mail без привязки Telegram.
+  @Index('UQ_users_telegramId', { unique: true, where: '"telegramId" IS NOT NULL' })
+  @Column({ type: 'bigint', nullable: true })
+  telegramId!: string | null;
+
+  // E-mail для регистрации/входа по паролю. Уникален среди заполненных.
+  @Index('UQ_users_email', { unique: true, where: '"email" IS NOT NULL' })
+  @Column({ type: 'varchar', nullable: true })
+  email!: string | null;
+
+  // Хэш пароля (bcrypt). null — если пользователь входит только через провайдера.
+  @Column({ type: 'varchar', nullable: true, select: false })
+  passwordHash!: string | null;
+
+  // URL аватара (из Telegram), если есть.
+  @Column({ type: 'varchar', nullable: true })
+  avatarUrl!: string | null;
 
   @Column({ type: 'varchar', nullable: true })
   username!: string | null;

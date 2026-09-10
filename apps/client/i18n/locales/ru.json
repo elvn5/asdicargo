@@ -121,5 +121,35 @@
   "cookie": {
     "text": "Мы используем файлы cookie для улучшения работы сайта. Продолжая пользоваться сайтом, вы соглашаетесь с их использованием.",
     "accept": "Принять"
+  },
+  "auth": {
+    "loginTitle": "Вход",
+    "loginSubtitle": "Войдите в личный кабинет",
+    "registerTitle": "Регистрация",
+    "registerSubtitle": "Создайте аккаунт AsDi Cargo",
+    "accountTitle": "Личный кабинет",
+    "email": "E-mail",
+    "password": "Пароль",
+    "passwordConfirm": "Повторите пароль",
+    "firstName": "Имя",
+    "loginButton": "Войти",
+    "registerButton": "Зарегистрироваться",
+    "logout": "Выйти",
+    "or": "или",
+    "noAccount": "Нет аккаунта?",
+    "registerLink": "Зарегистрироваться",
+    "haveAccount": "Уже есть аккаунт?",
+    "loginLink": "Войти",
+    "usernameLabel": "Имя пользователя",
+    "connected": "Подключён",
+    "errEmail": "Некорректный e-mail",
+    "errPasswordRequired": "Введите пароль",
+    "errPasswordMin": "Минимум 8 символов",
+    "errPasswordMatch": "Пароли не совпадают",
+    "errNameRequired": "Введите имя",
+    "errInvalidCredentials": "Неверный e-mail или пароль",
+    "errEmailTaken": "Пользователь с таким e-mail уже существует",
+    "errProvider": "Не удалось войти. Попробуйте снова",
+    "errNetwork": "Ошибка сети. Попробуйте позже"
   }
 }

@@ -1,3 +1,4 @@
+import { AccountModule } from '@/account/account.module';
 import { AddressesModule } from '@/addresses/addresses.module';
 import { AuthModule } from '@/auth/auth.module';
 import { BannedItemsModule } from '@/banned-items/banned-items.module';
@@ -37,6 +38,7 @@ import { LoggerModule } from 'nestjs-pino';
       }),
     }),
     AuthModule,
+    AccountModule,
     BannedItemsModule,
     AddressesModule,
     SupportModule,
