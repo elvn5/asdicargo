@@ -44,7 +44,8 @@
       "warehouse": "На складе",
       "transit": "В пути",
       "ready": "Готова к выдаче"
-    }
+    },
+    "imageAlt": "Приём и оформление сборного груза — AsDi Cargo"
   },
   "services": {
     "heading": "Услуги",

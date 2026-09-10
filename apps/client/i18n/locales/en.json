@@ -44,7 +44,8 @@
       "warehouse": "At warehouse",
       "transit": "In transit",
       "ready": "Ready for pickup"
-    }
+    },
+    "imageAlt": "Receiving and processing consolidated cargo — AsDi Cargo"
   },
   "services": {
     "heading": "Services",

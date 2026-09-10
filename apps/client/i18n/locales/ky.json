@@ -44,7 +44,8 @@
       "warehouse": "Складда",
       "transit": "Жолдо",
       "ready": "Берүүгө даяр"
-    }
+    },
+    "imageAlt": "Топтолгон жүктү кабыл алуу жана тариздөө — AsDi Cargo"
   },
   "services": {
     "heading": "Кызматтар",

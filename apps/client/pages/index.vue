@@ -15,26 +15,18 @@ useHead(() => ({ link: seoAlternates.value }));
 const config = useRuntimeConfig();
 const botUrl = config.public.botUrl as string;
 
-
-
-const statuses = ['created', 'warehouse', 'transit', 'ready'] as const;
 </script>
 
 <template>
   <div>
     <!-- Hero -->
     <section class="relative overflow-hidden">
-      <!-- Базовый фон -->
       <div
-        class="pointer-events-none absolute inset-0 -z-20 bg-gradient-to-br from-brand-50 via-white to-steel-50 dark:from-steel-950 dark:via-steel-950 dark:to-steel-900"
+        class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-brand-50 via-white to-steel-50 dark:from-steel-950 dark:via-steel-950 dark:to-steel-900"
       />
-      <!-- 3D-сцена: фуры AsDi курсируют между Кыргызстаном и Россией -->
-      <HeroTruckScene />
-      <!-- Затемнение для читаемости текста -->
       <div
-        class="pointer-events-none absolute inset-0 -z-[1] bg-gradient-to-r from-white via-white/60 to-transparent dark:from-steel-950 dark:via-steel-950/55 dark:to-transparent"
-      />
-      <div class="mx-auto grid w-full max-w-6xl gap-10 px-4 py-20 md:grid-cols-2 md:items-center">
+        class="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:py-24"
+      >
         <div>
           <UBadge color="primary" variant="soft" class="mb-4">{{ $t('hero.badge') }}</UBadge>
           <h1 class="text-4xl font-bold leading-tight sm:text-5xl">
@@ -51,27 +43,19 @@ const statuses = ['created', 'warehouse', 'transit', 'ready'] as const;
           </div>
         </div>
 
-        <div class="relative">
+        <div class="relative mx-auto w-full max-w-sm md:mx-0 md:ml-auto">
+          <!-- декоративное свечение -->
           <div
-            class="rounded-2xl border border-steel-200 bg-white p-6 shadow-xl shadow-steel-900/5 dark:border-steel-800 dark:bg-steel-900"
-          >
-            <div class="flex items-center gap-3">
-              <span class="flex size-11 items-center justify-center rounded-xl bg-brand-500 text-white">
-                <UIcon name="i-lucide-package-check" class="size-6" />
-              </span>
-              <div>
-                <p class="font-semibold">№AC-2048</p>
-                <p class="text-sm text-steel-500 dark:text-steel-400">{{ $t('hero.cardReady') }}</p>
-              </div>
-              <UBadge color="primary" variant="subtle" class="ml-auto">{{ $t('hero.cardBadge') }}</UBadge>
-            </div>
-            <div class="mt-5 space-y-3">
-              <div v-for="s in statuses" :key="s" class="flex items-center gap-3">
-                <span class="size-2.5 rounded-full bg-brand-500" aria-hidden="true" />
-                <span class="text-sm text-steel-600 dark:text-steel-300">{{ $t(`hero.status.${s}`) }}</span>
-              </div>
-            </div>
-          </div>
+            class="pointer-events-none absolute -inset-4 -z-10 rounded-[2rem] bg-brand-500/25 blur-2xl dark:bg-brand-500/15"
+            aria-hidden="true"
+          />
+          <img
+            src="/hero-cargo.jpg"
+            :alt="$t('hero.imageAlt')"
+            width="399"
+            height="501"
+            class="w-full rounded-2xl border border-steel-200 object-cover shadow-2xl shadow-steel-900/15 ring-1 ring-steel-900/5 dark:border-steel-800 dark:ring-white/5"
+          />
         </div>
       </div>
     </section>
