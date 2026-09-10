@@ -17,6 +17,10 @@ export class SupportInfo {
   @Column({ type: 'varchar', nullable: true })
   email!: string | null;
 
+  // Ссылка кнопки «Бесплатная консультация» на сайте (редактируется в админке).
+  @Column({ type: 'varchar', nullable: true })
+  consultationUrl!: string | null;
+
   @Column({ type: 'varchar', nullable: true })
   workingHours!: string | null;
 

@@ -45,6 +45,19 @@ const total = computed(() => (useVolume.value ? byVolume.value : byWeight.value)
 
 const numberFmt = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 });
 const fmt = (n: number) => numberFmt.format(Math.round(n));
+
+// Deep-link в Telegram-бота с данными расчёта: бот распарсит start-payload
+// и оформит заявку. Формат payload: calc_w<кг>_v<м³×1000>_t<итог>_<w|v>.
+// Разрешены только буквы/цифры/подчёркивание, длина ≤ 64 символа.
+const orderUrl = computed(() => {
+  if (!hasInput.value) return botUrl;
+  const wKg = Math.round(w.value);
+  const vLit = Math.round(v.value * 1000);
+  const totalSom = Math.round(total.value);
+  const mode = useVolume.value ? 'v' : 'w';
+  const payload = `calc_w${wKg}_v${vLit}_t${totalSom}_${mode}`;
+  return `${botUrl}?start=${payload}`;
+});
 </script>
 
 <template>
@@ -123,7 +136,7 @@ const fmt = (n: number) => numberFmt.format(Math.round(n));
       <p class="mt-4 text-sm text-steel-500">{{ t('calculator.note') }}</p>
 
       <UButton
-        :to="botUrl"
+        :to="orderUrl"
         target="_blank"
         size="lg"
         icon="i-lucide-send"

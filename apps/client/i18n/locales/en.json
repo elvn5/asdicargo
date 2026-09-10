@@ -151,5 +151,27 @@
     "errEmailTaken": "A user with this email already exists",
     "errProvider": "Sign-in failed. Please try again",
     "errNetwork": "Network error. Please try later"
+  },
+  "reviews": {
+    "heading": "Customer reviews",
+    "sub": "Thousands of parcels delivered with trust.",
+    "r1": {
+      "name": "Aibek",
+      "role": "Bishkek",
+      "text": "Ordered electronics from Russia — everything arrived on time and intact. Tracking via the bot is very convenient."
+    },
+    "r2": {
+      "name": "Gulnara",
+      "role": "Osh",
+      "text": "I've used AsDi Cargo for over a year. Transparent prices and managers are always in touch."
+    },
+    "r3": {
+      "name": "Daniyar",
+      "role": "Bishkek",
+      "text": "Sent a consolidated shipment — they combined and delivered it without delays. Highly recommend."
+    }
+  },
+  "home": {
+    "howCta": "Open the Telegram bot"
   }
 }

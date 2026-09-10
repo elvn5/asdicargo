@@ -42,10 +42,56 @@ export class BotUpdate {
       lastName: from.last_name,
     });
 
+    // Заявка из калькулятора сайта: /start calc_w<кг>_v<м³×1000>_t<итог>_<w|v>
+    const orderText = this.parseCalcPayload(this.getStartPayload(ctx));
+    if (orderText) {
+      await ctx.reply(orderText);
+    }
+
     await ctx.reply(
       `Здравствуйте, ${from.first_name ?? 'гость'}! Я помогу отследить посылки и отвечу на вопросы. Выберите раздел в меню ниже.`,
       mainMenuKeyboard,
     );
+  }
+
+  /** Достаёт start-параметр из "/start <payload>" (или ctx.startPayload). */
+  private getStartPayload(ctx: Context): string {
+    const message = ctx.message as { text?: string } | undefined;
+    const text = message?.text ?? '';
+    const spaceIdx = text.indexOf(' ');
+    if (spaceIdx !== -1) {
+      return text.slice(spaceIdx + 1).trim();
+    }
+    const withPayload = ctx as unknown as { startPayload?: string };
+    return withPayload.startPayload ?? '';
+  }
+
+  /**
+   * Разбирает payload калькулятора и возвращает текст заявки, либо null.
+   * Формат: calc_w<кг>_v<м³×1000>_t<итог>_<w|v>.
+   */
+  private parseCalcPayload(payload: string): string | null {
+    const match = /^calc_w(\d+)_v(\d+)_t(\d+)_(w|v)$/.exec(payload);
+    if (!match) return null;
+
+    const weightKg = Number(match[1]);
+    const volumeM3 = Number(match[2]) / 1000;
+    const total = Number(match[3]);
+    const mode = match[4] === 'v' ? 'по объёму (кубатуре)' : 'по весу';
+
+    const fmt = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 });
+    const volFmt = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 3 });
+
+    return [
+      '📦 Заявка из калькулятора на сайте:',
+      '',
+      `Вес: ${fmt.format(weightKg)} кг`,
+      `Объём: ${volFmt.format(volumeM3)} м³`,
+      `Способ расчёта: ${mode}`,
+      `Ориентировочная стоимость: ${fmt.format(total)} сом`,
+      '',
+      'Чтобы оформить доставку, укажите телефон в разделе «Профиль» — наш менеджер свяжется с вами. Точная стоимость подтверждается после приёмки груза.',
+    ].join('\n');
   }
 
   @Hears(MENU_BUTTONS.PARCELS)

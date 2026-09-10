@@ -22,6 +22,7 @@ export interface SupportInfo {
   telegramContact: string | null;
   email: string | null;
   workingHours: string | null;
+  consultationUrl: string | null;
 }
 
 export enum ParcelStatus {

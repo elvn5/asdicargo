@@ -6,6 +6,7 @@ export const updateSupportInfoSchema = z.object({
   telegramContact: z.string().max(255).nullable().optional(),
   email: z.string().email().max(255).nullable().optional(),
   workingHours: z.string().max(255).nullable().optional(),
+  consultationUrl: z.string().url().max(2000).nullable().optional(),
 });
 
 export type UpdateSupportInfoDto = z.infer<typeof updateSupportInfoSchema>;

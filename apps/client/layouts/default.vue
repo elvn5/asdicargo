@@ -241,7 +241,7 @@ const auth = useAuthStore();
             </li>
             <li class="flex items-center gap-2">
               <UIcon name="i-lucide-mail" class="size-4 shrink-0 text-brand-500" />
-              <a href="mailto:lidiya22_92@mail.ru" class="transition hover:text-brand-500 dark:hover:text-brand-400">lidiya22_92@mail.ru</a>
+              <a href="mailto:info@asdicargo.com" class="transition hover:text-brand-500 dark:hover:text-brand-400">info@asdicargo.com</a>
             </li>
             <li class="flex items-center gap-2">
               <UIcon name="i-lucide-clock" class="size-4 shrink-0 text-brand-500" />

@@ -5,7 +5,7 @@ import type { SupportInfo } from '~/shared/api/types';
 definePageMeta({ layout: 'default' });
 
 const api = useApiClient();
-const form = reactive({ message: '', phone: '', telegramContact: '', email: '', workingHours: '' });
+const form = reactive({ message: '', phone: '', telegramContact: '', email: '', workingHours: '', consultationUrl: '' });
 const loading = ref(false);
 const saving = ref(false);
 const saved = ref(false);
@@ -19,6 +19,7 @@ async function load(): Promise<void> {
     form.telegramContact = data.telegramContact ?? '';
     form.email = data.email ?? '';
     form.workingHours = data.workingHours ?? '';
+    form.consultationUrl = data.consultationUrl ?? '';
   } finally {
     loading.value = false;
   }
@@ -34,6 +35,7 @@ async function save(): Promise<void> {
       telegramContact: form.telegramContact || null,
       email: form.email || null,
       workingHours: form.workingHours || null,
+      consultationUrl: form.consultationUrl || null,
     });
     saved.value = true;
   } finally {
@@ -63,6 +65,9 @@ onMounted(load);
       </UFormField>
       <UFormField label="Часы работы">
         <UInput v-model="form.workingHours" class="w-full" />
+      </UFormField>
+      <UFormField label="Ссылка кнопки «Бесплатная консультация» (на сайте)">
+        <UInput v-model="form.consultationUrl" placeholder="https://t.me/asdicargo_bot" class="w-full" />
       </UFormField>
 
       <div class="mt-2 flex items-center gap-2">
