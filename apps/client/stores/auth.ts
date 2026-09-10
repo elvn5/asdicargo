@@ -50,8 +50,11 @@ export const useAuthStore = defineStore('auth', {
     },
     async fetchMe(force = false): Promise<AuthUser | null> {
       if (this.checked && !force) return this.user;
-      const api = useApiClient();
+      // Всё в try/catch, включая инициализацию клиента: проверка сессии не должна
+      // ронять SSR-рендер страницы, даже если API недоступен или контекст запроса
+      // прочитать не удалось.
       try {
+        const api = useApiClient();
         this.user = await api.get<AuthUser>('/account/me');
       } catch {
         this.user = null;
