@@ -15,7 +15,6 @@ const links = computed(() => [
 ]);
 
 const config = useRuntimeConfig();
-const botUrl = config.public.botUrl as string;
 
 // Версия задеплоенного образа (пусто в локальной разработке — тогда не показываем).
 const version = String(config.public.appVersion ?? '');
@@ -40,13 +39,17 @@ const auth = useAuthStore();
     <header
       class="sticky top-0 z-40 border-b border-steel-200/70 bg-white/80 backdrop-blur dark:border-steel-800/70 dark:bg-steel-950/80"
     >
-      <div class="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-4">
-        <NuxtLink :to="localePath('/')" class="flex items-center gap-2 text-lg font-semibold">
-          <span class="inline-block h-6 w-1.5 rounded-full bg-brand-500" aria-hidden="true" />
-          <span>As<span class="text-brand-600 dark:text-brand-400">Di</span> Cargo</span>
-        </NuxtLink>
+      <div class="mx-auto grid h-16 w-full max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-4">
+        <!-- Логотип: левая колонка -->
+        <div class="flex items-center">
+          <NuxtLink :to="localePath('/')" class="flex items-center gap-2 text-lg font-semibold">
+            <span class="inline-block h-6 w-1.5 rounded-full bg-brand-500" aria-hidden="true" />
+            <span>As<span class="text-brand-600 dark:text-brand-400">Di</span> Cargo</span>
+          </NuxtLink>
+        </div>
 
-        <nav class="hidden items-center gap-1 md:flex">
+        <!-- Навигация: центральная колонка, строго по центру -->
+        <nav class="hidden items-center gap-1 lg:flex">
           <UButton
             v-for="link in links"
             :key="link.to"
@@ -59,7 +62,8 @@ const auth = useAuthStore();
           </UButton>
         </nav>
 
-        <div class="flex items-center gap-2">
+        <!-- Действия: правая колонка -->
+        <div class="flex items-center justify-end gap-1.5">
           <LangSwitcher />
           <ThemeToggle />
           <ClientOnly>
@@ -74,8 +78,8 @@ const auth = useAuthStore();
             <UButton
               v-else
               :to="localePath('/login')"
-              color="neutral"
-              variant="ghost"
+              color="primary"
+              variant="soft"
               size="sm"
               icon="i-lucide-log-in"
               class="hidden sm:inline-flex"
@@ -85,8 +89,8 @@ const auth = useAuthStore();
             <template #fallback>
               <UButton
                 :to="localePath('/login')"
-                color="neutral"
-                variant="ghost"
+                color="primary"
+                variant="soft"
                 size="sm"
                 icon="i-lucide-log-in"
                 class="hidden sm:inline-flex"
@@ -95,11 +99,8 @@ const auth = useAuthStore();
               </UButton>
             </template>
           </ClientOnly>
-          <UButton :to="botUrl" target="_blank" icon="i-lucide-send" color="primary">
-            <span class="hidden sm:inline">{{ t('header.openBot') }}</span>
-          </UButton>
           <UButton
-            class="md:hidden"
+            class="lg:hidden"
             color="neutral"
             variant="ghost"
             :icon="mobileOpen ? 'i-lucide-x' : 'i-lucide-menu'"
@@ -120,7 +121,7 @@ const auth = useAuthStore();
       >
         <nav
           v-if="mobileOpen"
-          class="border-t border-steel-200/70 bg-white/95 backdrop-blur dark:border-steel-800/70 dark:bg-steel-950/95 md:hidden"
+          class="border-t border-steel-200/70 bg-white/95 backdrop-blur dark:border-steel-800/70 dark:bg-steel-950/95 lg:hidden"
         >
           <div class="mx-auto flex w-full max-w-6xl flex-col gap-1 px-4 py-3">
             <UButton
@@ -134,17 +135,6 @@ const auth = useAuthStore();
               @click="mobileOpen = false"
             >
               {{ link.label }}
-            </UButton>
-            <UButton
-              :to="botUrl"
-              target="_blank"
-              icon="i-lucide-send"
-              color="primary"
-              size="lg"
-              block
-              class="mt-1"
-            >
-              {{ t('header.openBot') }}
             </UButton>
             <ClientOnly>
               <UButton
@@ -162,7 +152,7 @@ const auth = useAuthStore();
               <UButton
                 v-else
                 :to="localePath('/login')"
-                color="neutral"
+                color="primary"
                 variant="soft"
                 size="lg"
                 icon="i-lucide-log-in"
@@ -174,7 +164,7 @@ const auth = useAuthStore();
               <template #fallback>
                 <UButton
                   :to="localePath('/login')"
-                  color="neutral"
+                  color="primary"
                   variant="soft"
                   size="lg"
                   icon="i-lucide-log-in"
