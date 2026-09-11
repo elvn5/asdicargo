@@ -18,7 +18,7 @@ const organizationLd = computed(() =>
     '@type': 'Organization',
     name: 'AsDi Cargo',
     url: siteUrl,
-    description: 'Карго и доставка грузов: Китай — Кыргызстан, Россия — Кыргызстан, Кыргызстан — Россия.',
+    description: 'Карго и доставка грузов: Россия — Кыргызстан, Кыргызстан — Россия.',
     areaServed: 'KG',
     sameAs: [botUrl],
   }),

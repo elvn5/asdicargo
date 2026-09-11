@@ -64,9 +64,7 @@ export class AddSitePageLanguages1789500000000 implements MigrationInterface {
         title: 'Directions',
         content:
           '<h2>Delivery directions</h2>' +
-          '<p>We carry cargo along three main routes.</p>' +
-          '<h3>China → Kyrgyzstan</h3>' +
-          '<p>Delivery of goods and cargo from China to Kyrgyzstan.</p>' +
+          '<p>We carry cargo along two main routes.</p>' +
           '<h3>Russia → Kyrgyzstan</h3>' +
           '<p>Delivery of parcels and cargo from Russia to Kyrgyzstan.</p>' +
           '<h3>Kyrgyzstan → Russia</h3>' +
@@ -78,9 +76,7 @@ export class AddSitePageLanguages1789500000000 implements MigrationInterface {
         title: 'Багыттар',
         content:
           '<h2>Жеткирүү багыттары</h2>' +
-          '<p>Биз жүктөрдү үч негизги багыт боюнча ташыйбыз.</p>' +
-          '<h3>Кытай → Кыргызстан</h3>' +
-          '<p>Кытайдан Кыргызстанга товарларды жана жүктөрдү жеткирүү.</p>' +
+          '<p>Биз жүктөрдү эки негизги багыт боюнча ташыйбыз.</p>' +
           '<h3>Россия → Кыргызстан</h3>' +
           '<p>Россиядан Кыргызстанга посылкаларды жана жүктөрдү жеткирүү.</p>' +
           '<h3>Кыргызстан → Россия</h3>' +
@@ -162,7 +158,7 @@ export class AddSitePageLanguages1789500000000 implements MigrationInterface {
         title: 'О нас',
         content:
           '<h2>О компании AsDi Cargo</h2>' +
-          '<p>AsDi Cargo — карго-компания, которая специализируется на перевозке консолидированных (сборных) грузов между Кыргызстаном и Россией, а также доставке товаров из Китая.</p>' +
+          '<p>AsDi Cargo — карго-компания, которая специализируется на перевозке консолидированных (сборных) грузов между Кыргызстаном и Россией.</p>' +
           '<p>Мы принимаем, консолидируем и доставляем ваши посылки и грузы «под ключ», а оформление и отслеживание проходят прямо в Telegram-боте — быстро и прозрачно.</p>' +
           '<h3>Почему нам доверяют</h3>' +
           '<p>С 2020 года мы помогаем тысячам клиентов получать покупки и отправлять грузы вовремя и в целости. Прозрачные цены, удобное отслеживание и поддержка на связи — на каждом этапе.</p>' +
@@ -175,7 +171,7 @@ export class AddSitePageLanguages1789500000000 implements MigrationInterface {
         title: 'About us',
         content:
           '<h2>About AsDi Cargo</h2>' +
-          '<p>AsDi Cargo is a cargo company specializing in the transport of consolidated (groupage) cargo between Kyrgyzstan and Russia, as well as delivery of goods from China.</p>' +
+          '<p>AsDi Cargo is a cargo company specializing in the transport of consolidated (groupage) cargo between Kyrgyzstan and Russia.</p>' +
           '<p>We receive, consolidate and deliver your parcels and cargo end to end, while ordering and tracking happen right in the Telegram bot — fast and transparent.</p>' +
           '<h3>Why clients trust us</h3>' +
           '<p>Since 2020 we have helped thousands of clients receive their purchases and ship cargo on time and intact. Transparent pricing, convenient tracking and responsive support — at every step.</p>' +
@@ -188,7 +184,7 @@ export class AddSitePageLanguages1789500000000 implements MigrationInterface {
         title: 'Биз жөнүндө',
         content:
           '<h2>AsDi Cargo компаниясы жөнүндө</h2>' +
-          '<p>AsDi Cargo — Кыргызстан менен Россиянын ортосунда топтолгон (сборный) жүктөрдү ташууга, ошондой эле Кытайдан товарларды жеткирүүгө адистешкен карго-компания.</p>' +
+          '<p>AsDi Cargo — Кыргызстан менен Россиянын ортосунда топтолгон (сборный) жүктөрдү ташууга адистешкен карго-компания.</p>' +
           '<p>Биз сиздин посылкаларыңызды жана жүктөрүңүздү кабыл алабыз, топтойбуз жана «ачкычка чейин» жеткиребиз, ал эми таштоо менен көзөмөл түз эле Telegram-ботто өтөт — тез жана ачык.</p>' +
           '<h3>Эмне үчүн бизге ишенишет</h3>' +
           '<p>2020-жылдан бери биз миңдеген кардарларга буюмдарын өз убагында жана бүтүн алууга жана жүк жөнөтүүгө жардам берип келебиз. Ачык баалар, ыңгайлуу көзөмөл жана байланыштагы колдоо — ар бир этапта.</p>' +
