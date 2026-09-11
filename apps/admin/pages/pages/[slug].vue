@@ -8,6 +8,15 @@ const route = useRoute();
 const api = useApiClient();
 const slug = computed(() => String(route.params.slug));
 
+// Язык редактируемого контента (страница хранится по строке на язык).
+type Lang = 'ru' | 'ky' | 'en';
+const languages: Array<{ value: Lang; label: string }> = [
+  { value: 'ru', label: 'Русский' },
+  { value: 'ky', label: 'Кыргызча' },
+  { value: 'en', label: 'English' },
+];
+const language = ref<Lang>('ru');
+
 const loading = ref(false);
 const saving = ref(false);
 const saved = ref(false);
@@ -21,8 +30,9 @@ const form = reactive({
 
 async function load(): Promise<void> {
   loading.value = true;
+  error.value = '';
   try {
-    const page = await api.get<SitePage>(`/pages/admin/${slug.value}`);
+    const page = await api.get<SitePage>(`/pages/admin/${slug.value}?language=${language.value}`);
     form.title = page.title;
     form.published = page.published;
     form.content = page.content || '<p></p>';
@@ -36,7 +46,7 @@ async function save(): Promise<void> {
   saved.value = false;
   saving.value = true;
   try {
-    await api.put(`/pages/${slug.value}`, {
+    await api.put(`/pages/${slug.value}?language=${language.value}`, {
       title: form.title,
       published: form.published,
       content: form.content,
@@ -47,6 +57,14 @@ async function save(): Promise<void> {
   } finally {
     saving.value = false;
   }
+}
+
+// Переключение языка перезагружает контент выбранной локали.
+async function switchLanguage(lang: Lang): Promise<void> {
+  if (lang === language.value) return;
+  language.value = lang;
+  saved.value = false;
+  await load();
 }
 
 onMounted(load);
@@ -60,6 +78,24 @@ onMounted(load);
     </div>
 
     <UAlert v-if="error" color="error" variant="soft" :title="error" class="mb-4" />
+
+    <!-- Переключатель языка -->
+    <div class="mb-4 inline-flex rounded-lg border border-steel-200 bg-steel-50 p-1 dark:border-steel-800 dark:bg-steel-900">
+      <button
+        v-for="l in languages"
+        :key="l.value"
+        type="button"
+        class="rounded-md px-3 py-1.5 text-sm font-medium transition"
+        :class="
+          language === l.value
+            ? 'bg-white text-steel-900 shadow-sm dark:bg-steel-950 dark:text-steel-100'
+            : 'text-steel-500 hover:text-steel-800 dark:text-steel-400 dark:hover:text-steel-200'
+        "
+        @click="switchLanguage(l.value)"
+      >
+        {{ l.label }}
+      </button>
+    </div>
 
     <div class="flex flex-col gap-4">
       <UFormField label="Заголовок" required>

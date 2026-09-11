@@ -95,7 +95,7 @@ useHead(() => ({
         </time>
       </header>
 
-      <img v-if="post.coverImageUrl" :src="post.coverImageUrl" :alt="post.title" class="w-full rounded-2xl" />
+      <img v-if="post.coverImageUrl" :src="post.coverImageUrl" :alt="post.title" class="w-full rounded-brand-lg" />
 
       <!-- Семантический HTML из редактора (h2/p/ul/blockquote/…), отрендеренный на сервере -->
       <div v-html="post.content" />

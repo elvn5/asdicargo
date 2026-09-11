@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { t } = useI18n();
+const localePath = useLocalePath();
 const config = useRuntimeConfig();
 const botUrl = config.public.botUrl as string;
 
@@ -25,94 +26,171 @@ const { data: settings } = await useFetch<{ consultationUrl: string | null }>(
 );
 const consultationUrl = computed(() => settings.value?.consultationUrl || botUrl);
 
-// Шаги «Как мы работаем» и отзывы берём из i18n.
-const steps = ['s1', 's2', 's3', 's4'] as const;
-const stepIcons: Record<(typeof steps)[number], string> = {
-  s1: 'i-lucide-user-plus',
-  s2: 'i-lucide-shopping-bag',
-  s3: 'i-lucide-radar',
-  s4: 'i-lucide-package-check',
-};
+// Услуги (иконочные карточки).
+const services = [
+  { key: 'receive', icon: 'i-lucide-package' },
+  { key: 'delivery', icon: 'i-lucide-truck' },
+  { key: 'pickup', icon: 'i-lucide-map-pin' },
+] as const;
+
+// Статистика «в цифрах» (значения редактируются через i18n).
+const stats = [
+  { v: 'stats.n1v', l: 'stats.n1l' },
+  { v: 'stats.n2v', l: 'stats.n2l' },
+  { v: 'stats.n3v', l: 'stats.n3l' },
+  { v: 'stats.n4v', l: 'stats.n4l' },
+] as const;
+
+// Блок «Почему выбирают нас».
+const features = [
+  { key: 'f1', icon: 'i-lucide-award' },
+  { key: 'f2', icon: 'i-lucide-calculator' },
+  { key: 'f3', icon: 'i-lucide-radar' },
+  { key: 'f4', icon: 'i-lucide-headset' },
+] as const;
+
 const reviews = ['r1', 'r2', 'r3'] as const;
 </script>
 
 <template>
   <div>
-    <!-- Hero -->
+    <!-- ============================ HERO ============================ -->
     <section class="relative overflow-hidden">
-      <div
-        class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-brand-50 via-white to-steel-50 dark:from-steel-950 dark:via-steel-950 dark:to-steel-900"
-      />
-      <div
-        class="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:py-24"
-      >
-        <div>
-          <UBadge color="primary" variant="soft" class="mb-4">{{ t('hero.badge') }}</UBadge>
-          <h1 class="text-4xl font-bold leading-tight sm:text-5xl">
+      <!-- Фоновое фото + затемняющий градиент -->
+      <div class="absolute inset-0 -z-10">
+        <img
+          src="/hero-cargo.jpg"
+          :alt="t('hero.imageAlt')"
+          class="h-full w-full object-cover"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-steel-950/90 via-steel-950/75 to-steel-950/40"
+        />
+      </div>
+
+      <div class="mx-auto w-full max-w-6xl px-4 py-20 sm:py-24 md:py-32">
+        <div class="glass-card max-w-xl rounded-brand-xl p-7 shadow-brand-card sm:p-10">
+          <span
+            class="inline-flex items-center rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-white/90"
+          >
+            {{ t('hero.badge') }}
+          </span>
+
+          <h1 class="mt-5 text-4xl font-bold leading-tight text-white sm:text-5xl">
             {{ t('hero.titleLead') }}
-            <span class="text-brand-600 dark:text-brand-400">{{ t('hero.titleAccent') }}</span>
+            <span class="text-brand-300">{{ t('hero.titleAccent') }}</span>
           </h1>
-          <p class="mt-4 max-w-md whitespace-pre-line text-lg text-steel-600 dark:text-steel-300">
+
+          <p class="mt-4 max-w-md whitespace-pre-line text-lg text-white/80">
             {{ t('hero.subtitle') }}
           </p>
-          <div class="mt-8 flex flex-wrap gap-3">
-            <UButton
-              :to="consultationUrl"
-              target="_blank"
-              size="lg"
-              icon="i-lucide-message-circle"
-              color="primary"
-            >
-              {{ t('hero.ctaStart') }}
-            </UButton>
-          </div>
-        </div>
 
-        <div class="relative mx-auto w-full max-w-sm md:mx-0 md:ml-auto">
-          <div
-            class="pointer-events-none absolute -inset-4 -z-10 rounded-[2rem] bg-brand-500/25 blur-2xl dark:bg-brand-500/15"
-            aria-hidden="true"
-          />
-          <img
-            src="/hero-cargo.jpg"
-            :alt="t('hero.imageAlt')"
-            width="399"
-            height="501"
-            class="w-full rounded-2xl border border-steel-200 object-cover shadow-2xl shadow-steel-900/15 ring-1 ring-steel-900/5 dark:border-steel-800 dark:ring-white/5"
-          />
+          <!-- Чипы-акценты -->
+          <div class="mt-6 flex flex-wrap gap-2">
+            <span
+              v-for="chip in ['chipRoute', 'chipSince', 'chipClients']"
+              :key="chip"
+              class="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-sm font-medium text-white ring-1 ring-white/15"
+            >
+              <span class="size-1.5 rounded-full bg-brand-400" aria-hidden="true" />
+              {{ t(`hero.${chip}`) }}
+            </span>
+          </div>
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a
+              :href="consultationUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-full bg-brand-gradient px-6 py-3 font-semibold text-white shadow-lg shadow-brand-900/30 transition hover:brightness-110"
+            >
+              <UIcon name="i-lucide-message-circle" class="size-5" />
+              {{ t('hero.ctaStart') }}
+            </a>
+            <NuxtLink
+              :to="localePath('/cargo-kalkulyator')"
+              class="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/5 px-6 py-3 font-semibold text-white backdrop-blur transition hover:bg-white/15"
+            >
+              <UIcon name="i-lucide-calculator" class="size-5" />
+              {{ t('hero.ctaCalc') }}
+            </NuxtLink>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Как мы работаем -->
+    <!-- ========================= СТАТИСТИКА ========================= -->
+    <section class="bg-steel-950 text-white">
+      <div class="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
+        <h2 class="mb-12 text-center text-3xl font-bold sm:text-4xl">
+          {{ t('stats.heading') }}
+        </h2>
+        <div class="grid grid-cols-2 gap-8 lg:grid-cols-4">
+          <div v-for="s in stats" :key="s.v" class="text-center">
+            <div class="text-4xl font-bold tracking-tight sm:text-5xl">
+              {{ t(s.v) }}
+            </div>
+            <div class="mx-auto mt-3 h-1 w-10 rounded-full bg-brand-gradient" />
+            <p class="mt-3 text-sm text-steel-300">{{ t(s.l) }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================== УСЛУГИ =========================== -->
     <section class="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
       <div class="mb-10 text-center">
-        <h2 class="text-3xl font-bold sm:text-4xl">{{ t('how.heading') }}</h2>
+        <h2 class="text-3xl font-bold sm:text-4xl">{{ t('services.heading') }}</h2>
+        <p class="mt-3 text-steel-600 dark:text-steel-300">{{ t('services.sub') }}</p>
       </div>
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="grid gap-6 md:grid-cols-3">
         <div
-          v-for="(step, i) in steps"
-          :key="step"
-          class="relative flex flex-col rounded-2xl border border-steel-200 bg-white p-6 dark:border-steel-800 dark:bg-steel-900/40"
+          v-for="s in services"
+          :key="s.key"
+          class="group rounded-brand-lg border border-steel-200 bg-white p-8 transition hover:-translate-y-1 hover:shadow-brand-card dark:border-steel-800 dark:bg-steel-900/50"
         >
           <div
-            class="mb-4 inline-flex size-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-400"
+            class="mb-5 inline-flex size-14 items-center justify-center rounded-2xl bg-brand-gradient text-white shadow-lg shadow-brand-900/20"
           >
-            <UIcon :name="stepIcons[step]" class="size-6" />
+            <UIcon :name="s.icon" class="size-7" />
           </div>
-          <span class="text-sm font-semibold text-brand-600 dark:text-brand-400">
-            {{ String(i + 1).padStart(2, '0') }}
-          </span>
-          <h3 class="mt-1 text-lg font-semibold">{{ t(`how.${step}.title`) }}</h3>
-          <p class="mt-2 text-sm leading-relaxed text-steel-600 dark:text-steel-300">
-            {{ t(`how.${step}.text`) }}
+          <h3 class="text-xl font-semibold">{{ t(`services.${s.key}.title`) }}</h3>
+          <p class="mt-2 leading-relaxed text-steel-600 dark:text-steel-300">
+            {{ t(`services.${s.key}.text`) }}
           </p>
         </div>
       </div>
     </section>
 
-    <!-- Отзывы -->
-    <section class="bg-steel-50 dark:bg-steel-900/40">
+    <!-- ======================== ПОЧЕМУ МЫ ========================== -->
+    <section class="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
+      <div class="mb-10 text-center">
+        <h2 class="text-3xl font-bold sm:text-4xl">{{ t('why.heading') }}</h2>
+        <p class="mt-3 text-steel-600 dark:text-steel-300">{{ t('why.sub') }}</p>
+      </div>
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div
+          v-for="f in features"
+          :key="f.key"
+          class="flex items-start gap-5 rounded-brand-lg border border-steel-200 bg-white p-6 transition hover:shadow-brand-card dark:border-steel-800 dark:bg-steel-900/50"
+        >
+          <div
+            class="flex size-14 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-400"
+          >
+            <UIcon :name="f.icon" class="size-7" />
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold">{{ t(`why.${f.key}.title`) }}</h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-steel-600 dark:text-steel-300">
+              {{ t(`why.${f.key}.text`) }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================== ОТЗЫВЫ =========================== -->
+    <section id="reviews" class="scroll-mt-16 bg-steel-50 dark:bg-steel-900/40">
       <div class="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
         <div class="mb-10 text-center">
           <h2 class="text-3xl font-bold sm:text-4xl">{{ t('reviews.heading') }}</h2>
@@ -122,7 +200,7 @@ const reviews = ['r1', 'r2', 'r3'] as const;
           <figure
             v-for="r in reviews"
             :key="r"
-            class="flex flex-col rounded-2xl border border-steel-200 bg-white p-6 dark:border-steel-800 dark:bg-steel-950"
+            class="flex flex-col rounded-brand-lg border border-steel-200 bg-white p-6 shadow-sm dark:border-steel-800 dark:bg-steel-950"
           >
             <div class="mb-3 flex gap-0.5 text-brand-500" aria-hidden="true">
               <UIcon v-for="n in 5" :key="n" name="i-lucide-star" class="size-4 fill-current" />
@@ -142,23 +220,25 @@ const reviews = ['r1', 'r2', 'r3'] as const;
       </div>
     </section>
 
-    <!-- Финальный CTA -->
+    <!-- ======================= ФИНАЛЬНЫЙ CTA ======================= -->
     <section class="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
       <div
-        class="relative overflow-hidden rounded-3xl border border-steel-200 bg-gradient-to-br from-brand-50 via-white to-steel-50 px-6 py-12 text-center dark:border-steel-800 dark:from-steel-900 dark:via-steel-950 dark:to-steel-900 md:px-12"
+        class="relative overflow-hidden rounded-brand-xl bg-brand-gradient px-6 py-14 text-center shadow-brand-card md:px-12"
       >
-        <h2 class="mx-auto max-w-2xl text-2xl font-bold sm:text-3xl">{{ t('cta.heading') }}</h2>
-        <p class="mx-auto mt-3 max-w-xl text-steel-600 dark:text-steel-300">{{ t('cta.text') }}</p>
+        <h2 class="mx-auto max-w-2xl text-2xl font-bold text-white sm:text-3xl">
+          {{ t('cta.heading') }}
+        </h2>
+        <p class="mx-auto mt-3 max-w-xl text-white/85">{{ t('cta.text') }}</p>
         <div class="mt-8 flex justify-center">
-          <UButton
-            :to="consultationUrl"
+          <a
+            :href="consultationUrl"
             target="_blank"
-            size="lg"
-            icon="i-lucide-send"
-            color="primary"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 font-semibold text-brand-700 shadow-lg transition hover:bg-white/90"
           >
+            <UIcon name="i-lucide-send" class="size-5" />
             {{ t('cta.button') }}
-          </UButton>
+          </a>
         </div>
       </div>
     </section>

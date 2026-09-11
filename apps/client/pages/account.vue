@@ -23,12 +23,12 @@ async function onLogout(): Promise<void> {
 </script>
 
 <template>
-  <div class="mx-auto w-full max-w-2xl px-4 py-12">
+  <div class="mx-auto w-full max-w-2xl px-4 py-14 sm:py-20">
     <h1 class="mb-6 text-2xl font-semibold">{{ t('auth.accountTitle') }}</h1>
 
     <div
       v-if="auth.user"
-      class="rounded-xl border border-steel-200 bg-white p-6 dark:border-steel-800 dark:bg-steel-900"
+      class="rounded-brand-lg border border-steel-200 bg-white p-6 shadow-brand-card dark:border-steel-800 dark:bg-steel-900"
     >
       <div class="flex items-center gap-4">
         <UAvatar

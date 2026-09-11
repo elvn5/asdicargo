@@ -48,50 +48,59 @@ useHead(() => ({ link: seoAlternates.value }));
 </script>
 
 <template>
-  <section class="mx-auto w-full max-w-5xl px-4 py-16">
-    <header class="mb-10">
-      <h1 class="text-3xl font-bold sm:text-4xl">{{ t('blog.title') }}</h1>
-      <p class="mt-2 text-steel-600 dark:text-steel-300">{{ t('blog.subtitle') }}</p>
-    </header>
+  <div>
+    <!-- Градиентная шапка -->
+    <section class="relative overflow-hidden bg-brand-steel-gradient">
+      <div
+        class="pointer-events-none absolute -right-16 -top-24 h-64 w-96 rounded-full bg-white/10 blur-3xl"
+        aria-hidden="true"
+      />
+      <div class="relative z-10 mx-auto w-full max-w-5xl px-4 py-14 md:py-20">
+        <h1 class="text-3xl font-bold leading-tight text-white sm:text-4xl">{{ t('blog.title') }}</h1>
+        <p class="mt-3 max-w-xl text-white/80">{{ t('blog.subtitle') }}</p>
+      </div>
+    </section>
 
-    <p v-if="!posts || posts.length === 0" class="text-steel-500 dark:text-steel-400">
-      {{ t('blog.empty') }}
-    </p>
+    <section class="mx-auto w-full max-w-5xl px-4 py-12 md:py-16">
+      <p v-if="!posts || posts.length === 0" class="text-steel-500 dark:text-steel-400">
+        {{ t('blog.empty') }}
+      </p>
 
-    <div v-else class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      <article
-        v-for="post in posts"
-        :key="post.id"
-        class="group overflow-hidden rounded-2xl border border-steel-200 bg-white transition hover:shadow-lg dark:border-steel-800 dark:bg-steel-900"
-      >
-        <NuxtLink :to="localePath(`/cargo-blog/${post.slug}`)" class="flex h-full flex-col">
-          <img
-            v-if="post.coverImageUrl"
-            :src="post.coverImageUrl"
-            :alt="post.title"
-            loading="lazy"
-            class="aspect-video w-full object-cover"
-          />
-          <div class="flex flex-1 flex-col p-5">
-            <time
-              v-if="post.publishedAt"
-              :datetime="post.publishedAt"
-              class="text-xs uppercase tracking-wide text-steel-400"
-            >
-              {{ fmt(post.publishedAt) }}
-            </time>
-            <h2 class="mt-2 text-lg font-semibold group-hover:text-brand-600 dark:group-hover:text-brand-400">
-              {{ post.title }}
-            </h2>
-            <p v-if="post.excerpt" class="mt-2 line-clamp-3 text-sm text-steel-600 dark:text-steel-300">
-              {{ post.excerpt }}
-            </p>
-            <span class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand-600 dark:text-brand-400">
-              {{ t('blog.readMore') }} <UIcon name="i-lucide-arrow-right" class="size-4" />
-            </span>
-          </div>
-        </NuxtLink>
-      </article>
-    </div>
-  </section>
+      <div v-else class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <article
+          v-for="post in posts"
+          :key="post.id"
+          class="group overflow-hidden rounded-brand-lg border border-steel-200 bg-white transition hover:-translate-y-1 hover:shadow-brand-card dark:border-steel-800 dark:bg-steel-900"
+        >
+          <NuxtLink :to="localePath(`/cargo-blog/${post.slug}`)" class="flex h-full flex-col">
+            <img
+              v-if="post.coverImageUrl"
+              :src="post.coverImageUrl"
+              :alt="post.title"
+              loading="lazy"
+              class="aspect-video w-full object-cover"
+            />
+            <div class="flex flex-1 flex-col p-5">
+              <time
+                v-if="post.publishedAt"
+                :datetime="post.publishedAt"
+                class="text-xs uppercase tracking-wide text-steel-400"
+              >
+                {{ fmt(post.publishedAt) }}
+              </time>
+              <h2 class="mt-2 text-lg font-semibold group-hover:text-brand-600 dark:group-hover:text-brand-400">
+                {{ post.title }}
+              </h2>
+              <p v-if="post.excerpt" class="mt-2 line-clamp-3 text-sm text-steel-600 dark:text-steel-300">
+                {{ post.excerpt }}
+              </p>
+              <span class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand-600 dark:text-brand-400">
+                {{ t('blog.readMore') }} <UIcon name="i-lucide-arrow-right" class="size-4" />
+              </span>
+            </div>
+          </NuxtLink>
+        </article>
+      </div>
+    </section>
+  </div>
 </template>

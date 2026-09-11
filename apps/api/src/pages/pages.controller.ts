@@ -1,6 +1,6 @@
 import { JwtAuthGuard } from '@/auth/jwt-auth.guard';
 import { ZodValidationPipe } from '@/common/zod-validation.pipe';
-import { Body, Controller, Get, Param, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, Query, UseGuards } from '@nestjs/common';
 import { type UpdateSitePageDto, updateSitePageSchema } from './page.dto';
 import { PagesService } from './pages.service';
 
@@ -11,8 +11,8 @@ export class PagesController {
   // -------- Публичное (без авторизации, только опубликованные) --------
 
   @Get('slug/:slug')
-  findPublishedBySlug(@Param('slug') slug: string) {
-    return this.service.findPublishedBySlug(slug);
+  findPublishedBySlug(@Param('slug') slug: string, @Query('language') language?: string) {
+    return this.service.findPublishedBySlug(slug, language);
   }
 
   // -------- Админ (JWT-кука) --------
@@ -25,16 +25,17 @@ export class PagesController {
 
   @Get('admin/:slug')
   @UseGuards(JwtAuthGuard)
-  findBySlug(@Param('slug') slug: string) {
-    return this.service.findBySlug(slug);
+  findBySlug(@Param('slug') slug: string, @Query('language') language?: string) {
+    return this.service.findBySlug(slug, language);
   }
 
   @Put(':slug')
   @UseGuards(JwtAuthGuard)
   update(
     @Param('slug') slug: string,
+    @Query('language') language: string,
     @Body(new ZodValidationPipe(updateSitePageSchema)) dto: UpdateSitePageDto,
   ) {
-    return this.service.update(slug, dto);
+    return this.service.update(slug, language, dto);
   }
 }

@@ -99,6 +99,7 @@ export interface SitePage {
   title: string;
   content: string;
   published: boolean;
+  language: 'ru' | 'ky' | 'en';
   createdAt: string;
   updatedAt: string;
 }

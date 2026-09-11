@@ -7,7 +7,8 @@
     "directions": "Направления",
     "documents": "Документы",
     "calculator": "Калькулятор стоимости",
-    "faq": "Вопрос-Ответ"
+    "faq": "Вопрос-Ответ",
+    "calculatorShort": "Calculator"
   },
   "header": {
     "openBot": "Open bot",
@@ -45,7 +46,11 @@
       "transit": "In transit",
       "ready": "Ready for pickup"
     },
-    "imageAlt": "Receiving and processing consolidated cargo — AsDi Cargo"
+    "imageAlt": "Receiving and processing consolidated cargo — AsDi Cargo",
+    "chipRoute": "Kyrgyzstan ⇄ Russia",
+    "chipSince": "On the market since 2020",
+    "chipClients": "Thousands of happy clients",
+    "ctaCalc": "Calculate cost"
   },
   "services": {
     "heading": "Services",
@@ -173,5 +178,36 @@
   },
   "home": {
     "howCta": "Open the Telegram bot"
+  },
+  "stats": {
+    "heading": "AsDi Cargo in numbers",
+    "n1v": "2020",
+    "n1l": "Founded",
+    "n2v": "2",
+    "n2l": "Countries — KG & RU",
+    "n3v": "10,000+",
+    "n3l": "Parcels delivered",
+    "n4v": "99%",
+    "n4l": "Positive reviews"
+  },
+  "why": {
+    "heading": "Why choose us",
+    "sub": "Reliable consolidated cargo delivery with no hassle.",
+    "f1": {
+      "title": "Experience since 2020",
+      "text": "Years on the Kyrgyzstan–Russia route and thousands of successful deliveries."
+    },
+    "f2": {
+      "title": "Transparent pricing",
+      "text": "Estimate the cost upfront with the online calculator — no hidden fees."
+    },
+    "f3": {
+      "title": "Real-time tracking",
+      "text": "Follow your parcel status in the Telegram bot at every step."
+    },
+    "f4": {
+      "title": "24/7 support",
+      "text": "Managers available on Telegram and WhatsApp anytime."
+    }
   }
 }

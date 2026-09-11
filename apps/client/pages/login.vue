@@ -64,7 +64,8 @@ async function onTelegram(data: TelegramAuthData): Promise<void> {
 </script>
 
 <template>
-  <div class="mx-auto flex w-full max-w-md flex-col px-4 py-12">
+  <div class="mx-auto w-full max-w-md px-4 py-14 sm:py-20">
+    <div class="rounded-brand-lg border border-steel-200 bg-white p-6 shadow-brand-card sm:p-8 dark:border-steel-800 dark:bg-steel-900/50">
     <h1 class="mb-1 text-2xl font-semibold">{{ t('auth.loginTitle') }}</h1>
     <p class="mb-6 text-sm text-steel-500 dark:text-steel-400">{{ t('auth.loginSubtitle') }}</p>
 
@@ -120,6 +121,7 @@ async function onTelegram(data: TelegramAuthData): Promise<void> {
           @auth="onTelegram"
         />
       </ClientOnly>
+    </div>
     </div>
   </div>
 </template>

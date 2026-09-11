@@ -61,90 +61,83 @@ const orderUrl = computed(() => {
 </script>
 
 <template>
-  <section class="mx-auto w-full max-w-3xl px-4 py-16">
-    <h1 class="text-3xl font-bold sm:text-4xl">{{ t('calculator.title') }}</h1>
-    <p class="mt-3 text-steel-600 dark:text-steel-300">{{ t('calculator.subtitle') }}</p>
-
-    <div
-      class="mt-8 rounded-2xl border border-steel-200 bg-steel-50 p-6 dark:border-steel-800 dark:bg-steel-900/40"
-    >
-      <div class="grid gap-5 sm:grid-cols-2">
-        <UFormField :label="`${t('calculator.weight')}, ${t('calculator.weightUnit')}`" name="weight">
-          <UInputNumber
-            v-model="weight"
-            :min="0"
-            :step="1"
-            size="lg"
-            class="w-full"
-          />
-        </UFormField>
-
-        <UFormField :label="`${t('calculator.volume')}, ${t('calculator.volumeUnit')}`" name="volume">
-          <UInputNumber
-            v-model="volume"
-            :min="0"
-            :step="0.1"
-            size="lg"
-            class="w-full"
-          />
-        </UFormField>
-      </div>
-
-      <!-- Тарифы -->
-      <div class="mt-5 flex flex-wrap gap-x-6 gap-y-1 text-sm text-steel-600 dark:text-steel-300">
-        <span>{{ t('calculator.rateWeight') }}</span>
-        <span>{{ t('calculator.rateVolume') }}</span>
-      </div>
-
-      <!-- Режим расчёта -->
-      <UCheckbox
-        v-model="forceVolume"
-        :label="t('calculator.lessThan200')"
-        class="mt-5"
-      />
-
-      <!-- Результат -->
+  <div>
+    <!-- Градиентная шапка -->
+    <section class="relative overflow-hidden bg-brand-steel-gradient">
       <div
-        class="mt-6 rounded-xl border border-steel-200 bg-white p-5 dark:border-steel-800 dark:bg-steel-950"
-      >
-        <template v-if="hasInput">
-          <p class="text-sm text-steel-500">{{ t('calculator.result') }}</p>
-          <p class="mt-1 text-3xl font-bold text-brand-600 dark:text-brand-400">
-            {{ fmt(total) }} <span class="text-xl font-semibold">{{ t('calculator.som') }}</span>
-          </p>
-
-          <div class="mt-4 flex flex-wrap items-center gap-2">
-            <span
-              class="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700 dark:bg-brand-950 dark:text-brand-300"
-            >
-              <UIcon
-                :name="useVolume ? 'i-lucide-box' : 'i-lucide-weight'"
-                class="size-4"
-              />
-              {{ useVolume ? t('calculator.byVolume') : t('calculator.byWeight') }}
-            </span>
-            <span v-if="density !== null" class="text-sm text-steel-500">
-              {{ t('calculator.density') }}: {{ numberFmt.format(Math.round(density)) }}
-              {{ t('calculator.densityUnit') }}
-            </span>
-          </div>
-        </template>
-
-        <p v-else class="text-steel-500">{{ t('calculator.enterValues') }}</p>
+        class="pointer-events-none absolute -right-16 -top-24 h-64 w-96 rounded-full bg-white/10 blur-3xl"
+        aria-hidden="true"
+      />
+      <div class="relative z-10 mx-auto w-full max-w-3xl px-4 py-14 md:py-20">
+        <h1 class="text-3xl font-bold leading-tight text-white sm:text-4xl">
+          {{ t('calculator.title') }}
+        </h1>
+        <p class="mt-3 max-w-xl text-white/80">{{ t('calculator.subtitle') }}</p>
       </div>
+    </section>
 
-      <p class="mt-4 text-sm text-steel-500">{{ t('calculator.note') }}</p>
-
-      <UButton
-        :to="orderUrl"
-        target="_blank"
-        size="lg"
-        icon="i-lucide-send"
-        color="primary"
-        class="mt-6"
+    <section class="mx-auto w-full max-w-3xl px-4 py-12">
+      <div
+        class="rounded-brand-lg border border-steel-200 bg-white p-6 shadow-brand-card sm:p-8 dark:border-steel-800 dark:bg-steel-900/40"
       >
-        {{ t('calculator.cta') }}
-      </UButton>
-    </div>
-  </section>
+        <div class="grid gap-5 sm:grid-cols-2">
+          <UFormField :label="`${t('calculator.weight')}, ${t('calculator.weightUnit')}`" name="weight">
+            <UInputNumber v-model="weight" :min="0" :step="1" size="lg" class="w-full" />
+          </UFormField>
+
+          <UFormField :label="`${t('calculator.volume')}, ${t('calculator.volumeUnit')}`" name="volume">
+            <UInputNumber v-model="volume" :min="0" :step="0.1" size="lg" class="w-full" />
+          </UFormField>
+        </div>
+
+        <!-- Тарифы -->
+        <div class="mt-5 flex flex-wrap gap-x-6 gap-y-1 text-sm text-steel-600 dark:text-steel-300">
+          <span>{{ t('calculator.rateWeight') }}</span>
+          <span>{{ t('calculator.rateVolume') }}</span>
+        </div>
+
+        <!-- Режим расчёта -->
+        <UCheckbox v-model="forceVolume" :label="t('calculator.lessThan200')" class="mt-5" />
+
+        <!-- Результат -->
+        <div
+          class="mt-6 rounded-brand-lg border border-brand-100 bg-brand-gradient-soft p-6 dark:border-steel-800"
+        >
+          <template v-if="hasInput">
+            <p class="text-sm text-steel-500 dark:text-steel-400">{{ t('calculator.result') }}</p>
+            <p class="mt-1 text-4xl font-bold text-brand-gradient">
+              {{ fmt(total) }} <span class="text-xl font-semibold text-brand-700 dark:text-brand-400">{{ t('calculator.som') }}</span>
+            </p>
+
+            <div class="mt-4 flex flex-wrap items-center gap-2">
+              <span
+                class="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-sm font-medium text-brand-700 shadow-sm dark:bg-steel-900 dark:text-brand-300"
+              >
+                <UIcon :name="useVolume ? 'i-lucide-box' : 'i-lucide-weight'" class="size-4" />
+                {{ useVolume ? t('calculator.byVolume') : t('calculator.byWeight') }}
+              </span>
+              <span v-if="density !== null" class="text-sm text-steel-500 dark:text-steel-400">
+                {{ t('calculator.density') }}: {{ numberFmt.format(Math.round(density)) }}
+                {{ t('calculator.densityUnit') }}
+              </span>
+            </div>
+          </template>
+
+          <p v-else class="text-steel-500 dark:text-steel-400">{{ t('calculator.enterValues') }}</p>
+        </div>
+
+        <p class="mt-4 text-sm text-steel-500 dark:text-steel-400">{{ t('calculator.note') }}</p>
+
+        <a
+          :href="orderUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-6 inline-flex items-center gap-2 rounded-full bg-brand-gradient px-6 py-3 font-semibold text-white shadow-lg shadow-brand-900/30 transition hover:brightness-110"
+        >
+          <UIcon name="i-lucide-send" class="size-5" />
+          {{ t('calculator.cta') }}
+        </a>
+      </div>
+    </section>
+  </div>
 </template>
