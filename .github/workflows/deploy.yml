@@ -147,7 +147,6 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CORS_ORIGINS: ${{ secrets.CORS_ORIGINS }}
           # Имя Telegram-бота — публичное (видно в JS), храним как Variable.
           USER_JWT_EXPIRES_IN: ${{ vars.USER_JWT_EXPIRES_IN }}
@@ -160,7 +159,6 @@ jobs:
           # обязательные — падаем сразу, если секрет забыли завести
           : "${JWT_SECRET:?JWT_SECRET secret is missing}"
           : "${ADMIN_PASSWORD:?ADMIN_PASSWORD secret is missing}"
-          : "${BOT_TOKEN:?BOT_TOKEN secret is missing}"
           : "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD secret is missing}"
           {
             printf 'POSTGRES_USER=%s\n'            "${POSTGRES_USER:-parcel_bot}"
@@ -169,7 +167,6 @@ jobs:
             printf 'JWT_SECRET=%s\n'               "$JWT_SECRET"
             [ -n "$JWT_EXPIRES_IN" ] && printf 'JWT_EXPIRES_IN=%s\n' "$JWT_EXPIRES_IN"
             printf 'ADMIN_PASSWORD=%s\n'           "$ADMIN_PASSWORD"
-            printf 'BOT_TOKEN=%s\n'                "$BOT_TOKEN"
             [ -n "$CORS_ORIGINS" ] && printf 'CORS_ORIGINS=%s\n' "$CORS_ORIGINS"
             [ -n "$USER_JWT_EXPIRES_IN" ] && printf 'USER_JWT_EXPIRES_IN=%s\n' "$USER_JWT_EXPIRES_IN"
             printf 'NUXT_PUBLIC_API_BASE_URL=%s\n' "$NUXT_PUBLIC_API_BASE_URL"

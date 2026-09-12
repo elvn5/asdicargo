@@ -147,7 +147,7 @@ vs `asdicargo-staging_postgres_data`), сети и контейнеры — БД
 4. **GitHub Environments** (Settings → Environments):
    - **production**: variable `NUXT_PUBLIC_API_BASE_URL=https://api.asdicargo.com`,
      secret `CORS_ORIGINS=https://asdicargo.com,https://admin.asdicargo.com`,
-     плюс все app-секреты (JWT_SECRET, ADMIN_PASSWORD, BOT_TOKEN, POSTGRES_PASSWORD, …).
+     плюс все app-секреты (JWT_SECRET, ADMIN_PASSWORD, POSTGRES_PASSWORD, …).
    - **staging**: variable `NUXT_PUBLIC_API_BASE_URL=https://test.api.asdicargo.com`,
      secret `CORS_ORIGINS=https://test.asdicargo.com,https://test.admin.asdicargo.com`,
      плюс свои app-секреты.
