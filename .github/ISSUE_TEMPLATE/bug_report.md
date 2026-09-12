@@ -12,7 +12,6 @@ A clear description of what's wrong.
 ## App affected
 
 - [ ] api
-- [ ] bot
 - [ ] admin
 - [ ] database
 

@@ -53,21 +53,6 @@ services:
       migrate:
         condition: service_completed_successfully
 
-  bot:
-    build:
-      context: .
-      dockerfile: apps/bot/Dockerfile
-    restart: unless-stopped
-    env_file: .env
-    environment:
-      POSTGRES_HOST: postgres
-      POSTGRES_PORT: 5432
-    depends_on:
-      postgres:
-        condition: service_healthy
-      migrate:
-        condition: service_completed_successfully
-
   admin:
     build:
       context: .

@@ -5,7 +5,6 @@
 ## App(s) affected
 
 - [ ] api
-- [ ] bot
 - [ ] admin
 - [ ] database
 

@@ -94,7 +94,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        app: [api, bot, admin, client]
+        app: [api, admin, client]
     steps:
       - uses: actions/checkout@v4
 

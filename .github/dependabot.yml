@@ -17,11 +17,6 @@ updates:
       interval: weekly
 
   - package-ecosystem: docker
-    directory: "/apps/bot"
-    schedule:
-      interval: weekly
-
-  - package-ecosystem: docker
     directory: "/apps/admin"
     schedule:
       interval: weekly

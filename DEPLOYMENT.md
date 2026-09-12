@@ -1,7 +1,7 @@
 # Деплой
 
 CI/CD построен на GitHub Actions + Docker. Образы всех приложений
-(`api`, `bot`, `admin`, `client`) собираются и публикуются в GitHub
+(`api`, `admin`, `client`) собираются и публикуются в GitHub
 Container Registry (GHCR), затем разворачиваются на сервере по SSH через
 `docker compose`.
 
@@ -152,10 +152,6 @@ vs `asdicargo-staging_postgres_data`), сети и контейнеры — БД
      secret `CORS_ORIGINS=https://test.asdicargo.com,https://test.admin.asdicargo.com`,
      плюс свои app-секреты.
    - `DEPLOY_SSH_*` — общие (repo-level), сервер один.
-   - ⚠️ **BOT_TOKEN**: один Telegram-бот не может работать в двух стеках
-     одновременно (конфликт polling). Заведите ОТДЕЛЬНОГО тест-бота и его
-     токен положите в staging-environment (иначе прод-бот и staging-бот
-     будут отбивать апдейты друг у друга).
    - `NUXT_PUBLIC_API_BASE_URL` вшивается в client/admin на этапе СБОРКИ,
      поэтому job `build` теперь тоже имеет `environment:` — менять домен без
      пересборки образа нельзя.

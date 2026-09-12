@@ -1,16 +1,16 @@
 # Parcel Bot Monorepo
 
-A pnpm/TypeScript monorepo template for a Telegram bot + admin panel + REST API, built on
+A pnpm/TypeScript monorepo template for an admin panel + REST API, built on
 NestJS, Nuxt 3, and TypeORM/PostgreSQL. Use this repository as a **GitHub template**
-("Use this template" button) to bootstrap similar bot + admin panel projects.
+("Use this template" button) to bootstrap similar admin panel projects.
 
 ## Stack
 
 | App | Framework | Purpose |
 | --- | --- | --- |
 | [`apps/api`](apps/api) | NestJS | REST API, JWT auth, TypeORM data access |
-| [`apps/bot`](apps/bot) | NestJS + Telegraf | Telegram bot |
 | [`apps/admin`](apps/admin) | Nuxt 3 + @nuxt/ui | Admin panel (Pinia, VeeValidate, Zod) |
+| [`apps/client`](apps/client) | Nuxt 3 | Public-facing client site |
 | [`packages/database`](packages/database) | TypeORM | Shared entities, migrations, data source |
 
 Formatting/linting via [Biome](https://biomejs.dev), logging via [Pino](https://getpino.io),
@@ -30,9 +30,8 @@ pnpm install
 cp .env.example .env
 ```
 
-Fill in `.env` — at minimum set `POSTGRES_PASSWORD`, `JWT_SECRET`, `ADMIN_PASSWORD`, and
-`BOT_TOKEN` (from [@BotFather](https://t.me/BotFather)). See [.env.example](.env.example)
-for the full list.
+Fill in `.env` — at minimum set `POSTGRES_PASSWORD`, `JWT_SECRET`, and `ADMIN_PASSWORD`.
+See [.env.example](.env.example) for the full list.
 
 ### Run with Docker (recommended)
 
@@ -40,7 +39,7 @@ for the full list.
 docker compose up -d --build
 ```
 
-This starts PostgreSQL, the API (`:3001`), the bot, and the admin panel (`:3000`).
+This starts PostgreSQL, the API (`:3001`), the admin panel (`:3000`), and the client.
 
 ### Run locally
 
@@ -48,7 +47,6 @@ Start PostgreSQL (e.g. `docker compose up -d postgres`), then in separate termin
 
 ```bash
 pnpm dev:api     # http://localhost:3001
-pnpm dev:bot
 pnpm dev:admin   # http://localhost:3000
 ```
 
@@ -58,7 +56,7 @@ Each `dev:*` script builds `@app/database` first so entity/migration changes are
 
 | Command | Description |
 | --- | --- |
-| `pnpm dev:api` / `dev:bot` / `dev:admin` | Run an app in watch mode |
+| `pnpm dev:api` / `dev:admin` | Run an app in watch mode |
 | `pnpm build` | Build all workspace packages |
 | `pnpm lint` / `pnpm lint:fix` | Biome check / check --write |
 | `pnpm typecheck` | Type-check all workspace packages |
@@ -70,8 +68,8 @@ Each `dev:*` script builds `@app/database` first so entity/migration changes are
 ```
 apps/
   api/      NestJS REST API
-  bot/      NestJS Telegram bot (Telegraf)
   admin/    Nuxt 3 admin panel
+  client/   Nuxt 3 public client
 packages/
   database/ TypeORM entities, migrations, data source
 ```
