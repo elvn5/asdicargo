@@ -66,7 +66,8 @@ const reviews = ['r1', 'r2', 'r3'] as const;
 <template>
   <div>
     <!-- ============================ HERO ============================ -->
-    <section class="relative overflow-hidden">
+    <!-- isolate: без него фон с -z-10 перекрывается bg-white/dark:bg-steel-950 обёртки лэйаута -->
+    <section class="relative isolate overflow-hidden">
       <!-- Фоновое фото + затемняющий градиент -->
       <div class="absolute inset-0 -z-10">
         <img

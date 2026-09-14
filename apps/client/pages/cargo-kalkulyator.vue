@@ -1,7 +1,8 @@
 <script setup lang="ts">
 const { t } = useI18n();
-const config = useRuntimeConfig();
-const botUrl = config.public.botUrl as string;
+
+// Номер WhatsApp для оформления заявки из калькулятора.
+const WHATSAPP_PHONE = '996552165165';
 
 useSeoMeta({
   title: () => `${t('calculator.title')} — AsDi Cargo`,
@@ -37,26 +38,36 @@ const density = computed(() => (v.value > 0 ? w.value / v.value : null));
 // Если чекбокс отмечен — считаем строго по объёму (кубатуре).
 // Если нет — автоматически: реактивно берём большую из двух стоимостей
 // (что эквивалентно правилу «меньше 200 кг в кубе → по объёму»).
-const useVolume = computed(() =>
-  forceVolume.value ? true : byVolume.value > byWeight.value,
-);
+const useVolume = computed(() => (forceVolume.value ? true : byVolume.value > byWeight.value));
 
 const total = computed(() => (useVolume.value ? byVolume.value : byWeight.value));
 
 const numberFmt = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 });
 const fmt = (n: number) => numberFmt.format(Math.round(n));
 
-// Deep-link в Telegram-бота с данными расчёта: бот распарсит start-payload
-// и оформит заявку. Формат payload: calc_w<кг>_v<м³×1000>_t<итог>_<w|v>.
-// Разрешены только буквы/цифры/подчёркивание, длина ≤ 64 символа.
+// Ссылка на чат в WhatsApp с данными расчёта, готовыми к отправке менеджеру.
 const orderUrl = computed(() => {
-  if (!hasInput.value) return botUrl;
-  const wKg = Math.round(w.value);
-  const vLit = Math.round(v.value * 1000);
-  const totalSom = Math.round(total.value);
-  const mode = useVolume.value ? 'v' : 'w';
-  const payload = `calc_w${wKg}_v${vLit}_t${totalSom}_${mode}`;
-  return `${botUrl}?start=${payload}`;
+  const params = new URLSearchParams({
+    phone: WHATSAPP_PHONE,
+    type: 'phone_number',
+    app_absent: '0',
+  });
+
+  if (hasInput.value) {
+    const wKg = Math.round(w.value);
+    const vM3 = Math.round(v.value * 100) / 100;
+    const mode = useVolume.value ? t('calculator.byVolume') : t('calculator.byWeight');
+    const message = [
+      t('calculator.title'),
+      `${t('calculator.weight')}: ${wKg} ${t('calculator.weightUnit')}`,
+      `${t('calculator.volume')}: ${vM3} ${t('calculator.volumeUnit')}`,
+      mode,
+      `${t('calculator.result')}: ${fmt(total.value)} ${t('calculator.som')}`,
+    ].join('\n');
+    params.set('text', message);
+  }
+
+  return `https://api.whatsapp.com/send/?${params.toString()}`;
 });
 </script>
 
