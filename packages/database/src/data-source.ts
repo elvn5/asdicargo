@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 import { DataSource, type DataSourceOptions } from 'typeorm';
 import { Address } from './entities/address.entity';
 import { BannedItem } from './entities/banned-item.entity';
+import { HomeStat } from './entities/home-stat.entity';
 import { Parcel } from './entities/parcel.entity';
 import { Post } from './entities/post.entity';
 import { SitePage } from './entities/site-page.entity';
@@ -11,7 +12,7 @@ import { User } from './entities/user.entity';
 
 config();
 
-export const entities = [User, Parcel, Address, BannedItem, SupportInfo, Post, SitePage];
+export const entities = [User, Parcel, Address, BannedItem, SupportInfo, Post, SitePage, HomeStat];
 
 export function buildDataSourceOptions(): DataSourceOptions {
   return {

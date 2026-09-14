@@ -13,6 +13,7 @@ const links = [
   { label: 'Запрещенные товары', to: '/banned-items' },
   { label: 'Адреса', to: '/addresses' },
   { label: 'Поддержка', to: '/support' },
+  { label: 'AsDi Cargo в цифрах', to: '/home-stats' },
   { label: 'Посылки', to: '/parcels' },
   { label: 'Пользователи', to: '/users' },
   { label: 'Блог', to: '/blog' },

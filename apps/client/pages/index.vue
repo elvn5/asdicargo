@@ -1,8 +1,11 @@
 <script setup lang="ts">
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const localePath = useLocalePath();
 const config = useRuntimeConfig();
-const botUrl = config.public.botUrl as string;
+
+// Дефолт для кнопки «Бесплатная консультация», пока админ не задал свою ссылку.
+const WHATSAPP_CONSULTATION_URL =
+  'https://api.whatsapp.com/send/?phone=996552165165&text&type=phone_number&app_absent=0';
 
 useSeoMeta({
   title: () => t('meta.title'),
@@ -17,14 +20,14 @@ useHead(() => ({ link: seoAlternates.value }));
 
 // Редактируемая через админку ссылка «Бесплатная консультация».
 // Тянем публичные настройки; при ошибке/пустом значении — fallback на бота.
-const apiBase = (
-  import.meta.server ? config.apiInternalUrl : config.public.apiBaseUrl
-) as string;
+const apiBase = (import.meta.server ? config.apiInternalUrl : config.public.apiBaseUrl) as string;
 const { data: settings } = await useFetch<{ consultationUrl: string | null }>(
   () => `${apiBase}/support/public`,
   { key: 'public-settings', server: true, default: () => null },
 );
-const consultationUrl = computed(() => settings.value?.consultationUrl || botUrl);
+const consultationUrl = computed(
+  () => settings.value?.consultationUrl || WHATSAPP_CONSULTATION_URL,
+);
 
 // Услуги (иконочные карточки).
 const services = [
@@ -33,13 +36,21 @@ const services = [
   { key: 'pickup', icon: 'i-lucide-map-pin' },
 ] as const;
 
-// Статистика «в цифрах» (значения редактируются через i18n).
-const stats = [
-  { v: 'stats.n1v', l: 'stats.n1l' },
-  { v: 'stats.n2v', l: 'stats.n2l' },
-  { v: 'stats.n3v', l: 'stats.n3l' },
-  { v: 'stats.n4v', l: 'stats.n4l' },
-] as const;
+// Статистика «в цифрах» — редактируется через админку; фолбэк на i18n, если API недоступен/пусто.
+const fallbackStats = computed(() => [
+  { value: t('stats.n1v'), label: t('stats.n1l') },
+  { value: t('stats.n2v'), label: t('stats.n2l') },
+  { value: t('stats.n3v'), label: t('stats.n3l') },
+  { value: t('stats.n4v'), label: t('stats.n4l') },
+]);
+
+const { data: homeStats } = await useFetch<Array<{ value: string; label: string }>>(
+  () => `${apiBase}/home-stats/public?language=${locale.value}`,
+  { key: () => `home-stats-${locale.value}`, server: true, default: () => [] },
+);
+const stats = computed(() =>
+  homeStats.value && homeStats.value.length > 0 ? homeStats.value : fallbackStats.value,
+);
 
 // Блок «Почему выбирают нас».
 const features = [
@@ -126,13 +137,7 @@ const reviews = ['r1', 'r2', 'r3'] as const;
           {{ t('stats.heading') }}
         </h2>
         <div class="grid grid-cols-2 gap-8 lg:grid-cols-4">
-          <div v-for="s in stats" :key="s.v" class="text-center">
-            <div class="text-4xl font-bold tracking-tight sm:text-5xl">
-              {{ t(s.v) }}
-            </div>
-            <div class="mx-auto mt-3 h-1 w-10 rounded-full bg-brand-gradient" />
-            <p class="mt-3 text-sm text-steel-300">{{ t(s.l) }}</p>
-          </div>
+          <AnimatedStat v-for="s in stats" :key="s.label" :value="s.value" :label="s.label" />
         </div>
       </div>
     </section>
@@ -216,29 +221,6 @@ const reviews = ['r1', 'r2', 'r3'] as const;
               </span>
             </figcaption>
           </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- ======================= ФИНАЛЬНЫЙ CTA ======================= -->
-    <section class="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
-      <div
-        class="relative overflow-hidden rounded-brand-xl bg-brand-gradient px-6 py-14 text-center shadow-brand-card md:px-12"
-      >
-        <h2 class="mx-auto max-w-2xl text-2xl font-bold text-white sm:text-3xl">
-          {{ t('cta.heading') }}
-        </h2>
-        <p class="mx-auto mt-3 max-w-xl text-white/85">{{ t('cta.text') }}</p>
-        <div class="mt-8 flex justify-center">
-          <a
-            :href="consultationUrl"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 font-semibold text-brand-700 shadow-lg transition hover:bg-white/90"
-          >
-            <UIcon name="i-lucide-send" class="size-5" />
-            {{ t('cta.button') }}
-          </a>
         </div>
       </div>
     </section>

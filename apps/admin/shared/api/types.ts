@@ -25,6 +25,14 @@ export interface SupportInfo {
   consultationUrl: string | null;
 }
 
+export interface HomeStat {
+  id: string;
+  language: 'ru' | 'ky' | 'en';
+  position: number;
+  value: string;
+  label: string;
+}
+
 export enum ParcelStatus {
   CREATED = 'created',
   IN_TRANSIT = 'in_transit',

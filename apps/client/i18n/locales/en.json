@@ -87,11 +87,6 @@
       "text": "Collect your order at a convenient point once it arrives."
     }
   },
-  "cta": {
-    "heading": "Ready to send your first parcel?",
-    "text": "Launch the bot, get a personal warehouse address and arrange delivery in a couple of minutes.",
-    "button": "Open the Telegram bot"
-  },
   "meta": {
     "title": "Cargo Russia — Kyrgyzstan · delivery | AsDi Cargo",
     "description": "AsDi Cargo — cargo and delivery: from Russia to Kyrgyzstan and from Kyrgyzstan to Russia. Tracking and ordering via a Telegram bot."

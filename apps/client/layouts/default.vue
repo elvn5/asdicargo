@@ -5,15 +5,21 @@ const localePath = useLocalePath();
 
 // Каждый пункт ведёт на отдельную cargo-страницу.
 // shortLabel — компактная подпись для пилюльной навигации (длинные названия).
-const links = computed((): Array<{ label: string; fullLabel?: string; to: string }> => [
-  { label: t('nav.services'), to: localePath('/cargo-uslugi') },
-  { label: t('nav.directions'), to: localePath('/cargo-napravleniya') },
-  { label: t('nav.calculatorShort'), fullLabel: t('nav.calculator'), to: localePath('/cargo-kalkulyator') },
-  { label: t('nav.documents'), to: localePath('/cargo-dokumenti') },
-  { label: t('nav.faq'), to: localePath('/cargo-faq') },
-  { label: t('nav.blog'), to: localePath('/cargo-blog') },
-  { label: t('nav.contacts'), to: localePath('/cargo-kontakty') },
-]);
+const links = computed(
+  (): Array<{ label: string; fullLabel?: string; to: string }> => [
+    { label: t('nav.services'), to: localePath('/cargo-uslugi') },
+    { label: t('nav.directions'), to: localePath('/cargo-napravleniya') },
+    {
+      label: t('nav.calculatorShort'),
+      fullLabel: t('nav.calculator'),
+      to: localePath('/cargo-kalkulyator'),
+    },
+    { label: t('nav.documents'), to: localePath('/cargo-dokumenti') },
+    { label: t('nav.faq'), to: localePath('/cargo-faq') },
+    { label: t('nav.blog'), to: localePath('/cargo-blog') },
+    { label: t('nav.contacts'), to: localePath('/cargo-kontakty') },
+  ],
+);
 
 const config = useRuntimeConfig();
 const botUrl = config.public.botUrl as string;
@@ -23,6 +29,9 @@ const phone = '+996552165165';
 const phoneHref = `tel:${phone}`;
 const whatsappHref = `https://wa.me/${phone.replace('+', '')}`;
 const email = 'info@asdicargo.com';
+
+// Личный контакт менеджера — плавающая кнопка Telegram ведёт сюда напрямую.
+const telegramContactHref = 'https://t.me/kalita_lida';
 
 // Версия задеплоенного образа (пусто в локальной разработке — тогда не показываем).
 const version = String(config.public.appVersion ?? '');
@@ -57,11 +66,11 @@ const auth = useAuthStore();
         class="pointer-events-none absolute -right-10 -top-16 h-40 w-72 rounded-full bg-brand-gradient opacity-15 blur-2xl dark:opacity-25"
         aria-hidden="true"
       />
-      <div class="relative z-10 mx-auto grid h-16 w-full max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-3 px-4">
+      <div class="relative z-10 mx-auto grid h-20 w-full max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-3 px-4">
         <!-- Логотип: левая колонка -->
         <div class="flex items-center">
-          <NuxtLink :to="localePath('/')" class="flex items-center gap-2.5 text-4xl font-bold">
-            <span class="inline-block h-10 w-2.5 rounded-full bg-brand-gradient" aria-hidden="true" />
+          <NuxtLink :to="localePath('/')" class="flex items-center gap-2 text-2xl font-bold">
+            <span class="inline-block h-7 w-2 rounded-full bg-brand-gradient" aria-hidden="true" />
             <span>As<span class="text-brand-600 dark:text-brand-400">Di</span> Cargo</span>
           </NuxtLink>
         </div>
@@ -222,7 +231,7 @@ const auth = useAuthStore();
         <UIcon name="i-lucide-message-circle" class="size-6 sm:size-7" />
       </a>
       <a
-        :href="botUrl"
+        :href="telegramContactHref"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Telegram"
