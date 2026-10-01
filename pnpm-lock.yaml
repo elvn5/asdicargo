@@ -152,8 +152,8 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0(@types/node@22.20.1)(typescript@5.9.3)
       tsc-alias:
-        specifier: ^1.8.10
-        version: 1.9.1
+        specifier: ^1.9.5
+        version: 1.9.5
       tsconfig-paths:
         specifier: ^4.2.0
         version: 4.2.0
@@ -3994,8 +3994,8 @@ packages:
   fast-wrap-ansi@0.2.2:
     resolution: {integrity: sha512-7F2Fl+TjRSenLqlU3UjSH0iyqopqoZIu7eZVpEirP2g1GtWa2G/ecEmBdgz31+Mxr+ELclgg6sokpSFIQiZ02Q==}
 
-  fastq@1.20.1:
-    resolution: {integrity: sha512-GGToxJ/w1x32s/D2EKND7kTil4n8OVk/9mycTc4VDza13lOvpUZTGX3mFSCtV9ksdGBVzvsyAVLM6mHFThxXxw==}
+  fastq@1.20.3:
+    resolution: {integrity: sha512-XKv5nnLs6nLF71NgiKJLIZFLkPyIEuOselLG7ujZnGrRfQK8HpvY+WqKhAJUAdLomwVHErVS4LfxFlPq0/FTAw==}
 
   fdir@6.5.0:
     resolution: {integrity: sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg==}
@@ -4159,8 +4159,8 @@ packages:
     resolution: {integrity: sha512-VaUJspBffn/LMCJVoMvSAdmscJyS1auj5Zulnn5UoYcY531UWmdwhRWkcGKnGU93m5HSXP9LP2usOryrBtQowA==}
     engines: {node: '>=16'}
 
-  get-tsconfig@4.14.2:
-    resolution: {integrity: sha512-XpwZALwwl/BaKTAyC6+c5T8y6kCg2jk+XGqOVrKIQmW49pNypYLMRjCUXqa28tQgJlhS2RlzP7sc+Rx7W6qsfw==}
+  get-tsconfig@4.14.3:
+    resolution: {integrity: sha512-++QEw4DIY7WGoukz+/+A/8dGYPT9l9yIadnmSgZ8Rjr3YVSVDipQSO9CdnJo9ePqFqUUqh+wk9uIaoiAwsiPkA==}
 
   giget@3.3.1:
     resolution: {integrity: sha512-r+mvuDjrjMpsdw46Kmeydb8bdHm7wOKw8wNBtTndkjbPjgAp5oUJUxRE76wZFknxIPokfWvep2qSXK37aXE6zg==}
@@ -4203,8 +4203,8 @@ packages:
     resolution: {integrity: sha512-jhIXaOzy1sb8IyocaruWSn1TjmnBVs8Ayhcy83rmxNJ8q2uWKCAj3CnJY+KpGSXCueAPc0i05kVvVKtP1t9S3g==}
     engines: {node: '>=10'}
 
-  globby@16.2.3:
-    resolution: {integrity: sha512-VZX7TV7jmd/pn71vdnLKtgwy1IWqc3KjI9x1/UtPkwoKk5fKrNLY30ltDe3cAM5xruIN7YuuaulFt133jRrKZg==}
+  globby@16.2.4:
+    resolution: {integrity: sha512-c8B/VNLmxRcmqqenRA9t+9IyOjf9+V6lTxPaUJLqOCONdQkWZ0ETYgX0qbtJqPsgCNusT9MZ5Jeidw8Eb9tn2g==}
     engines: {node: '>=20'}
 
   gopd@1.2.0:
@@ -4560,8 +4560,8 @@ packages:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
 
-  lib0@0.2.117:
-    resolution: {integrity: sha512-DeXj9X5xDCjgKLU/7RR+/HQEVzuuEUiwldwOGsHK/sfAfELGWEyTcf0x+uOvCvK3O2zPmZePXWL85vtia6GyZw==}
+  lib0@0.2.119:
+    resolution: {integrity: sha512-vh+TiejVy8Xm+hCdnRfn9BthGNvNUZdEXltNjVZL3TzRIKP3s1lnQh8pWd/Q0wCgY0FPAGVVjFF4ZiHUV3LFgA==}
     engines: {node: '>=16'}
     hasBin: true
 
@@ -6277,8 +6277,8 @@ packages:
       '@swc/wasm':
         optional: true
 
-  tsc-alias@1.9.1:
-    resolution: {integrity: sha512-sFZdVFthH8uvdplPJrOYGOHcxu6UPtcAcY678JPwEQiMzgLZYFO7Qc/rzELp7ingTc+OxtzH6n+8Pn2eVQep6w==}
+  tsc-alias@1.9.5:
+    resolution: {integrity: sha512-B2M3D2Fsb8dPT04Jc52R2Erp9u7QUjXpjb648dvKb0esKVmo0CC28KFe98sFkjmnY36D+PFqnAE/UDbHGbV+mA==}
     engines: {node: '>=16.20.2'}
     hasBin: true
 
@@ -7954,7 +7954,7 @@ snapshots:
   '@nodelib/fs.walk@1.2.8':
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
-      fastq: 1.20.1
+      fastq: 1.20.3
 
   '@nuxt/cli@3.37.0(@nuxt/schema@4.5.2)(cac@6.7.14)(magicast@0.5.4)':
     dependencies:
@@ -9893,7 +9893,7 @@ snapshots:
 
   '@tiptap/y-tiptap@3.0.9(prosemirror-model@1.25.11)(prosemirror-state@1.4.4)(prosemirror-view@1.42.3)(y-protocols@1.0.7(yjs@13.6.32))(yjs@13.6.32)':
     dependencies:
-      lib0: 0.2.117
+      lib0: 0.2.119
       prosemirror-model: 1.25.11
       prosemirror-state: 1.4.4
       prosemirror-view: 1.42.3
@@ -11616,7 +11616,7 @@ snapshots:
     dependencies:
       fast-string-width: 3.0.2
 
-  fastq@1.20.1:
+  fastq@1.20.3:
     dependencies:
       reusify: 1.1.0
 
@@ -11818,7 +11818,7 @@ snapshots:
 
   get-stream@8.0.1: {}
 
-  get-tsconfig@4.14.2:
+  get-tsconfig@4.14.3:
     dependencies:
       resolve-pkg-maps: 1.0.0
 
@@ -11880,12 +11880,13 @@ snapshots:
       merge2: 1.4.1
       slash: 3.0.0
 
-  globby@16.2.3:
+  globby@16.2.4:
     dependencies:
       '@sindresorhus/merge-streams': 4.0.0
       fast-glob: 3.3.3
       ignore: 7.0.6
       is-path-inside: 4.0.0
+      micromatch: 4.0.8
       slash: 5.1.0
       unicorn-magic: 0.4.0
 
@@ -12272,7 +12273,7 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
-  lib0@0.2.117:
+  lib0@0.2.119:
     dependencies:
       isomorphic.js: 0.2.5
 
@@ -12656,7 +12657,7 @@ snapshots:
       escape-string-regexp: 5.0.0
       etag: 1.8.1
       exsolve: 1.1.1
-      globby: 16.2.3
+      globby: 16.2.4
       gzip-size: 7.0.0
       h3: 1.15.11
       hookable: 5.5.3
@@ -12768,7 +12769,7 @@ snapshots:
       escape-string-regexp: 5.0.0
       etag: 1.8.1
       exsolve: 1.1.1
-      globby: 16.2.3
+      globby: 16.2.4
       gzip-size: 7.0.0
       h3: 1.15.11
       hookable: 5.5.3
@@ -14515,11 +14516,11 @@ snapshots:
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
 
-  tsc-alias@1.9.1:
+  tsc-alias@1.9.5:
     dependencies:
       chokidar: 3.6.0
       commander: 9.5.0
-      get-tsconfig: 4.14.2
+      get-tsconfig: 4.14.3
       globby: 11.1.0
       mylas: 2.1.14
       normalize-path: 3.0.0
@@ -15373,7 +15374,7 @@ snapshots:
 
   y-protocols@1.0.7(yjs@13.6.32):
     dependencies:
-      lib0: 0.2.117
+      lib0: 0.2.119
       yjs: 13.6.32
 
   y18n@5.0.8: {}
@@ -15414,7 +15415,7 @@ snapshots:
 
   yjs@13.6.32:
     dependencies:
-      lib0: 0.2.117
+      lib0: 0.2.119
 
   yn@3.1.1: {}
 
