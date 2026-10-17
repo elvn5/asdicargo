@@ -30,7 +30,7 @@ jobs:
   # 1. Определяем окружение, теги образов, каталог/проект/порты деплоя
   # --------------------------------------------------------------------------
   prepare:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       channel: ${{ steps.vars.outputs.channel }}
       version: ${{ steps.vars.outputs.version }}
@@ -86,7 +86,7 @@ jobs:
   # --------------------------------------------------------------------------
   build:
     needs: prepare
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment: ${{ needs.prepare.outputs.channel }}
     permissions:
       contents: read
@@ -96,19 +96,19 @@ jobs:
       matrix:
         app: [api, admin, client]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-buildx-action@v4
 
       - name: Login to GHCR
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build & push ${{ matrix.app }}
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: apps/${{ matrix.app }}/Dockerfile
@@ -131,13 +131,13 @@ jobs:
   # --------------------------------------------------------------------------
   deploy:
     needs: [prepare, build]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment: ${{ needs.prepare.outputs.channel }}
     permissions:
       contents: read
       packages: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Generate .env from GitHub secrets
         env:
@@ -174,10 +174,10 @@ jobs:
             [ -n "$NUXT_PUBLIC_TELEGRAM_BOT_USERNAME" ] && printf 'NUXT_PUBLIC_TELEGRAM_BOT_USERNAME=%s\n' "$NUXT_PUBLIC_TELEGRAM_BOT_USERNAME"
             [ -n "$NUXT_PUBLIC_SITE_ENV" ] && printf 'NUXT_PUBLIC_SITE_ENV=%s\n' "$NUXT_PUBLIC_SITE_ENV"
           } > .env
-          chmod 644 .env   # scp-action Docker-контейнер должен прочитать файл
+          chmod 600 .env   # scp-action v1 — composite, читает файл от того же пользователя
 
       - name: Ensure deploy dir exists
-        uses: appleboy/ssh-action@v1.2.0
+        uses: appleboy/ssh-action@v1.2.5
         env:
           DEPLOY_DIR: ${{ needs.prepare.outputs.deploy_dir }}
         with:
@@ -192,7 +192,7 @@ jobs:
             mkdir -p "$DEPLOY_DIR"
 
       - name: Copy compose + release script to server
-        uses: appleboy/scp-action@v0.1.7
+        uses: appleboy/scp-action@v1.0.0
         with:
           host: ${{ secrets.DEPLOY_SSH_HOST }}
           username: ${{ secrets.DEPLOY_SSH_USER }}
@@ -203,7 +203,7 @@ jobs:
           target: ${{ needs.prepare.outputs.deploy_dir }}
 
       - name: Deploy over SSH
-        uses: appleboy/ssh-action@v1.2.0
+        uses: appleboy/ssh-action@v1.2.5
         env:
           IMAGE_TAG: ${{ needs.prepare.outputs.deploy_tag }}
           COMPOSE_PROJECT_NAME: ${{ needs.prepare.outputs.project }}
