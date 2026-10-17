@@ -6,8 +6,8 @@ import type { MigrationInterface, QueryRunner } from 'typeorm';
  * - история статусов посылки для таймлайна в кабинете.
  * Существующим посылкам заводим стартовую запись истории с текущим статусом.
  */
-export class AddAccountParcels1789800000000 implements MigrationInterface {
-  name = 'AddAccountParcels1789800000000';
+export class AddAccountParcels1790000000000 implements MigrationInterface {
+  name = 'AddAccountParcels1790000000000';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE "parcels" ADD "volumeM3" character varying`);
