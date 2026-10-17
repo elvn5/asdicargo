@@ -119,6 +119,9 @@ const telegramUrl = computed(() => {
       </div>
     </section>
 
+    <!-- Расчёт перевозки — сразу ведёт в заявку -->
+    <ShippingSearch initial-from="Бишкек" />
+
     <div class="grid gap-6 xl:grid-cols-[1fr_20rem]">
       <!-- Последние посылки -->
       <section>
@@ -187,20 +190,6 @@ const telegramUrl = computed(() => {
           </div>
         </div>
 
-        <!-- Калькулятор -->
-        <NuxtLink
-          :to="localePath('/cargo-kalkulyator')"
-          class="group flex items-center gap-4 rounded-brand-lg border border-steel-200 bg-white p-5 transition hover:border-brand-300 hover:shadow-brand-card dark:border-steel-800 dark:bg-steel-900/50"
-        >
-          <div class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-gradient text-white">
-            <UIcon name="i-lucide-calculator" class="size-5" />
-          </div>
-          <div class="min-w-0 flex-1">
-            <p class="font-semibold">{{ t('account.calc.title') }}</p>
-            <p class="text-sm text-steel-500 dark:text-steel-400">{{ t('account.calc.sub') }}</p>
-          </div>
-          <UIcon name="i-lucide-arrow-right" class="size-5 text-steel-400 transition group-hover:translate-x-0.5 group-hover:text-brand-500" />
-        </NuxtLink>
         <AccountInstallApp />
       </aside>
     </div>

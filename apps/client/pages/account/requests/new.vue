@@ -59,29 +59,37 @@ const schema = toTypedSchema(
     }),
 );
 
-// Вес/объём можно передать из калькулятора: /account/requests/new?weight=10&volume=0.2
+// Вес/объём можно передать из поиска: /account/requests/new?weight=10&volume=0.2
 function queryNumber(key: string): number | null {
   const raw = Number(route.query[key]);
   return Number.isFinite(raw) && raw > 0 ? raw : null;
 }
+
+function queryText(key: string): string | null {
+  const raw = route.query[key];
+  return typeof raw === 'string' && raw.trim() ? raw.trim().slice(0, 1000) : null;
+}
+
+// Из поиска на сайте приходят направление, города, забор груза и список мест.
+const queryDirection: ShipmentDirection = route.query.direction === 'ru_kg' ? 'ru_kg' : 'kg_ru';
 
 const defaultAddress = computed(() => book.value.find((a) => a.isDefault) ?? null);
 
 const { defineField, errors, handleSubmit, setValues, values } = useForm({
   validationSchema: schema,
   initialValues: {
-    direction: 'kg_ru' as ShipmentDirection,
-    fromCity: 'Бишкек',
-    toCity: '',
+    direction: queryDirection,
+    fromCity: queryText('from') ?? (queryDirection === 'kg_ru' ? 'Бишкек' : ''),
+    toCity: queryText('to') ?? (queryDirection === 'ru_kg' ? 'Бишкек' : ''),
     cargoDescription: '',
     weightKg: queryNumber('weight') ?? undefined,
     volumeM3: queryNumber('volume'),
-    pickupRequired: false,
+    pickupRequired: route.query.pickup === '1',
     pickupAddress: '',
     recipientName: '',
     recipientPhone: '',
     recipientAddress: '',
-    comment: '',
+    comment: queryText('comment') ?? '',
   },
 });
 

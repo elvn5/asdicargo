@@ -80,7 +80,9 @@ const reviews = ['r1', 'r2', 'r3'] as const;
         />
       </div>
 
-      <div class="mx-auto w-full max-w-6xl px-4 py-20 sm:py-24 md:py-32">
+      <div
+        class="mx-auto grid w-full max-w-6xl items-center gap-8 px-4 py-16 sm:py-20 md:py-24 lg:grid-cols-[1fr_24rem]"
+      >
         <div class="glass-card max-w-xl rounded-brand-xl p-7 shadow-brand-card sm:p-10">
           <span
             class="inline-flex items-center rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-white/90"
@@ -128,6 +130,9 @@ const reviews = ['r1', 'r2', 'r3'] as const;
             </NuxtLink>
           </div>
         </div>
+
+        <!-- Поиск/расчёт перевозки -->
+        <ShippingSearch initial-from="Бишкек" />
       </div>
     </section>
 
