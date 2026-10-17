@@ -6,10 +6,24 @@ export interface BannedItem {
   sortOrder: number;
 }
 
+export type AddressKind = 'warehouse' | 'pickup' | 'office';
+
+export const ADDRESS_KIND_OPTIONS: { value: AddressKind; label: string }[] = [
+  { value: 'pickup', label: 'Пункт выдачи' },
+  { value: 'warehouse', label: 'Склад' },
+  { value: 'office', label: 'Офис' },
+];
+
 export interface Address {
   id: string;
   title: string;
+  kind: AddressKind;
+  city: string | null;
   fullAddress: string;
+  phone: string | null;
+  workingHours: string | null;
+  latitude: number | null;
+  longitude: number | null;
   comment: string | null;
   isActive: boolean;
   sortOrder: number;
@@ -120,4 +134,48 @@ export interface SitePage {
   language: 'ru' | 'ky' | 'en';
   createdAt: string;
   updatedAt: string;
+}
+
+export type ShipmentDirection = 'kg_ru' | 'ru_kg';
+export type ShipmentRequestStatus = 'new' | 'in_progress' | 'completed' | 'rejected' | 'cancelled';
+
+export const SHIPMENT_DIRECTION_LABELS: Record<ShipmentDirection, string> = {
+  kg_ru: 'Кыргызстан → Россия',
+  ru_kg: 'Россия → Кыргызстан',
+};
+
+export const REQUEST_STATUS_OPTIONS: {
+  value: ShipmentRequestStatus;
+  label: string;
+  color: 'info' | 'warning' | 'success' | 'error' | 'neutral';
+}[] = [
+  { value: 'new', label: 'Новая', color: 'info' },
+  { value: 'in_progress', label: 'В работе', color: 'warning' },
+  { value: 'completed', label: 'Выполнена', color: 'success' },
+  { value: 'rejected', label: 'Отклонена', color: 'error' },
+  { value: 'cancelled', label: 'Отменена клиентом', color: 'neutral' },
+];
+
+export interface ShipmentRequest {
+  id: string;
+  number: number;
+  userId: string;
+  user?: AppUser;
+  direction: ShipmentDirection;
+  fromCity: string;
+  toCity: string;
+  cargoDescription: string;
+  weightKg: string;
+  volumeM3: string | null;
+  estimatedCostSom: number;
+  pickupRequired: boolean;
+  pickupAddress: string | null;
+  recipientName: string;
+  recipientPhone: string;
+  recipientAddress: string;
+  comment: string | null;
+  status: ShipmentRequestStatus;
+  managerComment: string | null;
+  parcelId: string | null;
+  createdAt: string;
 }

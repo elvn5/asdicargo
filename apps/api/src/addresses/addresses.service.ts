@@ -15,6 +15,13 @@ export class AddressesService {
     return this.repository.find({ order: { sortOrder: 'ASC', title: 'ASC' } });
   }
 
+  findPublic(): Promise<Address[]> {
+    return this.repository.find({
+      where: { isActive: true },
+      order: { sortOrder: 'ASC', city: 'ASC', title: 'ASC' },
+    });
+  }
+
   async findOne(id: string): Promise<Address> {
     const item = await this.repository.findOne({ where: { id } });
     if (!item) {

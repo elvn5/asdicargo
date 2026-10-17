@@ -11,9 +11,10 @@ const versionLabel = /^\d/.test(version) ? `v${version}` : version;
 
 const links = [
   { label: 'Запрещенные товары', to: '/banned-items' },
-  { label: 'Адреса', to: '/addresses' },
+  { label: 'Адреса и пункты', to: '/addresses' },
   { label: 'Поддержка', to: '/support' },
   { label: 'AsDi Cargo в цифрах', to: '/home-stats' },
+  { label: 'Заявки', to: '/requests' },
   { label: 'Посылки', to: '/parcels' },
   { label: 'Пользователи', to: '/users' },
   { label: 'Блог', to: '/blog' },
@@ -63,7 +64,7 @@ async function handleLogout(): Promise<void> {
       </p>
     </aside>
 
-    <main class="flex-1 p-6">
+    <main class="min-w-0 flex-1 p-6">
       <slot />
     </main>
   </div>

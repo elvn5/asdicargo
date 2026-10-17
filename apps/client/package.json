@@ -18,12 +18,14 @@
     "@tailwindcss/typography": "^0.5.16",
     "@vee-validate/zod": "^4.15.0",
     "@vueuse/nuxt": "^13.0.0",
+    "leaflet": "1.9.4",
     "pinia": "^3.0.0",
     "tailwindcss": "^4.0.0",
     "vee-validate": "^4.15.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@types/leaflet": "1.9.12",
     "nuxt": "^4.1.0",
     "typescript": "^5.7.2",
     "vue-tsc": "^2.2.0"

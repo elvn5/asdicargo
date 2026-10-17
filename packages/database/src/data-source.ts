@@ -7,8 +7,10 @@ import { HomeStat } from './entities/home-stat.entity';
 import { ParcelStatusHistory } from './entities/parcel-status-history.entity';
 import { Parcel } from './entities/parcel.entity';
 import { Post } from './entities/post.entity';
+import { ShipmentRequest } from './entities/shipment-request.entity';
 import { SitePage } from './entities/site-page.entity';
 import { SupportInfo } from './entities/support-info.entity';
+import { UserAddress } from './entities/user-address.entity';
 import { User } from './entities/user.entity';
 
 config();
@@ -23,6 +25,8 @@ export const entities = [
   SitePage,
   HomeStat,
   ParcelStatusHistory,
+  UserAddress,
+  ShipmentRequest,
 ];
 
 export function buildDataSourceOptions(): DataSourceOptions {

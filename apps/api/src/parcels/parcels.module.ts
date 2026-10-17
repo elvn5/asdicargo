@@ -9,5 +9,6 @@ import { ParcelsService } from './parcels.service';
   imports: [TypeOrmModule.forFeature([Parcel, ParcelStatusHistory]), AuthModule],
   controllers: [ParcelsController],
   providers: [ParcelsService],
+  exports: [ParcelsService],
 })
 export class ParcelsModule {}

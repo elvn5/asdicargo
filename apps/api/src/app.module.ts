@@ -7,6 +7,7 @@ import { HomeStatsModule } from '@/home-stats/home-stats.module';
 import { PagesModule } from '@/pages/pages.module';
 import { ParcelsModule } from '@/parcels/parcels.module';
 import { PostsModule } from '@/posts/posts.module';
+import { ShipmentRequestsModule } from '@/shipment-requests/shipment-requests.module';
 import { SupportModule } from '@/support/support.module';
 import { UsersModule } from '@/users/users.module';
 import { entities } from '@app/database';
@@ -48,6 +49,7 @@ import { LoggerModule } from 'nestjs-pino';
     PostsModule,
     UsersModule,
     HomeStatsModule,
+    ShipmentRequestsModule,
   ],
 })
 export class AppModule {}

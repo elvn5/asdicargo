@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { t } = useI18n();
+const localePath = useLocalePath();
 
 // Номер WhatsApp для оформления заявки из калькулятора.
 const WHATSAPP_PHONE = '996552165165';
@@ -44,6 +45,13 @@ const total = computed(() => (useVolume.value ? byVolume.value : byWeight.value)
 
 const numberFmt = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 });
 const fmt = (n: number) => numberFmt.format(Math.round(n));
+
+const requestUrl = computed(() => {
+  const query: Record<string, string> = {};
+  if (w.value > 0) query.weight = String(w.value);
+  if (v.value > 0) query.volume = String(v.value);
+  return { path: localePath('/account/requests/new'), query };
+});
 
 // Ссылка на чат в WhatsApp с данными расчёта, готовыми к отправке менеджеру.
 const orderUrl = computed(() => {
@@ -133,15 +141,25 @@ const orderUrl = computed(() => {
 
         <p class="mt-4 text-sm text-steel-500 dark:text-steel-400">{{ t('calculator.note') }}</p>
 
-        <a
-          :href="orderUrl"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="mt-6 inline-flex items-center gap-2 rounded-full bg-brand-gradient px-6 py-3 font-semibold text-white shadow-lg shadow-brand-900/30 transition hover:brightness-110"
-        >
-          <UIcon name="i-lucide-send" class="size-5" />
-          {{ t('calculator.cta') }}
-        </a>
+        <div class="mt-6 flex flex-wrap items-center gap-3">
+          <a
+            :href="orderUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-full bg-brand-gradient px-6 py-3 font-semibold text-white shadow-lg shadow-brand-900/30 transition hover:brightness-110"
+          >
+            <UIcon name="i-lucide-send" class="size-5" />
+            {{ t('calculator.cta') }}
+          </a>
+          <!-- Заявка в кабинете с уже введёнными весом и объёмом (без входа — через логин). -->
+          <NuxtLink
+            :to="requestUrl"
+            class="inline-flex items-center gap-2 rounded-full border border-steel-300 px-6 py-3 font-semibold text-steel-700 transition hover:border-brand-400 hover:text-brand-600 dark:border-steel-700 dark:text-steel-200"
+          >
+            <UIcon name="i-lucide-clipboard-list" class="size-5" />
+            {{ t('calculator.ctaRequest') }}
+          </NuxtLink>
+        </div>
       </div>
     </section>
   </div>

@@ -16,7 +16,7 @@ import { PageLanguage } from './site-page.entity';
  * на клиенте при появлении блока во вьюпорте.
  */
 @Entity('home_stats')
-@Index(['language', 'position'], { unique: true })
+@Index('UQ_home_stats_language_position', ['language', 'position'], { unique: true })
 export class HomeStat {
   @PrimaryGeneratedColumn('uuid')
   id!: string;

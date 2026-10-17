@@ -77,9 +77,14 @@ const telegramUrl = computed(() => {
 
 <template>
   <div class="space-y-8">
-    <header>
-      <h1 class="text-2xl font-bold sm:text-3xl">{{ t('account.greeting', { name: firstName }) }}</h1>
-      <p class="mt-1 text-steel-500 dark:text-steel-400">{{ t('account.greetingSub') }}</p>
+    <header class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-bold sm:text-3xl">{{ t('account.greeting', { name: firstName }) }}</h1>
+        <p class="mt-1 text-steel-500 dark:text-steel-400">{{ t('account.greetingSub') }}</p>
+      </div>
+      <UButton :to="localePath('/account/requests/new')" icon="i-lucide-plus" size="lg" class="hidden sm:inline-flex lg:hidden">
+        {{ t('account.nav.newRequest') }}
+      </UButton>
     </header>
 
     <div v-if="status === 'error'" class="rounded-brand-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">
