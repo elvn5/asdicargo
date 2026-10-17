@@ -5,11 +5,25 @@ import type { MigrationInterface, QueryRunner } from 'typeorm';
  * - объём и стоимость посылки, которые заполняет менеджер;
  * - история статусов посылки для таймлайна в кабинете.
  * Существующим посылкам заводим стартовую запись истории с текущим статусом.
+ *
+ * Раньше миграция ненадолго называлась AddAccountParcels1789800000000 и на части
+ * окружений уже применена под этим именем. Тогда схема готова: убираем старую
+ * запись из таблицы migrations и ничего не меняем (TypeORM запишет новое имя).
  */
+const LEGACY_NAME = 'AddAccountParcels1789800000000';
+
 export class AddAccountParcels1790000000000 implements MigrationInterface {
   name = 'AddAccountParcels1790000000000';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
+    const legacy: unknown[] = await queryRunner.query(`SELECT 1 FROM "migrations" WHERE "name" = $1`, [
+      LEGACY_NAME,
+    ]);
+    if (legacy.length > 0) {
+      await queryRunner.query(`DELETE FROM "migrations" WHERE "name" = $1`, [LEGACY_NAME]);
+      return;
+    }
+
     await queryRunner.query(`ALTER TABLE "parcels" ADD "volumeM3" character varying`);
     await queryRunner.query(`ALTER TABLE "parcels" ADD "costSom" character varying`);
 
