@@ -73,19 +73,13 @@ const orderUrl = computed(() => {
 
 <template>
   <div>
-    <!-- Градиентная шапка -->
-    <section class="relative overflow-hidden bg-brand-steel-gradient">
-      <div
-        class="pointer-events-none absolute -right-16 -top-24 h-64 w-96 rounded-full bg-white/10 blur-3xl"
-        aria-hidden="true"
-      />
-      <div class="relative z-10 mx-auto w-full max-w-3xl px-4 py-14 md:py-20">
-        <h1 class="text-3xl font-bold leading-tight text-white sm:text-4xl">
-          {{ t('calculator.title') }}
-        </h1>
-        <p class="mt-3 max-w-xl text-white/80">{{ t('calculator.subtitle') }}</p>
-      </div>
-    </section>
+    <!-- Шапка с фоновым фото -->
+    <PageHero image="/backgrounds/kalkulyator.webp" max-width="max-w-3xl">
+      <h1 class="text-3xl font-bold leading-tight text-white sm:text-4xl">
+        {{ t('calculator.title') }}
+      </h1>
+      <p class="mt-3 max-w-xl text-white/80">{{ t('calculator.subtitle') }}</p>
+    </PageHero>
 
     <section class="mx-auto w-full max-w-3xl px-4 py-12">
       <div

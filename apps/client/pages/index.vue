@@ -71,7 +71,7 @@ const reviews = ['r1', 'r2', 'r3'] as const;
       <!-- Фоновое фото + затемняющий градиент -->
       <div class="absolute inset-0 -z-10">
         <img
-          src="/hero-cargo.jpg"
+          src="/backgrounds/main.webp"
           :alt="t('hero.imageAlt')"
           class="h-full w-full object-cover"
         />

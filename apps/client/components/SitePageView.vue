@@ -15,7 +15,7 @@ interface SitePage {
   published: boolean;
 }
 
-const props = defineProps<{ slug: string; faq?: boolean }>();
+const props = defineProps<{ slug: string; image?: string; faq?: boolean }>();
 
 const config = useRuntimeConfig();
 const base = (import.meta.server ? config.apiInternalUrl : config.public.apiBaseUrl) as string;
@@ -80,18 +80,12 @@ const showAccordion = computed(() => props.faq && faqItems.value.length > 0);
 
 <template>
   <div v-if="page">
-    <!-- Градиентная шапка страницы -->
-    <section class="relative overflow-hidden bg-brand-steel-gradient">
-      <div
-        class="pointer-events-none absolute -right-16 -top-24 h-64 w-96 rounded-full bg-white/10 blur-3xl"
-        aria-hidden="true"
-      />
-      <div class="relative z-10 mx-auto w-full max-w-4xl px-4 py-14 md:py-20">
-        <h1 class="text-3xl font-bold leading-tight text-white sm:text-4xl">
-          {{ page.title }}
-        </h1>
-      </div>
-    </section>
+    <!-- Шапка страницы с фоновым фото -->
+    <PageHero :image="image">
+      <h1 class="text-3xl font-bold leading-tight text-white sm:text-4xl">
+        {{ page.title }}
+      </h1>
+    </PageHero>
 
     <!-- Контент -->
     <section class="mx-auto w-full max-w-3xl px-4 py-12">
