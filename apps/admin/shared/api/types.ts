@@ -179,3 +179,76 @@ export interface ShipmentRequest {
   parcelId: string | null;
   createdAt: string;
 }
+
+export type AppealStatus = 'open' | 'answered' | 'closed';
+
+export const APPEAL_CATEGORY_LABELS: Record<string, string> = {
+  damage: 'Повреждение груза',
+  loss: 'Утеря груза',
+  delay: 'Задержка доставки',
+  payment: 'Оплата и стоимость',
+  other: 'Другое',
+};
+
+export const APPEAL_STATUS_OPTIONS: {
+  value: AppealStatus;
+  label: string;
+  color: 'warning' | 'success' | 'neutral';
+}[] = [
+  { value: 'open', label: 'Ждёт ответа', color: 'warning' },
+  { value: 'answered', label: 'Отвечено', color: 'success' },
+  { value: 'closed', label: 'Закрыто', color: 'neutral' },
+];
+
+export interface AppealMessage {
+  id: string;
+  author: 'client' | 'manager';
+  body: string;
+  createdAt: string;
+}
+
+export interface Appeal {
+  id: string;
+  number: number;
+  user?: AppUser;
+  category: string;
+  subject: string;
+  status: AppealStatus;
+  parcel: { id: string; trackNumber: string } | null;
+  messages?: AppealMessage[];
+  lastMessageAt: string;
+  createdAt: string;
+}
+
+export type DocumentRequestStatus = 'pending' | 'ready' | 'rejected';
+
+export const DOCUMENT_TYPE_LABELS: Record<string, string> = {
+  invoice: 'Счёт на оплату',
+  reconciliation: 'Акт сверки',
+  other: 'Другой документ',
+};
+
+export const DOCUMENT_STATUS_OPTIONS: {
+  value: DocumentRequestStatus;
+  label: string;
+  color: 'info' | 'success' | 'error';
+}[] = [
+  { value: 'pending', label: 'Ожидает', color: 'info' },
+  { value: 'ready', label: 'Готов', color: 'success' },
+  { value: 'rejected', label: 'Отклонён', color: 'error' },
+];
+
+export interface DocumentRequest {
+  id: string;
+  number: number;
+  user?: AppUser;
+  type: string;
+  periodFrom: string | null;
+  periodTo: string | null;
+  comment: string | null;
+  status: DocumentRequestStatus;
+  managerComment: string | null;
+  fileName: string | null;
+  fileSize: number | null;
+  createdAt: string;
+}

@@ -1,5 +1,6 @@
 import { AccountModule } from '@/account/account.module';
 import { AuthModule } from '@/auth/auth.module';
+import { NotificationsModule } from '@/notifications/notifications.module';
 import { ParcelsModule } from '@/parcels/parcels.module';
 import { ShipmentRequest } from '@app/database';
 import { Module } from '@nestjs/common';
@@ -9,7 +10,13 @@ import { ShipmentRequestsService } from './shipment-requests.service';
 
 @Module({
   // AccountModule — UserJwtAuthGuard, AuthModule — JwtAuthGuard, ParcelsModule — создание посылки.
-  imports: [TypeOrmModule.forFeature([ShipmentRequest]), AccountModule, AuthModule, ParcelsModule],
+  imports: [
+    TypeOrmModule.forFeature([ShipmentRequest]),
+    AccountModule,
+    AuthModule,
+    ParcelsModule,
+    NotificationsModule,
+  ],
   controllers: [AccountRequestsController, AdminRequestsController],
   providers: [ShipmentRequestsService],
 })

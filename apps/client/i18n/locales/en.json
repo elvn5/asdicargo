@@ -218,7 +218,10 @@
       "addresses": "Address book",
       "points": "Pickup points",
       "more": "More",
-      "request": "Request"
+      "request": "Request",
+      "appeals": "Support requests",
+      "documents": "Documents",
+      "notifications": "Notifications"
     },
     "greeting": "Hello, {name}!",
     "greetingSub": "Track your parcels and manage your profile here.",
@@ -265,7 +268,8 @@
       "kg": "kg",
       "m3": "m³",
       "som": "som",
-      "cancelled": "This parcel was cancelled. If this is a mistake, contact your manager."
+      "cancelled": "This parcel was cancelled. If this is a mistake, contact your manager.",
+      "reportProblem": "Report a problem"
     },
     "manager": {
       "title": "Your manager",
@@ -412,6 +416,146 @@
     },
     "more": {
       "title": "More"
+    },
+    "appeals": {
+      "title": "Support requests",
+      "sub": "Questions, claims and complaints — a manager will reply right here.",
+      "new": "New request",
+      "empty": "No support requests yet",
+      "emptySub": "If something went wrong with a parcel, write to us.",
+      "number": "Support request #{number}",
+      "category": {
+        "damage": "Damaged cargo",
+        "loss": "Lost cargo",
+        "delay": "Delivery delay",
+        "payment": "Payment & cost",
+        "other": "Other"
+      },
+      "status": {
+        "open": "Awaiting reply",
+        "answered": "Replied",
+        "closed": "Closed"
+      },
+      "form": {
+        "category": "Topic",
+        "parcel": "Parcel (optional)",
+        "noParcel": "Not related to a parcel",
+        "subject": "Short summary",
+        "message": "Describe the situation",
+        "messagePlaceholder": "What happened, when, what you expect…",
+        "submit": "Send",
+        "created": "Support request #{number} sent",
+        "errRequired": "Required field",
+        "errSubmit": "Could not send. Please try again"
+      },
+      "detail": {
+        "back": "← All support requests",
+        "you": "You",
+        "manager": "AsDi Cargo manager",
+        "reply": "Your message",
+        "send": "Send",
+        "close": "Close request",
+        "closeConfirm": "Close support request #{number}? You won't be able to reply.",
+        "closed": "This request is closed. If the issue isn't resolved, create a new one.",
+        "notFound": "Support request not found",
+        "parcel": "Parcel",
+        "waiting": "A manager will reply shortly."
+      }
+    },
+    "documents": {
+      "title": "Documents",
+      "sub": "Order an invoice or a reconciliation statement — the manager will prepare it and it will appear here.",
+      "order": "Order a document",
+      "empty": "You haven't ordered any documents yet",
+      "number": "#{number}",
+      "type": {
+        "invoice": "Invoice",
+        "reconciliation": "Reconciliation statement",
+        "other": "Other document"
+      },
+      "status": {
+        "pending": "In preparation",
+        "ready": "Ready",
+        "rejected": "Rejected"
+      },
+      "form": {
+        "type": "Document",
+        "periodFrom": "Period from",
+        "periodTo": "to",
+        "comment": "Comment",
+        "commentPlaceholder": "E.g. needs a stamp…",
+        "submit": "Order",
+        "cancel": "Cancel",
+        "created": "Document ordered",
+        "errPeriod": "Specify the period for a reconciliation statement",
+        "errOrder": "Start date is after end date",
+        "errSubmit": "Could not order the document"
+      },
+      "period": "Period: {from} — {to}",
+      "download": "Download",
+      "managerComment": "Manager's comment",
+      "hint": "Preparing a document takes up to 1–2 business days."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "readAll": "Mark all as read",
+      "empty": "No notifications yet",
+      "emptySub": "Parcel status changes, manager replies and ready documents will appear here.",
+      "newCount": "New notifications: {count}",
+      "show": "Show",
+      "types": {
+        "parcel_status": {
+          "title": "Parcel {track}",
+          "body": "New status: {status}"
+        },
+        "request_status": {
+          "title": "Request #{number}",
+          "body": "New status: {status}"
+        },
+        "request_reply": {
+          "title": "Request #{number}",
+          "body": "The manager replied to your request"
+        },
+        "appeal_reply": {
+          "title": "Support request #{number}",
+          "body": "New reply from the manager"
+        },
+        "document_ready": {
+          "title": "Document #{number}",
+          "body": "{doc} is ready to download"
+        },
+        "document_rejected": {
+          "title": "Document #{number}",
+          "body": "{doc}: the manager couldn't prepare the document"
+        }
+      }
+    },
+    "onboarding": {
+      "skip": "Skip",
+      "next": "Next",
+      "done": "Get started",
+      "s1": {
+        "title": "Welcome to your AsDi Cargo account",
+        "text": "Everything about your parcels in one place — statuses, history and cost."
+      },
+      "s2": {
+        "title": "Book in a couple of clicks",
+        "text": "Create a shipment request right here — we'll estimate the cost instantly and a manager will confirm."
+      },
+      "s3": {
+        "title": "Pickup points on the map",
+        "text": "Warehouses and pickup points with working hours and directions."
+      },
+      "s4": {
+        "title": "Always in touch",
+        "text": "Status notifications, support requests and documents — no calls or waiting."
+      }
+    },
+    "install": {
+      "title": "Your account on the phone",
+      "text": "Install the account as an app for quick access from your home screen.",
+      "button": "Install",
+      "iosHint": "Tap “Share” and choose “Add to Home Screen”."
     }
   }
 }

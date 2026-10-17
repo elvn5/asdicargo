@@ -14,10 +14,11 @@ export function useApiClient() {
     const response = await fetch(`${config.public.apiBaseUrl}${path}`, {
       ...options,
       credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
+      // Для FormData браузер сам выставит multipart с boundary.
+      headers:
+        options.body instanceof FormData
+          ? options.headers
+          : { 'Content-Type': 'application/json', ...options.headers },
     });
 
     if (!response.ok) {
@@ -39,5 +40,10 @@ export function useApiClient() {
     put: <T>(path: string, body?: unknown) =>
       request<T>(path, { method: 'PUT', body: body ? JSON.stringify(body) : undefined }),
     delete: <T>(path: string) => request<T>(path, { method: 'DELETE' }),
+    upload: <T>(path: string, file: File, field = 'file') => {
+      const body = new FormData();
+      body.append(field, file);
+      return request<T>(path, { method: 'POST', body });
+    },
   };
 }

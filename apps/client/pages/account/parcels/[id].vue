@@ -202,6 +202,14 @@ const { copy, copied } = useClipboard({ legacy: true });
           </ol>
         </section>
       </div>
+      <UButton
+        :to="localePath({ path: '/account/appeals/new', query: { parcel: parcel.id } })"
+        color="neutral"
+        variant="soft"
+        icon="i-lucide-message-square-warning"
+      >
+        {{ t('account.parcel.reportProblem') }}
+      </UButton>
     </template>
   </div>
 </template>

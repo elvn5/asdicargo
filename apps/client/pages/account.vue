@@ -10,6 +10,10 @@ const localePath = useLocalePath();
 const route = useRoute();
 const auth = useAuthStore();
 const { loggingOut, logout } = useLogout();
+const { unread, startPolling } = useNotifications();
+
+// Счётчик непрочитанных обновляем только в браузере (на сервере нет сессии).
+onMounted(startPolling);
 
 useHead({
   title: () => `${t('auth.accountTitle')} — AsDi Cargo`,
@@ -17,6 +21,7 @@ useHead({
 });
 
 interface NavLink {
+  key: string;
   to: string;
   label: string;
   icon: string;
@@ -28,21 +33,88 @@ const p = (path: string): string => localePath(path);
 // Боковое меню (десктоп).
 const sideLinks = computed<NavLink[]>(() => [
   {
+    key: 'dashboard',
     to: p('/account'),
     label: t('account.nav.dashboard'),
     icon: 'i-lucide-layout-dashboard',
     exact: true,
   },
-  { to: p('/account/parcels'), label: t('account.nav.parcels'), icon: 'i-lucide-package' },
-  { to: p('/account/requests'), label: t('account.nav.requests'), icon: 'i-lucide-clipboard-list' },
-  { to: p('/account/addresses'), label: t('account.nav.addresses'), icon: 'i-lucide-book-user' },
-  { to: p('/account/points'), label: t('account.nav.points'), icon: 'i-lucide-map-pin' },
-  { to: p('/account/profile'), label: t('account.nav.profile'), icon: 'i-lucide-user-round' },
+  {
+    key: 'parcels',
+    to: p('/account/parcels'),
+    label: t('account.nav.parcels'),
+    icon: 'i-lucide-package',
+  },
+  {
+    key: 'requests',
+    to: p('/account/requests'),
+    label: t('account.nav.requests'),
+    icon: 'i-lucide-clipboard-list',
+  },
+  {
+    key: 'appeals',
+    to: p('/account/appeals'),
+    label: t('account.nav.appeals'),
+    icon: 'i-lucide-message-square-warning',
+  },
+  {
+    key: 'documents',
+    to: p('/account/documents'),
+    label: t('account.nav.documents'),
+    icon: 'i-lucide-files',
+  },
+  {
+    key: 'notifications',
+    to: p('/account/notifications'),
+    label: t('account.nav.notifications'),
+    icon: 'i-lucide-bell',
+  },
+  {
+    key: 'addresses',
+    to: p('/account/addresses'),
+    label: t('account.nav.addresses'),
+    icon: 'i-lucide-book-user',
+  },
+  {
+    key: 'points',
+    to: p('/account/points'),
+    label: t('account.nav.points'),
+    icon: 'i-lucide-map-pin',
+  },
+  {
+    key: 'profile',
+    to: p('/account/profile'),
+    label: t('account.nav.profile'),
+    icon: 'i-lucide-user-round',
+  },
 ]);
+
+function linkByKey(key: string): NavLink {
+  return (
+    sideLinks.value.find((l) => l.key === key) ?? {
+      key,
+      to: p('/account'),
+      label: key,
+      icon: 'i-lucide-circle',
+    }
+  );
+}
+
+// Вкладки нижнего мобильного меню (кроме «+ Заявка» и «Ещё»).
+const mobileLeft = computed(() => [linkByKey('dashboard'), linkByKey('parcels')]);
+const mobilePoints = computed(() => linkByKey('points'));
 
 // Разделы, которые на мобильных живут под вкладкой «Ещё».
 const morePaths = computed(() =>
-  ['/account/more', '/account/requests', '/account/addresses', '/account/profile'].map(p),
+  [
+    '/account/more',
+    '/account/requests',
+    '/account/appeals',
+    '/account/documents',
+    '/account/notifications',
+    '/account/addresses',
+    '/account/profile',
+  ].map(p),
 );
 
 function isActive(link: NavLink): boolean {
@@ -97,7 +169,13 @@ const isMoreActive = computed(
                 "
               >
                 <UIcon :name="link.icon" class="size-5" />
-                {{ link.label }}
+                <span class="flex-1">{{ link.label }}</span>
+                <span
+                  v-if="link.key === 'notifications' && unread > 0"
+                  class="min-w-5 rounded-full bg-brand-500 px-1.5 text-center text-xs font-semibold leading-5 text-white"
+                >
+                  {{ unread > 99 ? '99+' : unread }}
+                </span>
               </NuxtLink>
               <NuxtLink
                 :to="p('/cargo-kalkulyator')"
@@ -123,12 +201,13 @@ const isMoreActive = computed(
           <NuxtPage />
         </main>
       </div>
+      <AccountOnboarding />
 
       <template #fallback>
         <div class="lg:grid lg:grid-cols-[15rem_1fr] lg:gap-8">
           <div class="hidden space-y-3 lg:block">
             <USkeleton class="h-16 w-full rounded-brand-lg" />
-            <USkeleton v-for="n in 6" :key="n" class="h-10 w-full rounded-xl" />
+            <USkeleton v-for="n in 9" :key="n" class="h-10 w-full rounded-xl" />
           </div>
           <div class="space-y-4">
             <USkeleton class="h-9 w-64" />
@@ -145,7 +224,7 @@ const isMoreActive = computed(
     >
       <div class="mx-auto grid max-w-md grid-cols-5 items-end pb-[env(safe-area-inset-bottom)]">
         <NuxtLink
-          v-for="link in [sideLinks[0]!, sideLinks[1]!]"
+          v-for="link in mobileLeft"
           :key="link.to"
           :to="link.to"
           class="flex flex-col items-center gap-1 py-2.5 text-[11px] font-medium transition"
@@ -169,12 +248,12 @@ const isMoreActive = computed(
         </NuxtLink>
 
         <NuxtLink
-          :to="sideLinks[4]!.to"
+          :to="mobilePoints.to"
           class="flex flex-col items-center gap-1 py-2.5 text-[11px] font-medium transition"
-          :class="isActive(sideLinks[4]!) ? 'text-brand-600 dark:text-brand-400' : 'text-steel-500 dark:text-steel-400'"
+          :class="isActive(mobilePoints) ? 'text-brand-600 dark:text-brand-400' : 'text-steel-500 dark:text-steel-400'"
         >
-          <UIcon :name="sideLinks[4]!.icon" class="size-5" />
-          <span class="max-w-full truncate px-1">{{ sideLinks[4]!.label }}</span>
+          <UIcon :name="mobilePoints.icon" class="size-5" />
+          <span class="max-w-full truncate px-1">{{ mobilePoints.label }}</span>
         </NuxtLink>
 
         <NuxtLink
@@ -182,7 +261,14 @@ const isMoreActive = computed(
           class="flex flex-col items-center gap-1 py-2.5 text-[11px] font-medium transition"
           :class="isMoreActive ? 'text-brand-600 dark:text-brand-400' : 'text-steel-500 dark:text-steel-400'"
         >
-          <UIcon name="i-lucide-menu" class="size-5" />
+          <span class="relative">
+            <UIcon name="i-lucide-menu" class="size-5" />
+            <!-- Точка — есть непрочитанные уведомления. -->
+            <span
+              v-if="unread > 0"
+              class="absolute -right-1 -top-0.5 size-2.5 rounded-full bg-brand-500 ring-2 ring-white dark:ring-steel-950"
+            />
+          </span>
           {{ t('account.nav.more') }}
         </NuxtLink>
       </div>

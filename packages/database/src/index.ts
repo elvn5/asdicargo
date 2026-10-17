@@ -15,3 +15,11 @@ export {
 } from './entities/shipment-request.entity';
 export { entities, buildDataSourceOptions } from './data-source';
 export { default as AppDataSource } from './data-source';
+export { Appeal, AppealCategory, AppealStatus } from './entities/appeal.entity';
+export { AppealMessage, AppealAuthor } from './entities/appeal-message.entity';
+export {
+  DocumentRequest,
+  DocumentRequestStatus,
+  DocumentType,
+} from './entities/document-request.entity';
+export { Notification, NotificationType } from './entities/notification.entity';

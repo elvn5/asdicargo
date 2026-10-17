@@ -1,9 +1,12 @@
 import { AccountModule } from '@/account/account.module';
 import { AddressesModule } from '@/addresses/addresses.module';
+import { AppealsModule } from '@/appeals/appeals.module';
 import { AuthModule } from '@/auth/auth.module';
 import { BannedItemsModule } from '@/banned-items/banned-items.module';
 import { validateEnv } from '@/config/env.schema';
+import { DocumentsModule } from '@/documents/documents.module';
 import { HomeStatsModule } from '@/home-stats/home-stats.module';
+import { NotificationsModule } from '@/notifications/notifications.module';
 import { PagesModule } from '@/pages/pages.module';
 import { ParcelsModule } from '@/parcels/parcels.module';
 import { PostsModule } from '@/posts/posts.module';
@@ -50,6 +53,9 @@ import { LoggerModule } from 'nestjs-pino';
     UsersModule,
     HomeStatsModule,
     ShipmentRequestsModule,
+    NotificationsModule,
+    AppealsModule,
+    DocumentsModule,
   ],
 })
 export class AppModule {}

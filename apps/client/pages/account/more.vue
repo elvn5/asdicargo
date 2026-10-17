@@ -7,26 +7,50 @@ const localePath = useLocalePath();
 const auth = useAuthStore();
 const { loggingOut, logout } = useLogout();
 
+const { unread } = useNotifications();
+
 const items = computed(() => [
+  {
+    to: localePath('/account/notifications'),
+    label: t('account.nav.notifications'),
+    icon: 'i-lucide-bell',
+    badge: unread.value,
+  },
   {
     to: localePath('/account/requests'),
     label: t('account.nav.requests'),
     icon: 'i-lucide-clipboard-list',
+    badge: 0,
+  },
+  {
+    to: localePath('/account/appeals'),
+    label: t('account.nav.appeals'),
+    icon: 'i-lucide-message-square-warning',
+    badge: 0,
+  },
+  {
+    to: localePath('/account/documents'),
+    label: t('account.nav.documents'),
+    icon: 'i-lucide-files',
+    badge: 0,
   },
   {
     to: localePath('/account/addresses'),
     label: t('account.nav.addresses'),
     icon: 'i-lucide-book-user',
+    badge: 0,
   },
   {
     to: localePath('/account/profile'),
     label: t('account.nav.profile'),
     icon: 'i-lucide-user-round',
+    badge: 0,
   },
   {
     to: localePath('/cargo-kalkulyator'),
     label: t('account.nav.calculator'),
     icon: 'i-lucide-calculator',
+    badge: 0,
   },
 ]);
 </script>
@@ -57,9 +81,17 @@ const items = computed(() => [
       >
         <UIcon :name="item.icon" class="size-5 text-brand-600 dark:text-brand-400" />
         <span class="flex-1">{{ item.label }}</span>
+        <span
+          v-if="item.badge > 0"
+          class="min-w-5 rounded-full bg-brand-500 px-1.5 text-center text-xs font-semibold leading-5 text-white"
+        >
+          {{ item.badge > 99 ? '99+' : item.badge }}
+        </span>
         <UIcon name="i-lucide-chevron-right" class="size-5 text-steel-300" />
       </NuxtLink>
     </nav>
+
+    <AccountInstallApp />
 
     <UButton block size="lg" color="error" variant="soft" icon="i-lucide-log-out" :loading="loggingOut" @click="logout">
       {{ t('account.nav.logout') }}

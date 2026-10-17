@@ -5,6 +5,7 @@ import type { MyParcel, ParcelSummary, PublicSettings } from '~/types/api';
 const { t } = useI18n();
 const localePath = useLocalePath();
 const auth = useAuthStore();
+const { unread } = useNotifications();
 const api = useApi();
 
 // Номер по умолчанию, пока в админке не задан телефон поддержки.
@@ -86,6 +87,16 @@ const telegramUrl = computed(() => {
         {{ t('account.nav.newRequest') }}
       </UButton>
     </header>
+
+    <NuxtLink
+      v-if="unread > 0"
+      :to="localePath('/account/notifications')"
+      class="flex items-center gap-3 rounded-brand-lg border border-brand-200 bg-brand-50 px-4 py-3 text-sm font-medium text-brand-800 transition hover:border-brand-300 dark:border-brand-900 dark:bg-brand-950/50 dark:text-brand-200"
+    >
+      <UIcon name="i-lucide-bell-ring" class="size-5 shrink-0" />
+      <span class="flex-1">{{ t('account.notifications.newCount', { count: unread }) }}</span>
+      <span class="text-brand-600 dark:text-brand-400">{{ t('account.notifications.show') }} →</span>
+    </NuxtLink>
 
     <div v-if="status === 'error'" class="rounded-brand-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">
       {{ t('account.loadError') }}
@@ -190,6 +201,7 @@ const telegramUrl = computed(() => {
           </div>
           <UIcon name="i-lucide-arrow-right" class="size-5 text-steel-400 transition group-hover:translate-x-0.5 group-hover:text-brand-500" />
         </NuxtLink>
+        <AccountInstallApp />
       </aside>
     </div>
   </div>

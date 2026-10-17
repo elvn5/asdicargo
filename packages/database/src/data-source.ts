@@ -2,8 +2,12 @@ import 'reflect-metadata';
 import { config } from 'dotenv';
 import { DataSource, type DataSourceOptions } from 'typeorm';
 import { Address } from './entities/address.entity';
+import { AppealMessage } from './entities/appeal-message.entity';
+import { Appeal } from './entities/appeal.entity';
 import { BannedItem } from './entities/banned-item.entity';
+import { DocumentRequest } from './entities/document-request.entity';
 import { HomeStat } from './entities/home-stat.entity';
+import { Notification } from './entities/notification.entity';
 import { ParcelStatusHistory } from './entities/parcel-status-history.entity';
 import { Parcel } from './entities/parcel.entity';
 import { Post } from './entities/post.entity';
@@ -27,6 +31,10 @@ export const entities = [
   ParcelStatusHistory,
   UserAddress,
   ShipmentRequest,
+  Appeal,
+  AppealMessage,
+  DocumentRequest,
+  Notification,
 ];
 
 export function buildDataSourceOptions(): DataSourceOptions {

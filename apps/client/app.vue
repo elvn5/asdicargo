@@ -28,18 +28,25 @@ const organizationLd = computed(() =>
 // микроразметка организации. Страницы дополняют/переопределяют своими тегами.
 useHead(() => ({
   htmlAttrs: { lang: currentLanguage.value },
-  link: [{ rel: 'canonical', href: siteUrl + route.path }],
+  link: [
+    { rel: 'canonical', href: siteUrl + route.path },
+    // Иконки и манифест PWA (кабинет можно установить на телефон).
+    { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/icons/favicon-32.png' },
+    { rel: 'apple-touch-icon', href: '/icons/apple-touch-icon.png' },
+    { rel: 'manifest', href: '/manifest.webmanifest' },
+  ],
   meta: [
     { property: 'og:site_name', content: 'AsDi Cargo' },
+    { name: 'theme-color', content: '#c33a22' },
+    { name: 'apple-mobile-web-app-title', content: 'AsDi Cargo' },
+    { name: 'apple-mobile-web-app-capable', content: 'yes' },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: siteUrl + route.path },
     { name: 'twitter:card', content: 'summary_large_image' },
     // На не-production закрываем от индексации на уровне мета-тега.
     ...(isProductionSite ? [] : [{ name: 'robots', content: 'noindex, nofollow' }]),
   ],
-  script: [
-    { type: 'application/ld+json', innerHTML: organizationLd.value },
-  ],
+  script: [{ type: 'application/ld+json', innerHTML: organizationLd.value }],
 }));
 </script>
 

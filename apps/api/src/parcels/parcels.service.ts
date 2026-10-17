@@ -1,4 +1,5 @@
-import { Parcel, ParcelStatusHistory } from '@app/database';
+import { NotificationsService } from '@/notifications/notifications.service';
+import { NotificationType, Parcel, ParcelStatusHistory } from '@app/database';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
@@ -11,6 +12,7 @@ export class ParcelsService {
     private readonly repository: Repository<Parcel>,
     @InjectRepository(ParcelStatusHistory)
     private readonly history: Repository<ParcelStatusHistory>,
+    private readonly notifications: NotificationsService,
   ) {}
 
   findAll(): Promise<Parcel[]> {
@@ -32,6 +34,7 @@ export class ParcelsService {
   async create(dto: CreateParcelDto): Promise<Parcel> {
     const parcel = await this.repository.save(this.repository.create(dto));
     await this.history.save(this.history.create({ parcelId: parcel.id, status: parcel.status }));
+    await this.notifyStatus(parcel);
     return parcel;
   }
 
@@ -46,6 +49,7 @@ export class ParcelsService {
     // Клиент видит смену статуса в таймлайне кабинета.
     if (statusChanged) {
       await this.history.save(this.history.create({ parcelId: saved.id, status: saved.status }));
+      await this.notifyStatus(saved);
     }
     return saved;
   }
@@ -53,5 +57,14 @@ export class ParcelsService {
   async remove(id: string): Promise<void> {
     const parcel = await this.findOne(id);
     await this.repository.remove(parcel);
+  }
+
+  private notifyStatus(parcel: Parcel): Promise<void> {
+    return this.notifications.notify(
+      parcel.userId,
+      NotificationType.PARCEL_STATUS,
+      { track: parcel.trackNumber, status: parcel.status },
+      `/account/parcels/${parcel.id}`,
+    );
   }
 }

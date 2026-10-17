@@ -138,3 +138,63 @@ export interface ShipmentRequestPayload {
   recipientAddress: string;
   comment: string | null;
 }
+
+export type AppealCategory = 'damage' | 'loss' | 'delay' | 'payment' | 'other';
+export type AppealStatus = 'open' | 'answered' | 'closed';
+
+export interface AppealMessage {
+  id: string;
+  author: 'client' | 'manager';
+  body: string;
+  createdAt: string;
+}
+
+// Обращение — /account/appeals.
+export interface Appeal {
+  id: string;
+  number: number;
+  category: AppealCategory;
+  subject: string;
+  status: AppealStatus;
+  parcelId: string | null;
+  parcel: { id: string; trackNumber: string } | null;
+  messages?: AppealMessage[];
+  lastMessageAt: string;
+  createdAt: string;
+}
+
+export type DocumentType = 'invoice' | 'reconciliation' | 'other';
+export type DocumentRequestStatus = 'pending' | 'ready' | 'rejected';
+
+// Заказ документа — /account/documents.
+export interface DocumentRequest {
+  id: string;
+  number: number;
+  type: DocumentType;
+  periodFrom: string | null;
+  periodTo: string | null;
+  comment: string | null;
+  status: DocumentRequestStatus;
+  managerComment: string | null;
+  fileName: string | null;
+  fileSize: number | null;
+  createdAt: string;
+}
+
+export type NotificationType =
+  | 'parcel_status'
+  | 'request_status'
+  | 'request_reply'
+  | 'appeal_reply'
+  | 'document_ready'
+  | 'document_rejected';
+
+// Уведомление в кабинете — /account/notifications.
+export interface AccountNotification {
+  id: string;
+  type: NotificationType;
+  params: Record<string, string | number>;
+  link: string | null;
+  readAt: string | null;
+  createdAt: string;
+}

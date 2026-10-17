@@ -1,6 +1,12 @@
 import { estimateShippingCost } from '@/common/shipping-cost';
+import { NotificationsService } from '@/notifications/notifications.service';
 import { ParcelsService } from '@/parcels/parcels.service';
-import { ParcelStatus, ShipmentRequest, ShipmentRequestStatus } from '@app/database';
+import {
+  NotificationType,
+  ParcelStatus,
+  ShipmentRequest,
+  ShipmentRequestStatus,
+} from '@app/database';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
@@ -20,6 +26,7 @@ export class ShipmentRequestsService {
     @InjectRepository(ShipmentRequest)
     private readonly requests: Repository<ShipmentRequest>,
     private readonly parcels: ParcelsService,
+    private readonly notifications: NotificationsService,
   ) {}
 
   // ---------------- Клиент ----------------
@@ -89,12 +96,39 @@ export class ShipmentRequestsService {
 
   async update(id: string, dto: UpdateShipmentRequestDto): Promise<ShipmentRequest> {
     const request = await this.findOne(id);
+    const statusChanged = dto.status !== undefined && dto.status !== request.status;
+    const replied =
+      dto.managerComment !== undefined &&
+      Boolean(dto.managerComment) &&
+      dto.managerComment !== request.managerComment;
     if (dto.status !== undefined) request.status = dto.status;
     if (dto.managerComment !== undefined) request.managerComment = dto.managerComment;
-    return this.requests.save(request);
+    const saved = await this.requests.save(request);
+
+    // Одно уведомление на изменение: смена статуса важнее нового ответа.
+    const link = `/account/requests/${saved.id}`;
+    if (statusChanged) {
+      await this.notifications.notify(
+        saved.userId,
+        NotificationType.REQUEST_STATUS,
+        { number: saved.number, status: saved.status },
+        link,
+      );
+    } else if (replied) {
+      await this.notifications.notify(
+        saved.userId,
+        NotificationType.REQUEST_REPLY,
+        { number: saved.number },
+        link,
+      );
+    }
+    return saved;
   }
 
-  /** Груз принят: создаём посылку из заявки и закрываем заявку. */
+  /**
+   * Груз принят: создаём посылку из заявки и закрываем заявку.
+   * Клиент получит уведомление о новой посылке от ParcelsService.
+   */
   async convertToParcel(id: string, dto: ConvertShipmentRequestDto): Promise<ShipmentRequest> {
     const request = await this.findOne(id);
     if (request.parcelId) {

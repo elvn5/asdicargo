@@ -1,4 +1,10 @@
-import type { AddressKind, ShipmentRequestStatus } from '~/types/api';
+import type {
+  AddressKind,
+  AppealStatus,
+  DocumentRequestStatus,
+  NotificationType,
+  ShipmentRequestStatus,
+} from '~/types/api';
 
 type BadgeColor = 'neutral' | 'info' | 'warning' | 'success' | 'error' | 'primary';
 
@@ -34,3 +40,30 @@ export function pointMapUrl(point: {
   const text = [point.city, point.fullAddress].filter(Boolean).join(', ');
   return `https://yandex.ru/maps/?text=${encodeURIComponent(text)}`;
 }
+
+/** Бейджи статусов обращений; подписи — в i18n `account.appeals.status.*`. */
+export const APPEAL_STATUS_META: Record<AppealStatus, { icon: string; color: BadgeColor }> = {
+  open: { icon: 'i-lucide-clock', color: 'warning' },
+  answered: { icon: 'i-lucide-message-circle-reply', color: 'success' },
+  closed: { icon: 'i-lucide-circle-check', color: 'neutral' },
+};
+
+/** Бейджи статусов документов; подписи — в i18n `account.documents.status.*`. */
+export const DOCUMENT_STATUS_META: Record<
+  DocumentRequestStatus,
+  { icon: string; color: BadgeColor }
+> = {
+  pending: { icon: 'i-lucide-hourglass', color: 'info' },
+  ready: { icon: 'i-lucide-file-check', color: 'success' },
+  rejected: { icon: 'i-lucide-file-x', color: 'error' },
+};
+
+/** Иконки уведомлений по типу. */
+export const NOTIFICATION_ICON: Record<NotificationType, string> = {
+  parcel_status: 'i-lucide-package',
+  request_status: 'i-lucide-clipboard-list',
+  request_reply: 'i-lucide-message-square-text',
+  appeal_reply: 'i-lucide-message-circle-reply',
+  document_ready: 'i-lucide-file-check',
+  document_rejected: 'i-lucide-file-x',
+};

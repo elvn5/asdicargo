@@ -15,6 +15,8 @@ const links = [
   { label: 'Поддержка', to: '/support' },
   { label: 'AsDi Cargo в цифрах', to: '/home-stats' },
   { label: 'Заявки', to: '/requests' },
+  { label: 'Обращения', to: '/appeals' },
+  { label: 'Документы', to: '/documents' },
   { label: 'Посылки', to: '/parcels' },
   { label: 'Пользователи', to: '/users' },
   { label: 'Блог', to: '/blog' },
