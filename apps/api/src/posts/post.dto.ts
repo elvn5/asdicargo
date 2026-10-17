@@ -13,7 +13,16 @@ export const createPostSchema = z.object({
     .optional(),
   excerpt: z.string().max(500).nullable().optional(),
   content: z.string().min(1),
-  coverImageUrl: z.string().url().max(2000).nullable().optional(),
+  // Абсолютный URL или путь к статике клиента (например, /blog/cover.webp).
+  coverImageUrl: z
+    .string()
+    .max(2000)
+    .refine(
+      (v) => v.startsWith('/') || URL.canParse(v),
+      'coverImageUrl: URL или путь от корня сайта',
+    )
+    .nullable()
+    .optional(),
   language: z.enum(postLanguages).optional().default('ru'),
   status: z.enum(postStatuses).optional().default('draft'),
 });

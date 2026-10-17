@@ -2,3 +2,32 @@
 @import "@nuxt/ui";
 @import "@app/theme/theme.css";
 @plugin "@tailwindcss/typography";
+
+/* Ссылка на PDF в статьях блога — кнопка «скачать». Оформляем по href, а не по
+   классу: санитайзер API срезает классы у ссылок при сохранении из админки. */
+.prose a[href$=".pdf"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: var(--radius-brand-lg);
+  background-image: linear-gradient(120deg, #da6e56 0%, #c33a22 45%, #862715 100%);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 10px 24px -12px rgb(134 39 21 / 0.6);
+  transition: filter 0.15s;
+}
+.prose a[href$=".pdf"]:hover {
+  filter: brightness(1.1);
+}
+.prose a[href$=".pdf"]::before {
+  content: "PDF";
+  flex: none;
+  padding: 0.2rem 0.45rem;
+  border-radius: 0.375rem;
+  background: rgb(255 255 255 / 0.2);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
