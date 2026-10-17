@@ -4,6 +4,7 @@ import { DataSource, type DataSourceOptions } from 'typeorm';
 import { Address } from './entities/address.entity';
 import { BannedItem } from './entities/banned-item.entity';
 import { HomeStat } from './entities/home-stat.entity';
+import { ParcelStatusHistory } from './entities/parcel-status-history.entity';
 import { Parcel } from './entities/parcel.entity';
 import { Post } from './entities/post.entity';
 import { SitePage } from './entities/site-page.entity';
@@ -12,7 +13,17 @@ import { User } from './entities/user.entity';
 
 config();
 
-export const entities = [User, Parcel, Address, BannedItem, SupportInfo, Post, SitePage, HomeStat];
+export const entities = [
+  User,
+  Parcel,
+  Address,
+  BannedItem,
+  SupportInfo,
+  Post,
+  SitePage,
+  HomeStat,
+  ParcelStatusHistory,
+];
 
 export function buildDataSourceOptions(): DataSourceOptions {
   return {

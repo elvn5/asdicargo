@@ -1,6 +1,13 @@
 import { defineStore } from 'pinia';
 import type { AuthUser, TelegramAuthData } from '~/types/api';
 
+export interface ProfilePayload {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+}
+
 interface RegisterPayload {
   email: string;
   password: string;
@@ -35,6 +42,13 @@ export const useAuthStore = defineStore('auth', {
     async loginWithTelegram(data: TelegramAuthData): Promise<void> {
       this.user = await useApi().post<AuthUser>('/account/telegram', data);
       this.checked = true;
+    },
+    async updateProfile(payload: ProfilePayload): Promise<void> {
+      this.user = await useApi().put<AuthUser>('/account/profile', payload);
+    },
+    async changePassword(newPassword: string, currentPassword?: string): Promise<void> {
+      await useApi().post('/account/password', { newPassword, currentPassword });
+      if (this.user) this.user.hasPassword = true;
     },
     async logout(): Promise<void> {
       try {

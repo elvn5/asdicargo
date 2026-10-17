@@ -204,5 +204,102 @@
       "title": "24/7 support",
       "text": "Managers available on Telegram and WhatsApp anytime."
     }
+  },
+  "account": {
+    "nav": {
+      "dashboard": "Dashboard",
+      "parcels": "My parcels",
+      "profile": "Profile",
+      "calculator": "Calculator",
+      "logout": "Sign out"
+    },
+    "greeting": "Hello, {name}!",
+    "greetingSub": "Track your parcels and manage your profile here.",
+    "summary": {
+      "total": "Total parcels",
+      "active": "In transit & at warehouse",
+      "ready": "Ready for pickup",
+      "issued": "Picked up"
+    },
+    "recent": "Recent parcels",
+    "viewAll": "All parcels",
+    "empty": "You have no parcels yet",
+    "emptySub": "Once a manager registers your parcel, it will appear here.",
+    "status": {
+      "created": "Registered",
+      "in_transit": "In transit",
+      "arrived": "At warehouse",
+      "ready_for_pickup": "Ready for pickup",
+      "issued": "Picked up",
+      "cancelled": "Cancelled"
+    },
+    "filters": {
+      "all": "All",
+      "search": "Tracking number or description",
+      "from": "From",
+      "to": "To",
+      "reset": "Reset",
+      "notFound": "No parcels match the filters"
+    },
+    "parcel": {
+      "track": "Tracking number",
+      "description": "Description",
+      "weight": "Weight",
+      "volume": "Volume",
+      "cost": "Cost",
+      "comment": "Manager's comment",
+      "created": "Registered",
+      "updated": "Updated",
+      "history": "Status history",
+      "back": "← All parcels",
+      "copy": "Copy tracking number",
+      "copied": "Copied",
+      "notFound": "Parcel not found",
+      "kg": "kg",
+      "m3": "m³",
+      "som": "som",
+      "cancelled": "This parcel was cancelled. If this is a mistake, contact your manager."
+    },
+    "manager": {
+      "title": "Your manager",
+      "sub": "We'll help with shipping and answer your questions",
+      "whatsapp": "Message on WhatsApp",
+      "telegram": "Telegram",
+      "hours": "Working hours"
+    },
+    "calc": {
+      "title": "Estimate delivery",
+      "sub": "Get the cost by weight and volume",
+      "open": "Open calculator"
+    },
+    "profile": {
+      "title": "Profile",
+      "completeness": "Profile {percent}% complete",
+      "completenessHint": "A complete profile speeds up shipping",
+      "personal": "Personal details",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "phone": "Phone",
+      "email": "Email",
+      "save": "Save",
+      "saved": "Profile saved",
+      "security": "Security",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm new password",
+      "changePassword": "Change password",
+      "setPassword": "Set password",
+      "setPasswordHint": "You sign in with Telegram. Set a password to also sign in with email.",
+      "passwordChanged": "Password updated",
+      "errPhone": "Invalid phone number",
+      "errCurrentPassword": "Current password is incorrect",
+      "errEmailTaken": "This email is already taken",
+      "errSave": "Could not save. Please try again",
+      "telegram": "Telegram",
+      "telegramConnected": "Connected",
+      "memberSince": "Member since {date}"
+    },
+    "loadError": "Failed to load data",
+    "retry": "Retry"
   }
 }

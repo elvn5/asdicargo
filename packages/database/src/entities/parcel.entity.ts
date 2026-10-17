@@ -4,9 +4,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import type { ParcelStatusHistory } from './parcel-status-history.entity';
 import { User } from './user.entity';
 
 export enum ParcelStatus {
@@ -46,8 +48,19 @@ export class Parcel {
   @Column({ type: 'varchar', nullable: true })
   weightKg!: string | null;
 
+  // Объём в м³ (строкой, как и вес — вводится менеджером вручную).
+  @Column({ type: 'varchar', nullable: true })
+  volumeM3!: string | null;
+
+  // Стоимость доставки в сомах, рассчитанная менеджером.
+  @Column({ type: 'varchar', nullable: true })
+  costSom!: string | null;
+
   @Column({ type: 'text', nullable: true })
   comment!: string | null;
+
+  @OneToMany('ParcelStatusHistory', 'parcel')
+  history!: ParcelStatusHistory[];
 
   @CreateDateColumn()
   createdAt!: Date;

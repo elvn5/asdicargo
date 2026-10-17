@@ -1,13 +1,17 @@
 import { ZodValidationPipe } from '@/common/zod-validation.pipe';
-import { Body, Controller, Get, HttpCode, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post, Put, Res, UseGuards } from '@nestjs/common';
 import type { CookieOptions, Response } from 'express';
 import {
+  type ChangePasswordDto,
   type LoginDto,
   type RegisterDto,
   type TelegramLoginDto,
+  type UpdateProfileDto,
+  changePasswordSchema,
   loginSchema,
   registerSchema,
   telegramLoginSchema,
+  updateProfileSchema,
 } from './account.dto';
 import { AccountService, type PublicUser } from './account.service';
 import { CurrentUserId } from './current-user.decorator';
@@ -65,6 +69,26 @@ export class AccountController {
   @UseGuards(UserJwtAuthGuard)
   me(@CurrentUserId() userId: string): Promise<PublicUser> {
     return this.accountService.getProfile(userId);
+  }
+
+  @Put('profile')
+  @UseGuards(UserJwtAuthGuard)
+  updateProfile(
+    @CurrentUserId() userId: string,
+    @Body(new ZodValidationPipe(updateProfileSchema)) dto: UpdateProfileDto,
+  ): Promise<PublicUser> {
+    return this.accountService.updateProfile(userId, dto);
+  }
+
+  @Post('password')
+  @HttpCode(200)
+  @UseGuards(UserJwtAuthGuard)
+  async changePassword(
+    @CurrentUserId() userId: string,
+    @Body(new ZodValidationPipe(changePasswordSchema)) dto: ChangePasswordDto,
+  ): Promise<{ success: true }> {
+    await this.accountService.changePassword(userId, dto);
+    return { success: true };
   }
 
   @Post('logout')

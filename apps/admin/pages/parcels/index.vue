@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { useApiClient } from '~/shared/api/client';
-import { type AppUser, PARCEL_STATUS_OPTIONS, type Parcel, ParcelStatus } from '~/shared/api/types';
+import {
+  type AppUser,
+  PARCEL_STATUS_OPTIONS,
+  type Parcel,
+  ParcelStatus,
+  type ParcelStatusHistoryItem,
+} from '~/shared/api/types';
 
 definePageMeta({ layout: 'default' });
 
@@ -17,21 +23,39 @@ const form = reactive({
   description: '',
   status: ParcelStatus.CREATED,
   weightKg: '',
+  volumeM3: '',
+  costSom: '',
   comment: '',
 });
+const history = ref<ParcelStatusHistoryItem[]>([]);
 
 const userOptions = computed(() =>
   users.value.map((user: AppUser) => ({
-    label:
-      `${user.firstName ?? ''} ${user.username ? `@${user.username}` : user.telegramId}`.trim(),
+    label: `${user.firstName ?? ''} ${userContact(user)}`.trim(),
     value: user.id,
   })),
 );
 
+// Пользователи сайта могут быть без Telegram — показываем e-mail.
+function userContact(user: AppUser): string {
+  return user.username ? `@${user.username}` : (user.email ?? user.telegramId ?? '');
+}
+
 function userLabel(userId: string): string {
   const user = users.value.find((item: AppUser) => item.id === userId);
   if (!user) return userId;
-  return user.username ? `@${user.username}` : (user.firstName ?? user.telegramId);
+  return user.firstName
+    ? `${user.firstName} ${userContact(user)}`.trim()
+    : userContact(user) || userId;
+}
+
+function formatDateTime(value: string): string {
+  return new Date(value).toLocaleString('ru-RU', {
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 }
 
 function statusLabel(status: ParcelStatus): string {
@@ -59,19 +83,28 @@ function openCreate(): void {
   form.description = '';
   form.status = ParcelStatus.CREATED;
   form.weightKg = '';
+  form.volumeM3 = '';
+  form.costSom = '';
   form.comment = '';
+  history.value = [];
   isModalOpen.value = true;
 }
 
-function openEdit(item: Parcel): void {
+async function openEdit(item: Parcel): Promise<void> {
   editingId.value = item.id;
   form.userId = item.userId;
   form.trackNumber = item.trackNumber;
   form.description = item.description ?? '';
   form.status = item.status;
   form.weightKg = item.weightKg ?? '';
+  form.volumeM3 = item.volumeM3 ?? '';
+  form.costSom = item.costSom ?? '';
   form.comment = item.comment ?? '';
+  history.value = [];
   isModalOpen.value = true;
+  // История статусов приходит только в карточке посылки.
+  const full = await api.get<Parcel>(`/parcels/${item.id}`);
+  history.value = full.history ?? [];
 }
 
 async function save(): Promise<void> {
@@ -81,6 +114,8 @@ async function save(): Promise<void> {
       description: form.description || null,
       status: form.status,
       weightKg: form.weightKg || null,
+      volumeM3: form.volumeM3 || null,
+      costSom: form.costSom || null,
       comment: form.comment || null,
     });
   } else {
@@ -90,6 +125,8 @@ async function save(): Promise<void> {
       description: form.description || null,
       status: form.status,
       weightKg: form.weightKg || null,
+      volumeM3: form.volumeM3 || null,
+      costSom: form.costSom || null,
       comment: form.comment || null,
     });
   }
@@ -162,12 +199,29 @@ onMounted(load);
           <UFormField label="Статус">
             <USelectMenu v-model="form.status" :items="PARCEL_STATUS_OPTIONS" value-key="value" class="w-full" />
           </UFormField>
-          <UFormField label="Вес, кг">
-            <UInput v-model="form.weightKg" class="w-full" />
-          </UFormField>
-          <UFormField label="Комментарий">
+          <div class="grid grid-cols-3 gap-3">
+            <UFormField label="Вес, кг">
+              <UInput v-model="form.weightKg" class="w-full" />
+            </UFormField>
+            <UFormField label="Объём, м³">
+              <UInput v-model="form.volumeM3" class="w-full" />
+            </UFormField>
+            <UFormField label="Стоимость, сом">
+              <UInput v-model="form.costSom" class="w-full" />
+            </UFormField>
+          </div>
+          <UFormField label="Комментарий (видит клиент)">
             <UTextarea v-model="form.comment" class="w-full" />
           </UFormField>
+          <div v-if="history.length" class="rounded-lg bg-steel-50 p-3 text-sm dark:bg-steel-900">
+            <p class="mb-2 font-medium text-steel-600 dark:text-steel-300">История статусов</p>
+            <ul class="space-y-1">
+              <li v-for="h in history" :key="h.id" class="flex justify-between gap-3">
+                <span>{{ statusLabel(h.status) }}</span>
+                <span class="text-steel-400">{{ formatDateTime(h.createdAt) }}</span>
+              </li>
+            </ul>
+          </div>
         </div>
       </template>
       <template #footer>

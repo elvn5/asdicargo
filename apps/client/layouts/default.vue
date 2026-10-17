@@ -40,6 +40,8 @@ const versionLabel = /^\d/.test(version) ? `v${version}` : version;
 // Мобильное меню
 const mobileOpen = ref(false);
 const route = useRoute();
+// В кабинете на мобильных снизу закреплено меню — поднимаем плавающие кнопки над ним.
+const hasAccountNav = computed(() => route.path.includes('/account'));
 watch(
   () => route.fullPath,
   () => {
@@ -220,7 +222,10 @@ const auth = useAuthStore();
     </main>
 
     <!-- Плавающие кнопки связи (WhatsApp + Telegram) -->
-    <div class="fixed bottom-5 right-4 z-50 flex flex-col gap-3 sm:bottom-6 sm:right-6">
+    <div
+      class="fixed right-4 z-50 flex flex-col gap-3 sm:right-6"
+      :class="hasAccountNav ? 'bottom-24 lg:bottom-6' : 'bottom-5 sm:bottom-6'"
+    >
       <a
         :href="whatsappHref"
         target="_blank"

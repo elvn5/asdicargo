@@ -53,7 +53,8 @@ export const PARCEL_STATUS_OPTIONS: { value: ParcelStatus; label: string }[] = [
 
 export interface AppUser {
   id: string;
-  telegramId: string;
+  telegramId: string | null;
+  email: string | null;
   username: string | null;
   firstName: string | null;
   lastName: string | null;
@@ -69,7 +70,16 @@ export interface Parcel {
   description: string | null;
   status: ParcelStatus;
   weightKg: string | null;
+  volumeM3: string | null;
+  costSom: string | null;
   comment: string | null;
+  createdAt: string;
+  history?: ParcelStatusHistoryItem[];
+}
+
+export interface ParcelStatusHistoryItem {
+  id: string;
+  status: ParcelStatus;
   createdAt: string;
 }
 

@@ -1,6 +1,7 @@
 import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
 import { User } from '@app/database';
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -12,7 +13,13 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import bcrypt from 'bcryptjs';
 import type { Repository } from 'typeorm';
-import type { LoginDto, RegisterDto, TelegramLoginDto } from './account.dto';
+import type {
+  ChangePasswordDto,
+  LoginDto,
+  RegisterDto,
+  TelegramLoginDto,
+  UpdateProfileDto,
+} from './account.dto';
 
 // Публичное представление пользователя (без passwordHash).
 export type PublicUser = {
@@ -23,6 +30,9 @@ export type PublicUser = {
   username: string | null;
   avatarUrl: string | null;
   telegramId: string | null;
+  phone: string | null;
+  // Задан ли пароль: кабинет спрашивает текущий пароль только в этом случае.
+  hasPassword: boolean;
   createdAt: Date;
 };
 
@@ -100,16 +110,63 @@ export class AccountService {
     user.username = dto.username ?? user.username;
     user.avatarUrl = dto.photo_url ?? user.avatarUrl;
     const saved = await this.users.save(user);
+    // Перечитываем с passwordHash, чтобы корректно отдать hasPassword.
+    const fresh = await this.findWithPassword(saved.id);
 
-    return { user: this.toPublic(saved), token: this.buildToken(saved) };
+    return { user: this.toPublic(fresh), token: this.buildToken(fresh) };
   }
 
   async getProfile(userId: string): Promise<PublicUser> {
-    const user = await this.users.findOne({ where: { id: userId } });
+    return this.toPublic(await this.findWithPassword(userId));
+  }
+
+  async updateProfile(userId: string, dto: UpdateProfileDto): Promise<PublicUser> {
+    const user = await this.findWithPassword(userId);
+
+    if (dto.email !== user.email) {
+      // Нельзя убрать e-mail, если по нему входят паролем, — иначе потеряется доступ.
+      if (!dto.email && user.passwordHash && !user.telegramId) {
+        throw new BadRequestException('E-mail нужен для входа в аккаунт');
+      }
+      if (dto.email) {
+        const taken = await this.users.findOne({ where: { email: dto.email } });
+        if (taken && taken.id !== user.id) {
+          throw new ConflictException('Пользователь с таким e-mail уже существует');
+        }
+      }
+    }
+
+    user.firstName = dto.firstName;
+    user.lastName = dto.lastName;
+    user.phone = dto.phone;
+    user.email = dto.email;
+    return this.toPublic(await this.users.save(user));
+  }
+
+  async changePassword(userId: string, dto: ChangePasswordDto): Promise<void> {
+    const user = await this.findWithPassword(userId);
+
+    if (user.passwordHash) {
+      const valid = await bcrypt.compare(dto.currentPassword ?? '', user.passwordHash);
+      if (!valid) {
+        throw new UnauthorizedException('Текущий пароль указан неверно');
+      }
+    }
+
+    user.passwordHash = await bcrypt.hash(dto.newPassword, BCRYPT_ROUNDS);
+    await this.users.save(user);
+  }
+
+  private async findWithPassword(userId: string): Promise<User> {
+    const user = await this.users
+      .createQueryBuilder('user')
+      .addSelect('user.passwordHash')
+      .where('user.id = :userId', { userId })
+      .getOne();
     if (!user) {
       throw new NotFoundException('Пользователь не найден');
     }
-    return this.toPublic(user);
+    return user;
   }
 
   private buildToken(user: User): string {
@@ -132,10 +189,7 @@ export class AccountService {
 
     const computedBuf = Buffer.from(computed, 'hex');
     const providedBuf = Buffer.from(hash, 'hex');
-    if (
-      computedBuf.length !== providedBuf.length ||
-      !timingSafeEqual(computedBuf, providedBuf)
-    ) {
+    if (computedBuf.length !== providedBuf.length || !timingSafeEqual(computedBuf, providedBuf)) {
       throw new UnauthorizedException('Не удалось проверить данные Telegram');
     }
   }
@@ -149,6 +203,8 @@ export class AccountService {
       username: user.username,
       avatarUrl: user.avatarUrl,
       telegramId: user.telegramId,
+      phone: user.phone,
+      hasPassword: Boolean(user.passwordHash),
       createdAt: user.createdAt,
     };
   }

@@ -6,5 +6,6 @@ export { SupportInfo } from './entities/support-info.entity';
 export { Post, PostLanguage, PostStatus } from './entities/post.entity';
 export { SitePage, PageLanguage } from './entities/site-page.entity';
 export { HomeStat } from './entities/home-stat.entity';
+export { ParcelStatusHistory } from './entities/parcel-status-history.entity';
 export { entities, buildDataSourceOptions } from './data-source';
 export { default as AppDataSource } from './data-source';

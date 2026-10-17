@@ -7,6 +7,8 @@ export const createParcelSchema = z.object({
   description: z.string().max(2000).nullable().optional(),
   status: z.nativeEnum(ParcelStatus).optional().default(ParcelStatus.CREATED),
   weightKg: z.string().max(20).nullable().optional(),
+  volumeM3: z.string().max(20).nullable().optional(),
+  costSom: z.string().max(20).nullable().optional(),
   comment: z.string().max(2000).nullable().optional(),
 });
 
