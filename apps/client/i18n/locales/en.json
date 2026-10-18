@@ -50,17 +50,17 @@
   "services": {
     "heading": "Services",
     "sub": "Everything to deliver your purchases and cargo.",
-    "receive": {
-      "title": "Parcel receiving",
-      "text": "A personal warehouse address — shop online and receive with us."
+    "storage": {
+      "title": "Cargo storage",
+      "text": "We receive and store your cargo at our warehouse — before dispatch or after arrival."
     },
     "delivery": {
       "title": "Cargo delivery",
       "text": "Fast and reliable transport from the warehouse to your city."
     },
-    "pickup": {
-      "title": "Pickup points",
-      "text": "Convenient addresses to collect — choose the nearest one."
+    "documents": {
+      "title": "Document preparation",
+      "text": "We prepare all the documents required for your shipment."
     }
   },
   "meta": {
@@ -682,16 +682,17 @@
     "servicesPage": {
       "kicker": "Service",
       "more": "Learn more",
-      "receive": {
+      "storage": {
         "h": [
-          "A personal warehouse address for your orders",
-          "We accept parcels from stores and suppliers",
-          "We weigh, check and consolidate into one shipment"
+          "We store cargo before dispatch or after arrival",
+          "Receiving, package count and packaging check",
+          "We consolidate lots before dispatch"
         ],
         "cta": "Create a request",
         "mock": {
-          "status": "Received at warehouse",
-          "weight": "Weight",
+          "status": "In storage",
+          "cell": "Bay",
+          "volume": "Volume",
           "places": "Packages",
           "code": "Client code"
         }
@@ -709,17 +710,22 @@
           "tariff": "Tariff"
         }
       },
-      "pickup": {
+      "documents": {
         "h": [
-          "Warehouses and pickup points with working hours",
-          "Directions to the point in one click",
-          "“Ready for pickup” status in your account and notifications"
+          "Invoice, packing list and CMR waybill",
+          "Accompanying documents for the border and customs",
+          "We check the set before dispatch — no delays on the road"
         ],
-        "cta": "Addresses & contacts",
+        "cta": "Contact a manager",
         "mock": {
-          "point": "Pickup point",
-          "ready": "Ready for pickup",
-          "hours": "Working hours"
+          "title": "Cargo documents",
+          "ready": "Set is ready",
+          "items": [
+            "Invoice",
+            "Packing list",
+            "CMR waybill",
+            "Declaration"
+          ]
         }
       },
       "help": {
@@ -730,8 +736,7 @@
       },
       "mock": {
         "from": "Bishkek",
-        "to": "Moscow",
-        "address": "Bishkek, Aibek-Ata 1/2"
+        "to": "Moscow"
       }
     },
     "privacy": {

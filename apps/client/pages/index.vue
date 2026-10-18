@@ -31,9 +31,9 @@ const consultationUrl = computed(
 
 // Услуги (иконочные карточки).
 const services = [
-  { key: 'receive', icon: 'i-lucide-package' },
+  { key: 'storage', icon: 'i-lucide-warehouse' },
   { key: 'delivery', icon: 'i-lucide-truck' },
-  { key: 'pickup', icon: 'i-lucide-map-pin' },
+  { key: 'documents', icon: 'i-lucide-file-text' },
 ] as const;
 
 // Статистика «в цифрах» — редактируется через админку; фолбэк на i18n, если API недоступен/пусто.

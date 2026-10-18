@@ -2,7 +2,7 @@
 /**
  * Страница «Услуги»: каждый блок `<h3>` из контента админки — крупная секция
  * с номером, описанием, преимуществами, действием и иллюстрацией-«интерфейсом».
- * Первые три услуги (приём, доставка, пункты выдачи) получают свои иллюстрации
+ * Первые три услуги (складирование, доставка, документы) получают свои иллюстрации
  * и списки преимуществ; новые услуги из админки выводятся в том же стиле.
  */
 interface ServiceSection {
@@ -18,15 +18,20 @@ const localePath = useLocalePath();
 const WHATSAPP_URL =
   'https://api.whatsapp.com/send/?phone=996552165165&type=phone_number&app_absent=0';
 
-type ServiceKey = 'receive' | 'delivery' | 'pickup';
+type ServiceKey = 'storage' | 'delivery' | 'documents';
 
 const META: Array<{ key: ServiceKey; icon: string; to: string }> = [
-  { key: 'receive', icon: 'i-lucide-package-open', to: '/account/requests/new' },
+  { key: 'storage', icon: 'i-lucide-warehouse', to: '/account/requests/new' },
   { key: 'delivery', icon: 'i-lucide-truck', to: '/cargo-kalkulyator' },
-  { key: 'pickup', icon: 'i-lucide-map-pin', to: '/cargo-kontakty' },
+  { key: 'documents', icon: 'i-lucide-file-text', to: '/cargo-kontakty' },
 ];
 
-// Секции с оформлением по порядку: 1-я — приём, 2-я — доставка, 3-я — пункты выдачи.
+// Иллюстрация «Документы»: список документов комплекта с отметками.
+const documentItems = computed(() =>
+  [0, 1, 2, 3].map((i) => t(`site.servicesPage.documents.mock.items.${i}`)),
+);
+
+// Секции с оформлением по порядку: 1-я — складирование, 2-я — доставка, 3-я — документы.
 const items = computed(() =>
   props.sections.map((section, index) => {
     const meta = META[index] ?? null;
@@ -72,36 +77,41 @@ const items = computed(() =>
 
         <!-- Иллюстрация -->
         <div :class="i % 2 === 1 ? 'lg:order-1' : ''" aria-hidden="true">
-          <!-- 01 · Приём посылок -->
+          <!-- 01 · Складирование грузов -->
           <div
-            v-if="section.meta?.key === 'receive'"
+            v-if="section.meta?.key === 'storage'"
             class="relative flex aspect-[5/4] items-center justify-center overflow-hidden rounded-[1.75rem] bg-brand-gradient p-6"
           >
             <div class="absolute -right-16 -top-16 size-56 rounded-full bg-white/10" />
             <div class="absolute -bottom-20 -left-10 size-64 rounded-full bg-black/10" />
+            <!-- Стеллаж с коробками -->
+            <div class="absolute left-6 top-6 grid grid-cols-3 gap-1.5 rounded-2xl bg-black/15 p-2.5 sm:left-10 sm:top-10">
+              <span v-for="n in 6" :key="n" class="size-7 rounded-md" :class="n === 5 ? 'bg-white' : 'bg-white/25'" />
+            </div>
             <div class="relative w-full max-w-xs rotate-[-3deg] rounded-[1.25rem] bg-white p-5 text-steel-900 shadow-2xl">
               <div class="flex items-center justify-between">
                 <span class="flex size-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
-                  <UIcon name="i-lucide-package-check" class="size-6" />
+                  <UIcon name="i-lucide-warehouse" class="size-6" />
                 </span>
                 <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
-                  {{ t('site.servicesPage.receive.mock.status') }}
+                  {{ t('site.servicesPage.storage.mock.status') }}
                 </span>
               </div>
-              <p class="mt-4 font-mono text-lg font-bold">ASD-240518</p>
+              <p class="mt-4 text-xs text-steel-500">{{ t('site.servicesPage.storage.mock.cell') }}</p>
+              <p class="font-mono text-lg font-bold">B-12</p>
               <div class="mt-3 grid grid-cols-2 gap-2 text-sm">
                 <div class="rounded-xl bg-[#f0f4f9] px-3 py-2">
-                  <p class="text-xs text-steel-500">{{ t('site.servicesPage.receive.mock.weight') }}</p>
-                  <p class="font-bold">12,4 {{ t('calculator.weightUnit') }}</p>
+                  <p class="text-xs text-steel-500">{{ t('site.servicesPage.storage.mock.volume') }}</p>
+                  <p class="font-bold">8,5 {{ t('calculator.volumeUnit') }}</p>
                 </div>
                 <div class="rounded-xl bg-[#f0f4f9] px-3 py-2">
-                  <p class="text-xs text-steel-500">{{ t('site.servicesPage.receive.mock.places') }}</p>
-                  <p class="font-bold">3</p>
+                  <p class="text-xs text-steel-500">{{ t('site.servicesPage.storage.mock.places') }}</p>
+                  <p class="font-bold">24</p>
                 </div>
               </div>
             </div>
             <div class="absolute bottom-6 right-6 rotate-[4deg] rounded-2xl bg-[#181818] px-4 py-3 text-white shadow-xl sm:bottom-10 sm:right-10">
-              <p class="text-[11px] text-white/60">{{ t('site.servicesPage.receive.mock.code') }}</p>
+              <p class="text-[11px] text-white/60">{{ t('site.servicesPage.storage.mock.code') }}</p>
               <p class="text-sm font-bold tracking-wide">AS-1024</p>
             </div>
           </div>
@@ -140,38 +150,37 @@ const items = computed(() =>
             </div>
           </div>
 
-          <!-- 03 · Пункты выдачи -->
+          <!-- 03 · Подготовка документов -->
           <div
-            v-else-if="section.meta?.key === 'pickup'"
+            v-else-if="section.meta?.key === 'documents'"
             class="relative flex aspect-[5/4] items-center justify-center overflow-hidden rounded-[1.75rem] bg-[#f0f4f9] p-6 dark:bg-steel-800"
           >
-            <!-- «Карта» -->
-            <div class="absolute inset-0 opacity-70 [background-image:linear-gradient(rgba(195,58,34,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(195,58,34,.08)_1px,transparent_1px)] [background-size:36px_36px]" />
-            <div class="absolute left-[18%] top-[22%] flex size-9 items-center justify-center rounded-full bg-white text-brand-400 shadow">
-              <UIcon name="i-lucide-map-pin" class="size-4" />
-            </div>
-            <div class="absolute bottom-[10%] left-[8%] flex size-9 items-center justify-center rounded-full bg-white text-brand-400 shadow">
-              <UIcon name="i-lucide-map-pin" class="size-4" />
-            </div>
-            <div class="absolute right-[18%] top-[30%] flex size-14 items-center justify-center rounded-full bg-brand-500 text-white shadow-xl ring-8 ring-brand-500/20">
-              <UIcon name="i-lucide-map-pin" class="size-7" />
-            </div>
-            <div class="relative mt-24 w-full max-w-xs rounded-[1.25rem] bg-white p-4 text-steel-900 shadow-2xl sm:mt-32">
+            <!-- Листы «под» карточкой -->
+            <div class="absolute h-[62%] w-[52%] rotate-[8deg] rounded-[1.25rem] bg-white/60 shadow dark:bg-white/10" />
+            <div class="absolute h-[62%] w-[52%] -rotate-[6deg] rounded-[1.25rem] bg-white/80 shadow dark:bg-white/15" />
+            <div class="relative w-full max-w-xs rounded-[1.25rem] bg-white p-5 text-steel-900 shadow-2xl">
               <div class="flex items-center gap-3">
                 <span class="flex size-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
-                  <UIcon name="i-lucide-store" class="size-5" />
+                  <UIcon name="i-lucide-file-text" class="size-5" />
                 </span>
-                <div>
-                  <p class="text-xs text-steel-500">{{ t('site.servicesPage.pickup.mock.point') }}</p>
-                  <p class="font-bold">{{ t('site.servicesPage.mock.address') }}</p>
-                </div>
+                <p class="font-bold">{{ t('site.servicesPage.documents.mock.title') }}</p>
               </div>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">
-                  {{ t('site.servicesPage.pickup.mock.ready') }}
-                </span>
-                <span class="text-xs text-steel-500">09:00–19:00</span>
-              </div>
+              <ul class="mt-4 space-y-2 text-sm">
+                <li
+                  v-for="doc in documentItems"
+                  :key="doc"
+                  class="flex items-center justify-between rounded-xl bg-[#f0f4f9] px-3 py-2"
+                >
+                  <span class="font-medium">{{ doc }}</span>
+                  <UIcon name="i-lucide-circle-check" class="size-4 text-emerald-600" />
+                </li>
+              </ul>
+            </div>
+            <div class="absolute bottom-6 right-6 rotate-[4deg] rounded-2xl bg-brand-500 px-4 py-3 text-white shadow-xl sm:bottom-10 sm:right-10">
+              <p class="flex items-center gap-1.5 text-sm font-bold">
+                <UIcon name="i-lucide-stamp" class="size-4" />
+                {{ t('site.servicesPage.documents.mock.ready') }}
+              </p>
             </div>
           </div>
 
