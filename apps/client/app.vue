@@ -3,7 +3,6 @@ const { locale, locales } = useI18n();
 const route = useRoute();
 const runtimeConfig = useRuntimeConfig();
 const siteUrl = String(runtimeConfig.public.siteUrl ?? 'https://asdicargo.com').replace(/\/$/, '');
-const botUrl = String(runtimeConfig.public.botUrl ?? 'https://t.me/asdicargo_bot');
 // Индексируем только production; staging и прочие окружения закрываем от поисковиков.
 const isProductionSite = String(runtimeConfig.public.siteEnv ?? 'production') === 'production';
 
@@ -20,7 +19,6 @@ const organizationLd = computed(() =>
     url: siteUrl,
     description: 'Карго и доставка грузов: Россия — Кыргызстан, Кыргызстан — Россия.',
     areaServed: 'KG',
-    sameAs: [botUrl],
   }),
 );
 

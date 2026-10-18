@@ -1,7 +1,6 @@
 {
   "nav": {
     "services": "Services",
-    "how": "How it works",
     "contacts": "Contacts",
     "blog": "Blog",
     "directions": "Directions",
@@ -10,7 +9,6 @@
     "calculatorShort": "Calculator"
   },
   "header": {
-    "openBot": "Open bot",
     "menu": "Menu"
   },
   "footer": {
@@ -35,7 +33,6 @@
     "titleAccent": "under reliable protection",
     "subtitle": "AsDi Cargo specializes in consolidated (groupage) freight transportation between Kyrgyzstan and Russia.",
     "ctaStart": "Free consultation",
-    "ctaHow": "How it works",
     "cardReady": "Ready for pickup",
     "cardBadge": "In transit → Pickup",
     "status": {
@@ -66,28 +63,9 @@
       "text": "Convenient addresses to collect — choose the nearest one."
     }
   },
-  "how": {
-    "heading": "How it works",
-    "s1": {
-      "title": "Registration",
-      "text": "Launch the Telegram bot and get your personal warehouse address."
-    },
-    "s2": {
-      "title": "Order",
-      "text": "Provide our address when placing an order in a store."
-    },
-    "s3": {
-      "title": "Tracking",
-      "text": "Track your parcel status in real time."
-    },
-    "s4": {
-      "title": "Pickup",
-      "text": "Collect your order at a convenient point once it arrives."
-    }
-  },
   "meta": {
     "title": "Cargo Russia — Kyrgyzstan · delivery | AsDi Cargo",
-    "description": "AsDi Cargo — cargo and delivery: from Russia to Kyrgyzstan and from Kyrgyzstan to Russia. Tracking and ordering via a Telegram bot."
+    "description": "AsDi Cargo — cargo and delivery: from Russia to Kyrgyzstan and from Kyrgyzstan to Russia. Online cost estimates, booking and parcel tracking."
   },
   "blog": {
     "title": "Blog",
@@ -157,7 +135,7 @@
     "r1": {
       "name": "Aibek",
       "role": "Bishkek",
-      "text": "Ordered electronics from Russia — everything arrived on time and intact. Tracking via the bot is very convenient."
+      "text": "Ordered electronics from Russia — everything arrived on time and intact. Tracking the parcel on the website is very convenient."
     },
     "r2": {
       "name": "Gulnara",
@@ -169,9 +147,6 @@
       "role": "Bishkek",
       "text": "Sent a consolidated shipment — they combined and delivered it without delays. Highly recommend."
     }
-  },
-  "home": {
-    "howCta": "Open the Telegram bot"
   },
   "stats": {
     "heading": "AsDi Cargo in numbers",
@@ -197,7 +172,7 @@
     },
     "f3": {
       "title": "Real-time tracking",
-      "text": "Follow your parcel status in the Telegram bot at every step."
+      "text": "Follow your parcel status on the website and in your account at every step."
     },
     "f4": {
       "title": "24/7 support",

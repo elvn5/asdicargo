@@ -45,7 +45,6 @@ Settings → Environments → создать **`staging`** и **`production`**.
 | Переменная                 | Назначение                          |
 | -------------------------- | ----------------------------------- |
 | `NUXT_PUBLIC_API_BASE_URL` | публичный URL API                   |
-| `NUXT_PUBLIC_BOT_URL`      | ссылка на Telegram-бота (client)    |
 
 ## Что нужно на сервере
 
