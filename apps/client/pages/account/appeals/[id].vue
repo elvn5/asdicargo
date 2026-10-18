@@ -62,10 +62,19 @@ async function send(): Promise<void> {
   }
 }
 
+const closing = ref(false);
+
 async function close(): Promise<void> {
   if (!appeal.value) return;
   if (!confirm(t('account.appeals.detail.closeConfirm', { number: appeal.value.number }))) return;
-  appeal.value = await api.post<Appeal>(`/account/appeals/${appeal.value.id}/close`);
+  closing.value = true;
+  try {
+    appeal.value = await api.post<Appeal>(`/account/appeals/${appeal.value.id}/close`);
+  } catch {
+    toast.add({ title: t('account.appeals.form.errSubmit'), color: 'error' });
+  } finally {
+    closing.value = false;
+  }
 }
 </script>
 
@@ -171,7 +180,7 @@ async function close(): Promise<void> {
         </div>
       </section>
 
-      <UButton v-if="appeal.status !== 'closed'" color="neutral" variant="soft" icon="i-lucide-circle-check" @click="close">
+      <UButton v-if="appeal.status !== 'closed'" color="neutral" variant="soft" icon="i-lucide-circle-check" :loading="closing" @click="close">
         {{ t('account.appeals.detail.close') }}
       </UButton>
     </template>

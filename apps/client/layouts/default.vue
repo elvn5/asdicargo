@@ -84,19 +84,6 @@ const footerColumns = computed(() => [
 
 <template>
   <div class="flex min-h-screen flex-col bg-page text-steel-950 dark:bg-steel-950 dark:text-steel-100">
-    <!-- Красная плашка сверху -->
-    <div class="mx-auto w-full max-w-[1320px] px-2 pt-2 sm:px-3">
-      <a
-        :href="whatsappHref"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="block rounded-full bg-brand-500 px-4 py-2 text-center text-xs text-white transition hover:bg-brand-600 sm:text-sm"
-      >
-        {{ t('site.topbar.text') }}
-        <span class="font-semibold underline underline-offset-2">{{ t('site.topbar.link') }}</span>
-      </a>
-    </div>
-
     <!-- Шапка -->
     <header class="sticky top-0 z-40 mx-auto w-full max-w-[1320px] px-2 pt-2 sm:px-3">
       <div class="site-panel shadow-[0_8px_24px_-16px_rgba(0,0,0,0.25)]">

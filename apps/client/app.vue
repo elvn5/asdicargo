@@ -59,6 +59,8 @@ useHead(() => ({
 
 <template>
   <UApp>
+    <!-- Полоса загрузки при переходах между страницами (фирменный градиент) -->
+    <NuxtLoadingIndicator color="linear-gradient(90deg, #da6e56, #c33a22, #862715)" :height="3" />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>

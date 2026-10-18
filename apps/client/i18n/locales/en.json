@@ -612,10 +612,6 @@
     }
   },
   "site": {
-    "topbar": {
-      "text": "Questions about delivery?",
-      "link": "Message us"
-    },
     "header": {
       "location": "Bishkek",
       "points": "Pickup points",

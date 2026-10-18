@@ -55,17 +55,34 @@ async function onSubmit(payload: UserAddressPayload): Promise<void> {
   }
 }
 
+// id адреса, по которому идёт действие, — для спиннера на его кнопке.
+const busyId = ref<string | null>(null);
+
 async function makeDefault(address: UserAddress): Promise<void> {
   const { id: _id, ...rest } = address;
-  await api.put(`/account/addresses/${address.id}`, { ...rest, isDefault: true });
-  await refresh();
+  busyId.value = address.id;
+  try {
+    await api.put(`/account/addresses/${address.id}`, { ...rest, isDefault: true });
+    await refresh();
+  } finally {
+    busyId.value = null;
+  }
 }
 
 async function remove(address: UserAddress): Promise<void> {
   if (!confirm(t('account.addresses.deleteConfirm', { label: address.label }))) return;
-  await api.delete(`/account/addresses/${address.id}`);
-  toast.add({ title: t('account.addresses.deleted'), color: 'neutral', icon: 'i-lucide-trash-2' });
-  await refresh();
+  busyId.value = address.id;
+  try {
+    await api.delete(`/account/addresses/${address.id}`);
+    toast.add({
+      title: t('account.addresses.deleted'),
+      color: 'neutral',
+      icon: 'i-lucide-trash-2',
+    });
+    await refresh();
+  } finally {
+    busyId.value = null;
+  }
 }
 </script>
 
@@ -117,6 +134,8 @@ async function remove(address: UserAddress): Promise<void> {
             variant="ghost"
             color="neutral"
             icon="i-lucide-star"
+            :loading="busyId === a.id"
+            :disabled="busyId !== null && busyId !== a.id"
             @click="makeDefault(a)"
           >
             {{ t('account.addresses.makeDefault') }}
@@ -127,6 +146,8 @@ async function remove(address: UserAddress): Promise<void> {
             color="error"
             icon="i-lucide-trash-2"
             class="ml-auto"
+            :loading="busyId === a.id"
+            :disabled="busyId !== null && busyId !== a.id"
             @click="remove(a)"
           >
             {{ t('account.addresses.delete') }}

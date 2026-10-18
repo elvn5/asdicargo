@@ -35,9 +35,16 @@ async function open(n: AccountNotification): Promise<void> {
   if (n.link) await navigateTo(localePath(n.link));
 }
 
+const readingAll = ref(false);
+
 async function readAll(): Promise<void> {
-  await api.post('/account/notifications/read-all');
-  await Promise.all([refresh(), refreshUnread()]);
+  readingAll.value = true;
+  try {
+    await api.post('/account/notifications/read-all');
+    await Promise.all([refresh(), refreshUnread()]);
+  } finally {
+    readingAll.value = false;
+  }
 }
 </script>
 
@@ -45,7 +52,7 @@ async function readAll(): Promise<void> {
   <div class="space-y-6">
     <div class="flex flex-wrap items-center justify-between gap-3">
       <h1 class="text-2xl font-bold sm:text-3xl">{{ t('account.notifications.title') }}</h1>
-      <UButton v-if="hasUnread" color="neutral" variant="soft" icon="i-lucide-check-check" @click="readAll">
+      <UButton v-if="hasUnread" color="neutral" variant="soft" icon="i-lucide-check-check" :loading="readingAll" @click="readAll">
         {{ t('account.notifications.readAll') }}
       </UButton>
     </div>
