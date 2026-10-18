@@ -73,32 +73,35 @@ useHead(() => ({
 </script>
 
 <template>
-  <div class="mx-auto w-full max-w-3xl px-4 py-12">
-    <NuxtLink
-      :to="localePath('/cargo-blog')"
-      class="text-sm text-steel-500 transition hover:text-brand-600 dark:text-steel-400"
-    >
-      {{ t('blog.back') }}
-    </NuxtLink>
+  <div class="space-y-2">
+    <section class="site-panel">
+      <div class="mx-auto max-w-3xl px-4 py-8 sm:px-8 sm:py-12">
+        <nav class="flex items-center gap-1.5 text-xs text-steel-500 dark:text-steel-400" aria-label="Breadcrumb">
+          <NuxtLink :to="localePath('/')" class="hover:text-brand-600">{{ t('site.breadcrumbs.home') }}</NuxtLink>
+          <UIcon name="i-lucide-chevron-right" class="size-3.5" />
+          <NuxtLink :to="localePath('/cargo-blog')" class="hover:text-brand-600">{{ t('blog.title') }}</NuxtLink>
+        </nav>
 
-    <article v-if="post" class="prose mt-6 max-w-none dark:prose-invert">
-      <header class="not-prose mb-8">
-        <h1 class="text-3xl font-bold leading-tight text-steel-900 sm:text-4xl dark:text-steel-100">
-          {{ post.title }}
-        </h1>
-        <time
-          v-if="post.publishedAt"
-          :datetime="post.publishedAt"
-          class="mt-3 block text-sm text-steel-500 dark:text-steel-400"
-        >
-          {{ formattedDate }}
-        </time>
-      </header>
+        <article v-if="post" class="prose mt-6 max-w-none dark:prose-invert">
+          <header class="not-prose mb-8">
+            <h1 class="site-heading text-3xl text-steel-950 sm:text-[2.5rem] dark:text-steel-100">
+              {{ post.title }}
+            </h1>
+            <time
+              v-if="post.publishedAt"
+              :datetime="post.publishedAt"
+              class="mt-3 block text-sm text-steel-500 dark:text-steel-400"
+            >
+              {{ formattedDate }}
+            </time>
+          </header>
 
-      <img v-if="post.coverImageUrl" :src="post.coverImageUrl" :alt="post.title" class="w-full rounded-brand-lg" />
+          <img v-if="post.coverImageUrl" :src="post.coverImageUrl" :alt="post.title" class="w-full rounded-[1.5rem]" />
 
-      <!-- Семантический HTML из редактора (h2/p/ul/blockquote/…), отрендеренный на сервере -->
-      <div v-html="post.content" />
-    </article>
+          <!-- Семантический HTML из редактора (h2/p/ul/blockquote/…), отрендеренный на сервере -->
+          <div v-html="post.content" />
+        </article>
+      </div>
+    </section>
   </div>
 </template>

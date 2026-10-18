@@ -31,3 +31,89 @@
   font-weight: 800;
   letter-spacing: 0.05em;
 }
+
+/* =============================================================================
+   Визуальный язык сайта (по мотивам sibtrans.ru) в палитре AsDi:
+   светло-серый фон страницы, крупные «панели» со скруглением 30px, внутри —
+   голубовато-серые/белые карточки, чёрные кнопки действий, Montserrat.
+   ============================================================================= */
+@theme {
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --color-page: #eeeff0;
+  --color-panel-soft: #f5f5f6;
+  --color-card: #f0f4f9;
+  --radius-panel: 1.875rem;
+  --radius-card: 1.5rem;
+}
+
+/* Панель секции: белая или мягко-серая. */
+.site-panel {
+  border-radius: var(--radius-panel);
+  background-color: #fff;
+}
+.site-panel-soft {
+  border-radius: var(--radius-panel);
+  background-color: var(--color-panel-soft);
+}
+.dark .site-panel {
+  background-color: var(--color-steel-900);
+}
+.dark .site-panel-soft {
+  background-color: color-mix(in oklab, var(--color-steel-900) 60%, var(--color-steel-950));
+}
+
+/* Карточка внутри белой панели (голубовато-серая) и внутри серой (белая). */
+.site-card {
+  border-radius: var(--radius-card);
+  background-color: var(--color-card);
+}
+.site-card-white {
+  border-radius: var(--radius-card);
+  background-color: #fff;
+}
+.dark .site-card,
+.dark .site-card-white {
+  background-color: color-mix(in oklab, var(--color-steel-800) 70%, var(--color-steel-900));
+}
+
+/* Заголовок секции — жирный Montserrat, как в референсе. */
+.site-heading {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+/* Чёрная кнопка действия. */
+.btn-ink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3.125rem;
+  padding: 0 1.5rem;
+  border-radius: 0.9375rem;
+  background-color: #181818;
+  color: #fff;
+  font-weight: 600;
+  transition: background-color 0.15s;
+}
+.btn-ink:hover {
+  background-color: #000;
+}
+.dark .btn-ink {
+  background-color: #fff;
+  color: #181818;
+}
+.dark .btn-ink:hover {
+  background-color: var(--color-steel-100);
+}
+
+/* Карточка с «вырезом» в правом нижнем углу под круглую кнопку-стрелку
+   (кнопка 2.75rem с отступом 0.25rem). Круг выреза центрирован по кнопке и
+   чуть больше её — получается «гнездо», открытое к краям карточки. */
+.card-notch {
+  --notch-r: 1.875rem;
+  --notch-c: calc(100% - 1.625rem);
+  -webkit-mask: radial-gradient(circle var(--notch-r) at var(--notch-c) var(--notch-c), #0000 calc(100% - 0.5px), #000);
+  mask: radial-gradient(circle var(--notch-r) at var(--notch-c) var(--notch-c), #0000 calc(100% - 0.5px), #000);
+}

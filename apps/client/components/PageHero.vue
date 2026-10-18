@@ -1,30 +1,30 @@
 <script setup lang="ts">
 /**
- * Шапка внутренней страницы: фоновое фото + затемняющий градиент поверх,
- * чтобы белый заголовок читался на любом снимке. Без фото — фирменный градиент.
+ * Шапка внутренней страницы: панель с «хлебными крошками», заголовком и
+ * подзаголовком; фото страницы (если есть) — скруглённой карточкой справа.
  */
-defineProps<{ image?: string; maxWidth?: 'max-w-3xl' | 'max-w-4xl' }>();
+defineProps<{ title: string; subtitle?: string; image?: string }>();
+
+const { t } = useI18n();
+const localePath = useLocalePath();
 </script>
 
 <template>
-  <!-- isolate: без него фон с -z-10 перекрывается фоном обёртки лэйаута -->
-  <section
-    class="relative isolate overflow-hidden"
-    :class="image ? 'bg-steel-950' : 'bg-brand-steel-gradient'"
-  >
-    <div v-if="image" class="absolute inset-0 -z-10">
-      <img :src="image" alt="" class="h-full w-full object-cover" fetchpriority="high" />
-      <div
-        class="absolute inset-0 bg-gradient-to-r from-steel-950/90 via-steel-950/70 to-steel-950/40"
-      />
-    </div>
-    <div
-      v-else
-      class="pointer-events-none absolute -right-16 -top-24 -z-10 h-64 w-96 rounded-full bg-white/10 blur-3xl"
-      aria-hidden="true"
-    />
-    <div class="mx-auto w-full px-4 py-14 md:py-20" :class="maxWidth ?? 'max-w-4xl'">
-      <slot />
+  <section class="site-panel">
+    <div class="mx-auto grid max-w-6xl items-center gap-6 px-4 py-8 sm:px-8 sm:py-10" :class="image ? 'md:grid-cols-[1fr_22rem]' : ''">
+      <div>
+        <nav class="flex items-center gap-1.5 text-xs text-steel-500 dark:text-steel-400" aria-label="Breadcrumb">
+          <NuxtLink :to="localePath('/')" class="hover:text-brand-600">{{ t('site.breadcrumbs.home') }}</NuxtLink>
+          <UIcon name="i-lucide-chevron-right" class="size-3.5" />
+          <span class="truncate text-steel-700 dark:text-steel-200">{{ title }}</span>
+        </nav>
+        <h1 class="site-heading mt-3 text-3xl sm:text-[2.5rem]">{{ title }}</h1>
+        <p v-if="subtitle" class="mt-3 max-w-2xl text-steel-600 dark:text-steel-300">{{ subtitle }}</p>
+        <slot />
+      </div>
+      <div v-if="image" class="hidden h-44 overflow-hidden rounded-[1.5rem] md:block">
+        <img :src="image" alt="" class="h-full w-full object-cover" fetchpriority="high" />
+      </div>
     </div>
   </section>
 </template>

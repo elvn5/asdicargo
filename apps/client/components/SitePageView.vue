@@ -3,7 +3,7 @@
  * Рендер контентной страницы, редактируемой из админки. Контент тянется по
  * слагу на сервере (SSR); 404, если страница не найдена или снята с публикации.
  *
- * Оформление: градиентная шапка страницы (в стиле лендинга) + карточка контента.
+ * Оформление: панель-шапка с «хлебными крошками» + панель с карточкой контента.
  * Для страниц формата «вопрос-ответ» (prop `faq`) блоки `<h3>вопрос</h3>` с
  * идущим за ними ответом превращаются в аккордеон.
  */
@@ -79,19 +79,12 @@ const showAccordion = computed(() => props.faq && faqItems.value.length > 0);
 </script>
 
 <template>
-  <div v-if="page">
-    <!-- Шапка страницы с фоновым фото -->
-    <PageHero :image="image">
-      <h1 class="text-3xl font-bold leading-tight text-white sm:text-4xl">
-        {{ page.title }}
-      </h1>
-    </PageHero>
+  <div v-if="page" class="space-y-2">
+    <PageHero :title="page.title" :image="image" />
 
     <!-- Контент -->
-    <section class="mx-auto w-full max-w-3xl px-4 py-12">
-      <article
-        class="rounded-brand-lg border border-steel-200 bg-white p-6 shadow-sm sm:p-8 dark:border-steel-800 dark:bg-steel-900/40"
-      >
+    <SitePanel tone="soft">
+      <article class="site-card-white mx-auto max-w-3xl p-6 sm:p-8">
         <template v-if="showAccordion">
           <div
             v-if="faqIntro.trim()"
@@ -102,7 +95,7 @@ const showAccordion = computed(() => props.faq && faqItems.value.length > 0);
             :items="faqItems"
             type="multiple"
             :ui="{
-              item: 'border border-steel-200 dark:border-steel-800 rounded-brand-lg mb-3 last:mb-0 px-4',
+              item: 'site-card mb-3 last:mb-0 px-5 border-0',
               trigger: 'py-4 font-semibold',
             }"
           >
@@ -114,6 +107,6 @@ const showAccordion = computed(() => props.faq && faqItems.value.length > 0);
 
         <div v-else class="prose max-w-none dark:prose-invert" v-html="page.content" />
       </article>
-    </section>
+    </SitePanel>
   </div>
 </template>

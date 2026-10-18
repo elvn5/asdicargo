@@ -19,7 +19,7 @@ const seoAlternates = useSeoAlternates();
 useHead(() => ({ link: seoAlternates.value }));
 
 // Редактируемая через админку ссылка «Бесплатная консультация».
-// Тянем публичные настройки; при ошибке/пустом значении — fallback на бота.
+// Тянем публичные настройки; при ошибке/пустом значении — WhatsApp по умолчанию.
 const apiBase = (import.meta.server ? config.apiInternalUrl : config.public.apiBaseUrl) as string;
 const { data: settings } = await useFetch<{ consultationUrl: string | null }>(
   () => `${apiBase}/support/public`,
@@ -52,183 +52,214 @@ const stats = computed(() =>
   homeStats.value && homeStats.value.length > 0 ? homeStats.value : fallbackStats.value,
 );
 
-// Блок «Почему выбирают нас».
-const features = [
-  { key: 'f1', icon: 'i-lucide-award' },
-  { key: 'f2', icon: 'i-lucide-calculator' },
-  { key: 'f3', icon: 'i-lucide-radar' },
-  { key: 'f4', icon: 'i-lucide-headset' },
-] as const;
+// Блок «Почему выбирают нас» — карточки с кнопкой-стрелкой в «вырезе» угла.
+const features = computed(() => [
+  { key: 'f1', icon: 'i-lucide-award', to: localePath('/cargo-o-nas') },
+  { key: 'f2', icon: 'i-lucide-calculator', to: localePath('/cargo-kalkulyator') },
+  { key: 'f3', icon: 'i-lucide-radar', to: '#tracking' },
+  { key: 'f4', icon: 'i-lucide-headset', to: localePath('/cargo-kontakty') },
+]);
+
+// Мини-карточки первого экрана.
+const quickLinks = computed(() => [
+  { key: 'f1', icon: 'i-lucide-boxes', to: localePath('/cargo-uslugi') },
+  { key: 'f2', icon: 'i-lucide-clipboard-list', to: localePath('/account/requests/new') },
+  { key: 'f3', icon: 'i-lucide-radar', to: '#tracking' },
+]);
+
+// «3 шага к доставке».
+const steps = computed(() => [
+  { key: 's1', to: localePath('/register') },
+  { key: 's2', to: localePath('/cargo-kalkulyator') },
+  { key: 's3', to: localePath('/account/requests/new') },
+]);
+
+const statIcons = [
+  'i-lucide-calendar-check',
+  'i-lucide-globe',
+  'i-lucide-package-check',
+  'i-lucide-thumbs-up',
+];
+
+const phoneLabel = '+996 552 165 165';
+const whatsappHref = 'https://wa.me/996552165165';
+const telegramHref = 'https://t.me/kalita_lida';
 
 const reviews = ['r1', 'r2', 'r3'] as const;
 </script>
 
 <template>
-  <div>
-    <!-- ============================ HERO ============================ -->
-    <!-- isolate: без него фон с -z-10 перекрывается bg-white/dark:bg-steel-950 обёртки лэйаута -->
-    <section class="relative isolate overflow-hidden">
-      <!-- Фоновое фото + затемняющий градиент -->
-      <div class="absolute inset-0 -z-10">
-        <img
-          src="/backgrounds/main.webp"
-          :alt="t('hero.imageAlt')"
-          class="h-full w-full object-cover"
-        />
-        <div
-          class="absolute inset-0 bg-gradient-to-r from-steel-950/90 via-steel-950/75 to-steel-950/40"
-        />
-      </div>
+  <div class="space-y-2">
+    <!-- ======================= ПЕРВЫЙ ЭКРАН ======================= -->
+    <section class="site-panel">
+      <div class="mx-auto grid max-w-6xl gap-6 px-4 py-8 sm:px-8 sm:py-10 lg:grid-cols-[1fr_24rem]">
+        <div class="min-w-0">
+          <h1 class="site-heading text-3xl sm:text-[2.5rem]">{{ t('site.home.title') }}</h1>
 
-      <div
-        class="mx-auto grid w-full max-w-6xl items-center gap-8 px-4 py-16 sm:py-20 md:py-24 lg:grid-cols-[1fr_24rem]"
-      >
-        <div class="glass-card max-w-xl rounded-brand-xl p-7 shadow-brand-card sm:p-10">
-          <span
-            class="inline-flex items-center rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-white/90"
-          >
-            {{ t('hero.badge') }}
-          </span>
-
-          <h1 class="mt-5 text-4xl font-bold leading-tight text-white sm:text-5xl">
-            {{ t('hero.titleLead') }}
-            <span class="text-brand-300">{{ t('hero.titleAccent') }}</span>
-          </h1>
-
-          <p class="mt-4 max-w-md whitespace-pre-line text-lg text-white/80">
-            {{ t('hero.subtitle') }}
-          </p>
-
-          <!-- Чипы-акценты -->
-          <div class="mt-6 flex flex-wrap gap-2">
-            <span
-              v-for="chip in ['chipRoute', 'chipSince', 'chipClients']"
-              :key="chip"
-              class="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-sm font-medium text-white ring-1 ring-white/15"
+          <!-- Мини-карточки -->
+          <div class="mt-6 grid gap-2 sm:grid-cols-3">
+            <NuxtLink
+              v-for="q in quickLinks"
+              :key="q.key"
+              :to="q.to"
+              class="site-card group p-4 transition hover:brightness-[0.98]"
             >
-              <span class="size-1.5 rounded-full bg-brand-400" aria-hidden="true" />
-              {{ t(`hero.${chip}`) }}
-            </span>
+              <div class="flex size-9 items-center justify-center rounded-full bg-brand-500 text-white">
+                <UIcon :name="q.icon" class="size-5" />
+              </div>
+              <p class="mt-3 flex items-center gap-1.5 font-bold">
+                {{ t(`site.home.features.${q.key}.title`) }}
+                <UIcon name="i-lucide-arrow-right" class="size-4 transition group-hover:translate-x-0.5" />
+              </p>
+              <p class="mt-1 text-sm text-steel-600 dark:text-steel-300">{{ t(`site.home.features.${q.key}.text`) }}</p>
+            </NuxtLink>
           </div>
 
-          <div class="mt-8 flex flex-wrap gap-3">
-            <a
-              :href="consultationUrl"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 rounded-full bg-brand-gradient px-6 py-3 font-semibold text-white shadow-lg shadow-brand-900/30 transition hover:brightness-110"
-            >
-              <UIcon name="i-lucide-message-circle" class="size-5" />
-              {{ t('hero.ctaStart') }}
-            </a>
-            <NuxtLink
-              :to="localePath('/cargo-kalkulyator')"
-              class="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/5 px-6 py-3 font-semibold text-white backdrop-blur transition hover:bg-white/15"
-            >
-              <UIcon name="i-lucide-calculator" class="size-5" />
-              {{ t('hero.ctaCalc') }}
-            </NuxtLink>
+          <!-- Промо-карусель -->
+          <div class="mt-2">
+            <SitePromoCarousel />
           </div>
         </div>
 
-        <!-- Поиск/расчёт перевозки -->
-        <ShippingSearch initial-from="Бишкек" />
-      </div>
-    </section>
-
-    <!-- ========================= СТАТИСТИКА ========================= -->
-    <section class="bg-steel-950 text-white">
-      <div class="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
-        <h2 class="mb-12 text-center text-3xl font-bold sm:text-4xl">
-          {{ t('stats.heading') }}
-        </h2>
-        <div class="grid grid-cols-2 gap-8 lg:grid-cols-4">
-          <AnimatedStat v-for="s in stats" :key="s.label" :value="s.value" :label="s.label" />
+        <!-- Расчёт, подсказка, трекинг -->
+        <div class="space-y-2">
+          <ShippingSearch initial-from="Бишкек" variant="light" />
+          <a
+            :href="consultationUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-start gap-2 rounded-[1.25rem] bg-amber-50 px-4 py-3 text-sm text-steel-800 transition hover:bg-amber-100 dark:bg-amber-950/40 dark:text-amber-100"
+          >
+            <UIcon name="i-lucide-circle-alert" class="mt-0.5 size-4 shrink-0 text-amber-500" />
+            <span>
+              <span class="font-semibold">{{ t('site.home.notice.text') }}</span>{{ ' ' }}
+              <span class="text-brand-600 dark:text-brand-400">{{ t('site.home.notice.link') }}</span>
+            </span>
+          </a>
+          <SiteTrackingWidget />
         </div>
       </div>
     </section>
 
     <!-- ========================== УСЛУГИ =========================== -->
-    <section class="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
-      <div class="mb-10 text-center">
-        <h2 class="text-3xl font-bold sm:text-4xl">{{ t('services.heading') }}</h2>
-        <p class="mt-3 text-steel-600 dark:text-steel-300">{{ t('services.sub') }}</p>
-      </div>
-      <div class="grid gap-6 md:grid-cols-3">
-        <div
-          v-for="s in services"
-          :key="s.key"
-          class="group rounded-brand-lg border border-steel-200 bg-white p-8 transition hover:-translate-y-1 hover:shadow-brand-card dark:border-steel-800 dark:bg-steel-900/50"
-        >
-          <div
-            class="mb-5 inline-flex size-14 items-center justify-center rounded-2xl bg-brand-gradient text-white shadow-lg shadow-brand-900/20"
-          >
-            <UIcon :name="s.icon" class="size-7" />
-          </div>
-          <h3 class="text-xl font-semibold">{{ t(`services.${s.key}.title`) }}</h3>
-          <p class="mt-2 leading-relaxed text-steel-600 dark:text-steel-300">
-            {{ t(`services.${s.key}.text`) }}
-          </p>
+    <SitePanel tone="soft" :heading="t('services.heading')">
+      <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        <div v-for="s in services" :key="s.key" class="site-card-white p-6">
+          <UIcon :name="s.icon" class="size-8 text-brand-500" />
+          <h3 class="mt-4 text-lg font-bold">{{ t(`services.${s.key}.title`) }}</h3>
+          <p class="mt-1.5 text-sm leading-relaxed text-steel-600 dark:text-steel-300">{{ t(`services.${s.key}.text`) }}</p>
         </div>
       </div>
-    </section>
+    </SitePanel>
 
     <!-- ======================== ПОЧЕМУ МЫ ========================== -->
-    <section class="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
-      <div class="mb-10 text-center">
-        <h2 class="text-3xl font-bold sm:text-4xl">{{ t('why.heading') }}</h2>
-        <p class="mt-3 text-steel-600 dark:text-steel-300">{{ t('why.sub') }}</p>
-      </div>
-      <div class="grid gap-6 sm:grid-cols-2">
-        <div
-          v-for="f in features"
-          :key="f.key"
-          class="flex items-start gap-5 rounded-brand-lg border border-steel-200 bg-white p-6 transition hover:shadow-brand-card dark:border-steel-800 dark:bg-steel-900/50"
-        >
-          <div
-            class="flex size-14 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-400"
-          >
-            <UIcon :name="f.icon" class="size-7" />
+    <SitePanel :heading="t('why.heading')">
+      <div class="grid gap-2 sm:grid-cols-2">
+        <NuxtLink v-for="f in features" :key="f.key" :to="f.to" class="group relative block">
+          <div class="site-card card-notch h-full p-6 pr-16">
+            <div class="flex size-10 items-center justify-center rounded-full bg-brand-500 text-white">
+              <UIcon :name="f.icon" class="size-5" />
+            </div>
+            <h3 class="mt-4 text-lg font-bold">{{ t(`why.${f.key}.title`) }}</h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-steel-600 dark:text-steel-300">{{ t(`why.${f.key}.text`) }}</p>
           </div>
-          <div>
-            <h3 class="text-lg font-semibold">{{ t(`why.${f.key}.title`) }}</h3>
-            <p class="mt-1.5 text-sm leading-relaxed text-steel-600 dark:text-steel-300">
-              {{ t(`why.${f.key}.text`) }}
+          <span
+            class="absolute bottom-1 right-1 flex size-11 items-center justify-center rounded-full bg-[#181818] text-white transition group-hover:bg-brand-500 dark:bg-white dark:text-steel-950"
+            aria-hidden="true"
+          >
+            <UIcon name="i-lucide-chevron-right" class="size-5" />
+          </span>
+        </NuxtLink>
+      </div>
+    </SitePanel>
+
+    <!-- ===================== 3 ШАГА К ДОСТАВКЕ ===================== -->
+    <SitePanel tone="soft" :heading="t('site.home.steps.heading')">
+      <div class="grid gap-2 md:grid-cols-3">
+        <NuxtLink v-for="(step, i) in steps" :key="step.key" :to="step.to" class="group relative block">
+          <div
+            class="card-notch h-full rounded-[1.5rem] p-6 pr-16"
+            :class="i === steps.length - 1 ? 'bg-[#2f2f2f] text-white dark:bg-brand-900' : 'bg-white dark:bg-steel-800'"
+          >
+            <p class="text-3xl font-extrabold" :class="i === steps.length - 1 ? 'text-brand-300' : 'text-brand-500'">
+              0{{ i + 1 }}
+            </p>
+            <h3 class="mt-4 text-lg font-bold">{{ t(`site.home.steps.${step.key}.title`) }}</h3>
+            <p class="mt-1.5 text-sm" :class="i === steps.length - 1 ? 'text-white/75' : 'text-steel-600 dark:text-steel-300'">
+              {{ t(`site.home.steps.${step.key}.text`) }}
             </p>
           </div>
-        </div>
+          <span
+            class="absolute bottom-1 right-1 flex size-11 items-center justify-center rounded-full transition group-hover:bg-brand-500 group-hover:text-white"
+            :class="i === steps.length - 1 ? 'bg-white text-steel-950' : 'bg-[#181818] text-white dark:bg-white dark:text-steel-950'"
+            aria-hidden="true"
+          >
+            <UIcon name="i-lucide-chevron-right" class="size-5" />
+          </span>
+        </NuxtLink>
       </div>
-    </section>
+    </SitePanel>
+
+    <!-- ===================== AsDi Cargo — это ====================== -->
+    <SitePanel :heading="t('site.home.statsHeading')">
+      <div class="grid grid-cols-2 gap-2 lg:grid-cols-4">
+        <AnimatedStat
+          v-for="(s, i) in stats"
+          :key="s.label"
+          :value="s.value"
+          :label="s.label"
+          :icon="statIcons[i % statIcons.length]"
+        />
+      </div>
+    </SitePanel>
 
     <!-- ========================== ОТЗЫВЫ =========================== -->
-    <section id="reviews" class="scroll-mt-16 bg-steel-50 dark:bg-steel-900/40">
-      <div class="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
-        <div class="mb-10 text-center">
-          <h2 class="text-3xl font-bold sm:text-4xl">{{ t('reviews.heading') }}</h2>
-          <p class="mt-3 text-steel-600 dark:text-steel-300">{{ t('reviews.sub') }}</p>
-        </div>
-        <div class="grid gap-6 md:grid-cols-3">
-          <figure
-            v-for="r in reviews"
-            :key="r"
-            class="flex flex-col rounded-brand-lg border border-steel-200 bg-white p-6 shadow-sm dark:border-steel-800 dark:bg-steel-950"
-          >
+    <section id="reviews" class="scroll-mt-32">
+      <SitePanel tone="soft" :heading="t('reviews.heading')">
+        <div class="grid gap-2 md:grid-cols-3">
+          <figure v-for="r in reviews" :key="r" class="site-card-white flex flex-col p-6">
             <div class="mb-3 flex gap-0.5 text-brand-500" aria-hidden="true">
               <UIcon v-for="n in 5" :key="n" name="i-lucide-star" class="size-4 fill-current" />
             </div>
-            <blockquote class="flex-1 text-steel-700 dark:text-steel-200">
+            <blockquote class="flex-1 text-sm leading-relaxed text-steel-700 dark:text-steel-200">
               “{{ t(`reviews.${r}.text`) }}”
             </blockquote>
             <figcaption class="mt-5 flex items-center gap-3">
               <UAvatar :alt="t(`reviews.${r}.name`)" icon="i-lucide-user" size="sm" />
               <span>
-                <span class="block text-sm font-semibold">{{ t(`reviews.${r}.name`) }}</span>
+                <span class="block text-sm font-bold">{{ t(`reviews.${r}.name`) }}</span>
                 <span class="block text-xs text-steel-500">{{ t(`reviews.${r}.role`) }}</span>
               </span>
             </figcaption>
           </figure>
         </div>
-      </div>
+      </SitePanel>
+    </section>
+
+    <!-- ===================== СВЯЖИТЕСЬ С НАМИ ====================== -->
+    <section id="contact" class="scroll-mt-32">
+      <SitePanel :heading="t('site.contact.heading')">
+        <div class="space-y-2">
+          <div class="site-card p-5 sm:p-6">
+            <p class="text-lg font-bold">{{ t('site.contact.call') }}</p>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <a href="tel:+996552165165" class="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold dark:bg-steel-900">
+                <UIcon name="i-lucide-phone" class="size-4 text-brand-500" />
+                {{ phoneLabel }}
+              </a>
+              <a :href="whatsappHref" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold dark:bg-steel-900">
+                <UIcon name="i-lucide-message-circle" class="size-4 text-[#25D366]" />
+                WhatsApp
+              </a>
+              <a :href="telegramHref" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold dark:bg-steel-900">
+                <UIcon name="i-lucide-send" class="size-4 text-[#229ED9]" />
+                Telegram
+              </a>
+            </div>
+          </div>
+          <SiteCallbackForm />
+        </div>
+      </SitePanel>
     </section>
   </div>
 </template>

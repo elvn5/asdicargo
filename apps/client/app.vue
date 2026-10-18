@@ -30,6 +30,13 @@ useHead(() => ({
   htmlAttrs: { lang: currentLanguage.value },
   link: [
     { rel: 'canonical', href: siteUrl + route.path },
+    // Montserrat (латиница + кириллица) — основной шрифт сайта.
+    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+    { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+    {
+      rel: 'stylesheet',
+      href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap&subset=cyrillic',
+    },
     // Иконки и манифест PWA (кабинет можно установить на телефон).
     { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/icons/favicon-32.png' },
     { rel: 'apple-touch-icon', href: '/icons/apple-touch-icon.png' },

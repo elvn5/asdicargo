@@ -610,5 +610,110 @@
       "order": "Create a request",
       "whatsapp": "Discuss on WhatsApp"
     }
+  },
+  "site": {
+    "topbar": {
+      "text": "Questions about delivery?",
+      "link": "Message us"
+    },
+    "header": {
+      "location": "Bishkek",
+      "points": "Pickup points",
+      "callback": "Request a call",
+      "account": "My account"
+    },
+    "breadcrumbs": {
+      "home": "Home"
+    },
+    "home": {
+      "title": "Cargo delivery between Kyrgyzstan and Russia",
+      "features": {
+        "f1": {
+          "title": "Consolidated cargo",
+          "text": "We combine parcels and ship them at a good rate"
+        },
+        "f2": {
+          "title": "Online request",
+          "text": "Estimate and book in a couple of minutes"
+        },
+        "f3": {
+          "title": "Tracking",
+          "text": "Parcel status at every stage"
+        }
+      },
+      "promo": {
+        "s1": {
+          "label": "Free",
+          "title": "Manager consultation on WhatsApp",
+          "cta": "Message"
+        },
+        "s2": {
+          "label": "Your account",
+          "title": "Requests, parcels and documents in one place",
+          "cta": "Open"
+        },
+        "s3": {
+          "label": "Pickup points",
+          "title": "Warehouses and pickup points on the map",
+          "cta": "View"
+        }
+      },
+      "notice": {
+        "text": "Not sure how to pack your cargo?",
+        "link": "Ask a manager"
+      },
+      "steps": {
+        "heading": "3 steps to delivery",
+        "s1": {
+          "title": "Sign up",
+          "text": "Create your account in a minute"
+        },
+        "s2": {
+          "title": "Estimate",
+          "text": "Calculate the cost in the calculator"
+        },
+        "s3": {
+          "title": "Request",
+          "text": "Place a request — we'll handle the rest"
+        }
+      },
+      "statsHeading": "AsDi Cargo is"
+    },
+    "tracking": {
+      "title": "Track your cargo",
+      "placeholder": "Tracking number, e.g. ASD-240001",
+      "search": "Find",
+      "notFound": "No parcel with this number. Please check the tracking number.",
+      "error": "Search failed. Please try later.",
+      "updated": "Updated {date}",
+      "account": "All your parcels are in your account"
+    },
+    "contact": {
+      "heading": "Contact us",
+      "call": "Call us",
+      "callbackTitle": "Request a call back",
+      "callbackSub": "Leave your name and phone — a manager will contact you",
+      "type": "Topic",
+      "types": {
+        "delivery": "Delivery estimate",
+        "status": "Parcel status",
+        "docs": "Documents",
+        "other": "Other"
+      },
+      "name": "Name",
+      "phone": "Phone",
+      "submit": "Send via WhatsApp",
+      "consent": "By clicking the button you agree to the processing of personal data",
+      "errName": "Enter your name",
+      "errPhone": "Enter your phone",
+      "message": "Hello! Please contact me.\nTopic: {type}\nName: {name}\nPhone: {phone}"
+    },
+    "footerExtra": {
+      "clients": "For clients",
+      "account": "My account",
+      "calculator": "Calculator",
+      "tracking": "Track cargo",
+      "points": "Pickup points"
+    }
   }
 }

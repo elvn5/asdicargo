@@ -6,10 +6,32 @@
  */
 import type { CargoPlace } from '~/utils/shippingCost';
 
-const props = withDefaults(defineProps<{ initialFrom?: string; initialTo?: string }>(), {
-  initialFrom: '',
-  initialTo: '',
-});
+const props = withDefaults(
+  defineProps<{ initialFrom?: string; initialTo?: string; variant?: 'brand' | 'light' }>(),
+  { initialFrom: '', initialTo: '', variant: 'brand' },
+);
+
+// brand — красная карточка (кабинет), light — светлая карточка сайта.
+const isLight = computed(() => props.variant === 'light');
+const ui = computed(() =>
+  isLight.value
+    ? {
+        root: 'site-card p-5 text-steel-900 sm:p-6 dark:text-steel-100',
+        row: 'bg-white dark:bg-steel-900',
+        rowHover: 'hover:bg-steel-50 dark:hover:bg-steel-800',
+        error: 'text-red-600 dark:text-red-400',
+        field: 'bg-white dark:bg-steel-900 dark:text-steel-100',
+        switchColor: 'primary' as const,
+      }
+    : {
+        root: 'rounded-brand-xl bg-brand-gradient p-4 text-white shadow-brand-card sm:p-6',
+        row: 'bg-white/15',
+        rowHover: 'hover:bg-white/25',
+        error: 'text-white/90',
+        field: 'bg-white',
+        switchColor: 'neutral' as const,
+      },
+);
 
 const WHATSAPP_PHONE = '996552165165';
 
@@ -156,11 +178,11 @@ const whatsappUrl = computed(() => {
 </script>
 
 <template>
-  <div class="rounded-brand-xl bg-brand-gradient p-4 text-white shadow-brand-card sm:p-6">
-    <h2 class="mb-4 text-lg font-semibold sm:text-xl">{{ t('search.title') }}</h2>
+  <div :class="ui.root">
+    <h2 class="mb-4 text-lg font-bold sm:text-xl">{{ t('search.title') }}</h2>
 
     <!-- Откуда ⇄ Куда -->
-    <div class="flex items-stretch overflow-hidden rounded-2xl bg-white text-steel-900 shadow-sm">
+    <div class="flex items-stretch overflow-hidden rounded-[0.9375rem] text-steel-900" :class="ui.field">
       <button
         type="button"
         class="min-w-0 flex-1 px-4 py-3.5 text-left"
@@ -188,7 +210,7 @@ const whatsappUrl = computed(() => {
         <span class="block truncate font-medium" :class="to ? '' : 'text-steel-400'">{{ to || '—' }}</span>
       </button>
     </div>
-    <div v-if="submitted && (errors.from || errors.to || errors.route)" class="mt-1.5 grid grid-cols-2 gap-2 text-xs text-white/90">
+    <div v-if="submitted && (errors.from || errors.to || errors.route)" class="mt-1.5 grid grid-cols-2 gap-2 text-xs" :class="ui.error">
       <template v-if="errors.route">
         <p class="col-span-2">{{ errors.route }}</p>
       </template>
@@ -200,12 +222,12 @@ const whatsappUrl = computed(() => {
 
     <!-- Переключатели -->
     <div class="mt-3 space-y-2">
-      <label class="flex cursor-pointer items-center gap-3 rounded-2xl bg-white/15 px-4 py-3 transition hover:bg-white/20">
-        <USwitch v-model="exact" color="neutral" />
+      <label class="flex cursor-pointer items-center gap-3 rounded-[0.9375rem] px-4 py-3 transition" :class="[ui.row, ui.rowHover]">
+        <USwitch v-model="exact" :color="ui.switchColor" />
         <span class="text-sm font-medium">{{ t('search.exact') }}</span>
       </label>
-      <label class="flex cursor-pointer items-center gap-3 rounded-2xl bg-white/15 px-4 py-3 transition hover:bg-white/20">
-        <USwitch v-model="pickup" color="neutral" />
+      <label class="flex cursor-pointer items-center gap-3 rounded-[0.9375rem] px-4 py-3 transition" :class="[ui.row, ui.rowHover]">
+        <USwitch v-model="pickup" :color="ui.switchColor" />
         <span class="text-sm font-medium">{{ t('search.pickup') }}</span>
       </label>
     </div>
@@ -216,7 +238,7 @@ const whatsappUrl = computed(() => {
         <div
           v-for="(p, i) in places"
           :key="i"
-          class="flex items-center gap-3 rounded-2xl bg-white px-4 py-3 text-steel-900"
+          class="flex items-center gap-3 rounded-[0.9375rem] px-4 py-3 text-steel-900" :class="ui.field"
         >
           <UIcon name="i-lucide-box" class="size-5 shrink-0 text-brand-600" />
           <button type="button" class="min-w-0 flex-1 text-left text-sm" @click="editPlace(i)">
@@ -237,7 +259,7 @@ const whatsappUrl = computed(() => {
         </div>
         <button
           type="button"
-          class="flex w-full items-center justify-center gap-2 rounded-2xl bg-white/15 px-4 py-3.5 text-sm font-medium transition hover:bg-white/25"
+          class="flex w-full items-center justify-center gap-2 rounded-[0.9375rem] px-4 py-3.5 text-sm font-medium transition" :class="[ui.row, ui.rowHover]"
           @click="addPlace"
         >
           <UIcon name="i-lucide-plus" class="size-5" />
@@ -255,7 +277,7 @@ const whatsappUrl = computed(() => {
           class="w-full"
           :increment="false"
           :decrement="false"
-          :ui="{ base: 'rounded-2xl bg-white px-4 py-3.5 text-left text-base text-steel-900 ring-0 placeholder:text-steel-400' }"
+          :ui="{ base: 'rounded-[0.9375rem] bg-white px-4 py-3.5 text-left text-base text-steel-900 ring-0 placeholder:text-steel-400 dark:bg-steel-900 dark:text-steel-100' }"
         />
         <UInputNumber
           v-model="volume"
@@ -268,22 +290,22 @@ const whatsappUrl = computed(() => {
           class="w-full"
           :increment="false"
           :decrement="false"
-          :ui="{ base: 'rounded-2xl bg-white px-4 py-3.5 text-left text-base text-steel-900 ring-0 placeholder:text-steel-400' }"
+          :ui="{ base: 'rounded-[0.9375rem] bg-white px-4 py-3.5 text-left text-base text-steel-900 ring-0 placeholder:text-steel-400 dark:bg-steel-900 dark:text-steel-100' }"
         />
       </template>
-      <p v-if="submitted && errors.cargo" class="text-xs text-white/90">{{ errors.cargo }}</p>
+      <p v-if="submitted && errors.cargo" class="text-xs" :class="ui.error">{{ errors.cargo }}</p>
     </div>
 
     <button
       type="button"
-      class="mt-4 w-full rounded-2xl bg-steel-950 px-4 py-3.5 font-semibold text-white transition hover:bg-black"
+      class="btn-ink mt-4 w-full"
       @click="calculate"
     >
       {{ t('search.calculate') }}
     </button>
 
     <!-- Результат -->
-    <div v-if="submitted && isValid" class="mt-4 rounded-2xl bg-white p-4 text-steel-900 sm:p-5">
+    <div v-if="submitted && isValid" class="mt-4 rounded-[1.25rem] bg-white p-4 text-steel-900 sm:p-5 dark:bg-steel-900 dark:text-steel-100">
       <p class="text-sm text-steel-500">{{ t('search.result.title') }} · {{ from }} → {{ to }}</p>
       <p class="mt-1 text-3xl font-bold text-brand-gradient">
         ≈ {{ fmt(estimate.total) }} <span class="text-lg font-semibold text-brand-700">{{ t('calculator.som') }}</span>

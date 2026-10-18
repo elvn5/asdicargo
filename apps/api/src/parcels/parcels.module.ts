@@ -3,6 +3,7 @@ import { NotificationsModule } from '@/notifications/notifications.module';
 import { Parcel, ParcelStatusHistory } from '@app/database';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ParcelTrackingController } from './parcel-tracking.controller';
 import { ParcelsController } from './parcels.controller';
 import { ParcelsService } from './parcels.service';
 
@@ -12,7 +13,7 @@ import { ParcelsService } from './parcels.service';
     AuthModule,
     NotificationsModule,
   ],
-  controllers: [ParcelsController],
+  controllers: [ParcelTrackingController, ParcelsController],
   providers: [ParcelsService],
   exports: [ParcelsService],
 })

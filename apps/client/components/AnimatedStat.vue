@@ -4,7 +4,7 @@
  * значения (напр. «10 000+» → считает 0 → 10 000, суффикс «+» остаётся статичным).
  * Анимация запускается один раз, когда блок появляется во вьюпорте.
  */
-const props = defineProps<{ value: string; label: string }>();
+const props = defineProps<{ value: string; label: string; icon?: string }>();
 
 const el = ref<HTMLElement | null>(null);
 const displayValue = ref(props.value);
@@ -41,7 +41,9 @@ function animate(): void {
   const start = performance.now();
 
   function tick(now: number): void {
-    const elapsed = Math.min((now - start) / duration, 1);
+    // Метка кадра rAF бывает чуть раньше start — без нижней границы прогресс
+    // уходит в минус, и счётчик на мгновение показывает отрицательное число.
+    const elapsed = Math.min(Math.max((now - start) / duration, 0), 1);
     const eased = 1 - (1 - elapsed) ** 3;
     displayValue.value = `${format(target * eased, separator)}${suffix}`;
     if (elapsed < 1) {
@@ -71,11 +73,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="el" class="text-center">
-    <div class="text-4xl font-bold tracking-tight tabular-nums sm:text-5xl">
+  <div ref="el" class="site-card p-5 sm:p-6">
+    <div v-if="icon" class="flex size-10 items-center justify-center rounded-full bg-brand-500 text-white">
+      <UIcon :name="icon" class="size-5" />
+    </div>
+    <div class="mt-4 text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
       {{ displayValue }}
     </div>
-    <div class="mx-auto mt-3 h-1 w-10 rounded-full bg-brand-gradient" />
-    <p class="mt-3 text-sm text-steel-300">{{ label }}</p>
+    <p class="mt-1 text-sm text-steel-600 dark:text-steel-300">{{ label }}</p>
   </div>
 </template>
