@@ -87,11 +87,38 @@ const showAccordion = computed(() => props.faq && faqItems.value.length > 0);
 // Режим «Услуги»: каждый блок h3 — крупная секция, первый абзац вступления —
 // подзаголовок шапки страницы.
 const showServices = computed(() => props.services && faqItems.value.length > 0);
-const showDirections = computed(() => props.directions && faqItems.value.length > 0);
 const introText = computed(() => {
   const match = faqIntro.value.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
   return match?.[1] ? match[1].replace(/<[^>]*>/g, '').trim() : undefined;
 });
+
+// Режим «Направления»: блоки h3, а если их нет — строки-маршруты из абзацев
+// и списков («* Бишкек → Россия»), как их часто пишут в админке.
+const ARROW = /\s(?:→|->|—|–)\s/;
+const directionLines = computed(() =>
+  [...(page.value?.content ?? '').matchAll(/<(?:p|li)[^>]*>([\s\S]*?)<\/(?:p|li)>/gi)].map((m) =>
+    (m[1] ?? '')
+      .replace(/<[^>]*>/g, '')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/^[\s*•·-]+/, '')
+      .trim(),
+  ),
+);
+const directionItems = computed(() =>
+  faqItems.value.length
+    ? faqItems.value
+    : directionLines.value
+        .filter((line) => ARROW.test(line))
+        .map((label, index) => ({ label, content: '', value: `dir-${index}` })),
+);
+const directionsIntro = computed(() => {
+  if (faqItems.value.length) return introText.value;
+  const title = page.value?.title.trim().toLowerCase();
+  return directionLines.value.find(
+    (line) => line && !ARROW.test(line) && line.toLowerCase() !== title,
+  );
+});
+const showDirections = computed(() => props.directions && directionItems.value.length > 0);
 </script>
 
 <template>
@@ -101,8 +128,8 @@ const introText = computed(() => {
   </div>
 
   <div v-else-if="page && showDirections" class="space-y-2">
-    <PageHero :title="page.title" :subtitle="introText" :image="image" />
-    <SiteDirectionsCards :sections="faqItems" />
+    <PageHero :title="page.title" :subtitle="directionsIntro" :image="image" />
+    <SiteDirectionsCards :sections="directionItems" />
   </div>
 
   <div v-else-if="page" class="space-y-2">

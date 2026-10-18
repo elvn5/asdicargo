@@ -3,8 +3,9 @@
  * Страница «Направления»: каждый блок `<h3>` из контента админки — карточка
  * маршрута с анимированной линией «откуда → куда», городами, преимуществами и
  * кнопками расчёта / заявки (маршрут подставляется в калькулятор и заявку).
- * Страны маршрута определяются по заголовку («Россия → Кыргызстан»), поэтому
- * новые направления из админки выводятся в том же стиле.
+ * Страны маршрута определяются по заголовку («Россия → Кыргызстан», «Бишкек →
+ * Казахстан»), поэтому новые направления из админки выводятся в том же стиле.
+ * Маршрут подставляется в калькулятор и заявку только для RU ↔ KG.
  */
 import { KG_CITIES, RU_CITIES } from '~/utils/cities';
 
@@ -13,7 +14,9 @@ interface DirectionSection {
   content: string;
 }
 
-type Country = 'ru' | 'kg';
+type Country = 'ru' | 'kg' | 'kz';
+/** Страны, между которыми работают калькулятор и заявки. */
+type MainCountry = 'ru' | 'kg';
 
 const props = defineProps<{ sections: DirectionSection[] }>();
 
@@ -24,21 +27,23 @@ const WHATSAPP_URL =
   'https://api.whatsapp.com/send/?phone=996552165165&type=phone_number&app_absent=0';
 
 // Город-хаб страны, который подставляется в калькулятор и заявку.
-const HUB: Record<Country, string> = { ru: RU_CITIES[0], kg: KG_CITIES[0] };
+const HUB: Record<MainCountry, string> = { ru: RU_CITIES[0], kg: KG_CITIES[0] };
 
 const COUNTRY_PATTERNS: Record<Country, RegExp> = {
-  ru: /росси|russia/i,
-  kg: /кыргыз|kyrgyz/i,
+  ru: /росси|russia|москв|moscow/i,
+  kg: /кыргыз|киргиз|kyrgyz|бишкек|bishkek/i,
+  kz: /казах|kazakh|алмат|almaty/i,
 };
 
-/** Страны в порядке упоминания в заголовке: первая — откуда, вторая — куда. */
-function routeOf(label: string): { from: Country; to: Country } | null {
-  const found = (Object.keys(COUNTRY_PATTERNS) as Country[])
-    .map((country) => ({ country, index: label.search(COUNTRY_PATTERNS[country]) }))
-    .filter((item) => item.index !== -1)
-    .sort((a, b) => a.index - b.index);
-  const [first, second] = found;
-  return first && second ? { from: first.country, to: second.country } : null;
+/** Страна конца маршрута («Россия», «Бишкек», «Казахстан»). */
+function countryOf(name: string): Country | null {
+  return (
+    (Object.keys(COUNTRY_PATTERNS) as Country[]).find((c) => COUNTRY_PATTERNS[c].test(name)) ?? null
+  );
+}
+
+function isMain(country: Country | null): country is MainCountry {
+  return country === 'ru' || country === 'kg';
 }
 
 /** Концы маршрута как они написаны в заголовке («Россия», «Кыргызстан»). */
@@ -47,16 +52,33 @@ function endpointsOf(label: string): [string, string] {
   return [parts[0] ?? label, parts[1] ?? ''];
 }
 
+/** Подпись под концом маршрута: город-хаб, если в заголовке указана страна. */
+function hubLabel(name: string, country: Country | null): string {
+  if (!isMain(country)) return '';
+  const hub = t(`site.directionsPage.hub.${country}`);
+  return name.toLowerCase().includes(HUB[country].toLowerCase()) ? '' : hub;
+}
+
 const cards = computed(() =>
   props.sections.map((section) => {
-    const route = routeOf(section.label);
     const [fromName, toName] = endpointsOf(section.label);
+    const fromCountry = countryOf(fromName);
+    const toCountry = countryOf(toName);
+    // Маршрут, который можно подставить в калькулятор и заявку (RU ↔ KG).
+    const route =
+      isMain(fromCountry) && isMain(toCountry) && fromCountry !== toCountry
+        ? { from: fromCountry, to: toCountry }
+        : null;
     return {
       ...section,
       route,
       fromName,
       toName,
-      cities: route ? t(`site.directionsPage.cities.${route.from}`).split(', ') : [],
+      fromCode: fromCountry?.toUpperCase() ?? '',
+      toCode: toCountry?.toUpperCase() ?? '',
+      fromHub: hubLabel(fromName, fromCountry),
+      toHub: hubLabel(toName, toCountry),
+      cities: isMain(fromCountry) ? t(`site.directionsPage.cities.${fromCountry}`).split(', ') : [],
       calcLink: route
         ? {
             path: localePath('/cargo-kalkulyator'),
@@ -137,13 +159,13 @@ revealOnce(stepsRef, stepsVisible);
               <!-- Откуда -->
               <div class="min-w-0 shrink-0">
                 <span
-                  v-if="card.route"
+                  v-if="card.fromCode"
                   class="inline-flex rounded-md bg-white/15 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider"
                 >
-                  {{ card.route.from === 'kg' ? 'KG' : 'RU' }}
+                  {{ card.fromCode }}
                 </span>
                 <p class="mt-2 text-xl font-extrabold leading-tight sm:text-2xl">{{ card.fromName }}</p>
-                <p v-if="card.route" class="text-sm text-white/70">{{ t(`site.directionsPage.hub.${card.route.from}`) }}</p>
+                <p v-if="card.fromHub" class="text-sm text-white/70">{{ card.fromHub }}</p>
               </div>
 
               <!-- Линия с машинкой -->
@@ -162,13 +184,13 @@ revealOnce(stepsRef, stepsVisible);
               <!-- Куда -->
               <div class="min-w-0 shrink-0 self-end text-right sm:self-auto">
                 <span
-                  v-if="card.route"
+                  v-if="card.toCode"
                   class="inline-flex rounded-md bg-white/15 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider"
                 >
-                  {{ card.route.to === 'kg' ? 'KG' : 'RU' }}
+                  {{ card.toCode }}
                 </span>
                 <p class="mt-2 text-xl font-extrabold leading-tight sm:text-2xl">{{ card.toName }}</p>
-                <p v-if="card.route" class="text-sm text-white/70">{{ t(`site.directionsPage.hub.${card.route.to}`) }}</p>
+                <p v-if="card.toHub" class="text-sm text-white/70">{{ card.toHub }}</p>
               </div>
             </div>
           </div>
@@ -176,7 +198,11 @@ revealOnce(stepsRef, stepsVisible);
           <!-- Описание -->
           <div class="flex flex-1 flex-col p-6 sm:p-8">
             <h2 class="site-heading text-2xl">{{ card.label }}</h2>
-            <div class="prose mt-2 max-w-none text-steel-600 dark:prose-invert dark:text-steel-300" v-html="card.content" />
+            <div
+              v-if="card.content"
+              class="prose mt-2 max-w-none text-steel-600 dark:prose-invert dark:text-steel-300"
+              v-html="card.content"
+            />
 
             <div v-if="card.cities.length" class="mt-5">
               <p class="text-xs font-semibold uppercase tracking-wider text-steel-500 dark:text-steel-400">
@@ -217,7 +243,7 @@ revealOnce(stepsRef, stepsVisible);
                 {{ t('site.directionsPage.request') }}
                 <UIcon name="i-lucide-arrow-right" class="size-4 transition-transform group-hover:translate-x-1" />
               </NuxtLink>
-              <span class="ml-auto text-sm font-semibold text-steel-500 dark:text-steel-400">
+              <span v-if="card.route" class="ml-auto text-sm font-semibold text-steel-500 dark:text-steel-400">
                 {{ t('calculator.rateWeight') }}
               </span>
             </div>
