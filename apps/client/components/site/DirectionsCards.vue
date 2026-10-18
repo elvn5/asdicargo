@@ -32,7 +32,7 @@ const HUB: Record<MainCountry, string> = { ru: RU_CITIES[0], kg: KG_CITIES[0] };
 const COUNTRY_PATTERNS: Record<Country, RegExp> = {
   ru: /росси|russia|москв|moscow/i,
   kg: /кыргыз|киргиз|kyrgyz|бишкек|bishkek/i,
-  kz: /казах|kazakh|алмат|almaty/i,
+  kz: /каза[хк]|kazakh|алмат|almaty/i,
 };
 
 /** Страна конца маршрута («Россия», «Бишкек», «Казахстан»). */
