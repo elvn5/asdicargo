@@ -710,6 +710,61 @@
       "calculator": "Calculator",
       "tracking": "Track cargo",
       "points": "Pickup points"
+    },
+    "servicesPage": {
+      "kicker": "Service",
+      "more": "Learn more",
+      "receive": {
+        "h": [
+          "A personal warehouse address for your orders",
+          "We accept parcels from stores and suppliers",
+          "We weigh, check and consolidate into one shipment"
+        ],
+        "cta": "Create a request",
+        "mock": {
+          "status": "Received at warehouse",
+          "weight": "Weight",
+          "places": "Packages",
+          "code": "Client code"
+        }
+      },
+      "delivery": {
+        "h": [
+          "Kyrgyzstan ⇄ Russia in both directions",
+          "50 som per kg or 10,000 som per m³",
+          "Pickup from your address on request"
+        ],
+        "cta": "Estimate the cost",
+        "mock": {
+          "route": "Route",
+          "status": "In transit",
+          "tariff": "Tariff"
+        }
+      },
+      "pickup": {
+        "h": [
+          "Warehouses and pickup points with working hours",
+          "Directions to the point in one click",
+          "“Ready for pickup” status in your account and notifications"
+        ],
+        "cta": "Addresses & contacts",
+        "mock": {
+          "point": "Pickup point",
+          "ready": "Ready for pickup",
+          "hours": "Working hours"
+        }
+      },
+      "help": {
+        "title": "Need help choosing?",
+        "text": "A manager will suggest the best way to ship your cargo and answer your questions.",
+        "whatsapp": "Message on WhatsApp",
+        "calc": "Estimate the cost"
+      },
+      "mock": {
+        "from": "Bishkek",
+        "to": "Moscow",
+        "address": "Bishkek, Aibek-Ata 1/2"
+      }
     }
   }
 }

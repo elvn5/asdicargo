@@ -5,7 +5,8 @@
  *
  * Оформление: панель-шапка с «хлебными крошками» + панель с карточкой контента.
  * Для страниц формата «вопрос-ответ» (prop `faq`) блоки `<h3>вопрос</h3>` с
- * идущим за ними ответом превращаются в аккордеон.
+ * идущим за ними ответом превращаются в аккордеон, а в режиме `services` —
+ * в крупные секции услуг.
  */
 interface SitePage {
   id: string;
@@ -15,7 +16,7 @@ interface SitePage {
   published: boolean;
 }
 
-const props = defineProps<{ slug: string; image?: string; faq?: boolean }>();
+const props = defineProps<{ slug: string; image?: string; faq?: boolean; services?: boolean }>();
 
 const config = useRuntimeConfig();
 const base = (import.meta.server ? config.apiInternalUrl : config.public.apiBaseUrl) as string;
@@ -76,10 +77,23 @@ const faqItems = computed(() => {
 });
 
 const showAccordion = computed(() => props.faq && faqItems.value.length > 0);
+
+// Режим «Услуги»: каждый блок h3 — крупная секция, первый абзац вступления —
+// подзаголовок шапки страницы.
+const showServices = computed(() => props.services && faqItems.value.length > 0);
+const introText = computed(() => {
+  const match = faqIntro.value.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
+  return match?.[1] ? match[1].replace(/<[^>]*>/g, '').trim() : undefined;
+});
 </script>
 
 <template>
-  <div v-if="page" class="space-y-2">
+  <div v-if="page && showServices" class="space-y-2">
+    <PageHero :title="page.title" :subtitle="introText" :image="image" />
+    <SiteServicesSections :sections="faqItems" />
+  </div>
+
+  <div v-else-if="page" class="space-y-2">
     <PageHero :title="page.title" :image="image" />
 
     <!-- Контент -->
