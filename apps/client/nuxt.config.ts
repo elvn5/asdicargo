@@ -35,8 +35,6 @@ export default defineNuxtConfig({
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL ?? 'https://asdicargo.com',
       // Окружение сайта: 'production' индексируется, любое другое (staging) — нет.
       siteEnv: process.env.NUXT_PUBLIC_SITE_ENV ?? 'production',
-      // Имя Telegram-бота (без @) для Telegram Login Widget.
-      telegramBotUsername: process.env.NUXT_PUBLIC_TELEGRAM_BOT_USERNAME ?? '',
     },
   },
   // Предсжатие статики (CSS/JS/шрифты) в .gz и .br на этапе билда.

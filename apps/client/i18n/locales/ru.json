@@ -112,7 +112,6 @@
     "loginButton": "Войти",
     "registerButton": "Зарегистрироваться",
     "logout": "Выйти",
-    "or": "или",
     "noAccount": "Нет аккаунта?",
     "registerLink": "Зарегистрироваться",
     "haveAccount": "Уже есть аккаунт?",
@@ -126,7 +125,6 @@
     "errNameRequired": "Введите имя",
     "errInvalidCredentials": "Неверный e-mail или пароль",
     "errEmailTaken": "Пользователь с таким e-mail уже существует",
-    "errProvider": "Не удалось войти. Попробуйте снова",
     "errNetwork": "Ошибка сети. Попробуйте позже"
   },
   "reviews": {
@@ -279,8 +277,6 @@
       "errCurrentPassword": "Текущий пароль указан неверно",
       "errEmailTaken": "Этот e-mail уже занят",
       "errSave": "Не удалось сохранить. Попробуйте ещё раз",
-      "telegram": "Telegram",
-      "telegramConnected": "Подключён",
       "memberSince": "С нами с {date}"
     },
     "loadError": "Не удалось загрузить данные",

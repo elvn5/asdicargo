@@ -154,10 +154,6 @@ const memberSince = computed(() =>
         <div class="min-w-0">
           <p class="truncate text-lg font-semibold">{{ auth.displayName }}</p>
           <p class="text-sm text-steel-500 dark:text-steel-400">{{ t('account.profile.memberSince', { date: memberSince }) }}</p>
-          <p v-if="auth.user.telegramId" class="mt-1 inline-flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400">
-            <UIcon name="i-lucide-send" class="size-3.5" />
-            {{ t('account.profile.telegram') }}: {{ t('account.profile.telegramConnected') }}
-          </p>
         </div>
       </div>
       <div class="sm:ml-auto sm:w-64">

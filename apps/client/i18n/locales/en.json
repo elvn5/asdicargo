@@ -112,7 +112,6 @@
     "loginButton": "Sign in",
     "registerButton": "Sign up",
     "logout": "Sign out",
-    "or": "or",
     "noAccount": "No account?",
     "registerLink": "Sign up",
     "haveAccount": "Already have an account?",
@@ -126,7 +125,6 @@
     "errNameRequired": "Enter your name",
     "errInvalidCredentials": "Invalid email or password",
     "errEmailTaken": "A user with this email already exists",
-    "errProvider": "Sign-in failed. Please try again",
     "errNetwork": "Network error. Please try later"
   },
   "reviews": {
@@ -279,8 +277,6 @@
       "errCurrentPassword": "Current password is incorrect",
       "errEmailTaken": "This email is already taken",
       "errSave": "Could not save. Please try again",
-      "telegram": "Telegram",
-      "telegramConnected": "Connected",
       "memberSince": "Member since {date}"
     },
     "loadError": "Failed to load data",

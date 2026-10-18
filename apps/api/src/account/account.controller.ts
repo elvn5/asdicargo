@@ -5,12 +5,10 @@ import {
   type ChangePasswordDto,
   type LoginDto,
   type RegisterDto,
-  type TelegramLoginDto,
   type UpdateProfileDto,
   changePasswordSchema,
   loginSchema,
   registerSchema,
-  telegramLoginSchema,
   updateProfileSchema,
 } from './account.dto';
 import { AccountService, type PublicUser } from './account.service';
@@ -50,17 +48,6 @@ export class AccountController {
     @Res({ passthrough: true }) res: Response,
   ): Promise<PublicUser> {
     const { user, token } = await this.accountService.login(dto);
-    res.cookie(USER_COOKIE, token, cookieOptions);
-    return user;
-  }
-
-  @Post('telegram')
-  @HttpCode(200)
-  async telegram(
-    @Body(new ZodValidationPipe(telegramLoginSchema)) dto: TelegramLoginDto,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<PublicUser> {
-    const { user, token } = await this.accountService.loginWithTelegram(dto);
     res.cookie(USER_COOKIE, token, cookieOptions);
     return user;
   }

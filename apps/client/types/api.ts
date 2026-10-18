@@ -6,7 +6,6 @@ export interface AuthUser {
   lastName: string | null;
   username: string | null;
   avatarUrl: string | null;
-  telegramId: string | null;
   phone: string | null;
   hasPassword: boolean;
   createdAt: string;
@@ -53,17 +52,6 @@ export interface PublicSettings {
   telegramContact: string | null;
   email: string | null;
   workingHours: string | null;
-}
-
-// Полезная нагрузка Telegram Login Widget (data-onauth).
-export interface TelegramAuthData {
-  id: number;
-  first_name?: string;
-  last_name?: string;
-  username?: string;
-  photo_url?: string;
-  auth_date: number;
-  hash: string;
 }
 
 export type AddressKind = 'warehouse' | 'pickup' | 'office';

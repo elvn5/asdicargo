@@ -10,9 +10,6 @@ export const envSchema = z.object({
   JWT_SECRET: z.string().min(16, 'JWT_SECRET must be at least 16 characters'),
   JWT_EXPIRES_IN: z.string().default('12h'),
   ADMIN_PASSWORD: z.string().min(1, 'ADMIN_PASSWORD is required'),
-  // Токен Telegram-бота — нужен и для проверки подписи Telegram Login Widget.
-  // Необязателен: без него вход через Telegram просто недоступен.
-  BOT_TOKEN: z.string().optional(),
   // Время жизни пользовательской сессии сайта (cookie user_token).
   USER_JWT_EXPIRES_IN: z.string().default('30d'),
 });

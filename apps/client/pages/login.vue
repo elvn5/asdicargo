@@ -3,16 +3,12 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
 import { z } from 'zod';
 import { ApiError } from '~/composables/useApi';
-import type { TelegramAuthData } from '~/types/api';
 import { useAuthStore } from '~/stores/auth';
 
 const { t } = useI18n();
 const localePath = useLocalePath();
 const route = useRoute();
-const config = useRuntimeConfig();
 const auth = useAuthStore();
-
-const botUsername = String(config.public.telegramBotUsername ?? '');
 
 useHead({ title: t('auth.loginTitle') });
 
@@ -32,7 +28,7 @@ const [password, passwordAttrs] = defineField('password');
 function redirectAfterAuth(): Promise<unknown> {
   const raw = typeof route.query.redirect === 'string' ? route.query.redirect : null;
   // Разрешаем только внутренние относительные пути (защита от open-redirect).
-  const target = raw && raw.startsWith('/') && !raw.startsWith('//') ? raw : null;
+  const target = raw?.startsWith('/') && !raw.startsWith('//') ? raw : null;
   return navigateTo(target ?? localePath('/account'));
 }
 
@@ -51,16 +47,6 @@ const onSubmit = handleSubmit(async (values) => {
     loading.value = false;
   }
 });
-
-async function onTelegram(data: TelegramAuthData): Promise<void> {
-  errorMessage.value = null;
-  try {
-    await auth.loginWithTelegram(data);
-    await redirectAfterAuth();
-  } catch {
-    errorMessage.value = t('auth.errProvider');
-  }
-}
 </script>
 
 <template>
@@ -106,22 +92,6 @@ async function onTelegram(data: TelegramAuthData): Promise<void> {
         {{ t('auth.registerLink') }}
       </NuxtLink>
     </p>
-
-    <div v-if="botUsername" class="my-6 flex items-center gap-3">
-      <span class="h-px flex-1 bg-steel-200 dark:bg-steel-800" />
-      <span class="text-xs uppercase tracking-wider text-steel-400">{{ t('auth.or') }}</span>
-      <span class="h-px flex-1 bg-steel-200 dark:bg-steel-800" />
-    </div>
-
-    <div class="flex flex-col items-center gap-3">
-      <ClientOnly>
-        <TelegramLoginButton
-          v-if="botUsername"
-          :bot-username="botUsername"
-          @auth="onTelegram"
-        />
-      </ClientOnly>
-    </div>
     </div>
   </div>
 </template>

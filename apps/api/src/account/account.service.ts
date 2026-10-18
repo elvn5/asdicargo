@@ -1,11 +1,9 @@
-import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
 import { User } from '@app/database';
 import {
   BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
-  ServiceUnavailableException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -13,13 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import bcrypt from 'bcryptjs';
 import type { Repository } from 'typeorm';
-import type {
-  ChangePasswordDto,
-  LoginDto,
-  RegisterDto,
-  TelegramLoginDto,
-  UpdateProfileDto,
-} from './account.dto';
+import type { ChangePasswordDto, LoginDto, RegisterDto, UpdateProfileDto } from './account.dto';
 
 // Публичное представление пользователя (без passwordHash).
 export type PublicUser = {
@@ -29,7 +21,6 @@ export type PublicUser = {
   lastName: string | null;
   username: string | null;
   avatarUrl: string | null;
-  telegramId: string | null;
   phone: string | null;
   // Задан ли пароль: кабинет спрашивает текущий пароль только в этом случае.
   hasPassword: boolean;
@@ -37,8 +28,6 @@ export type PublicUser = {
 };
 
 const BCRYPT_ROUNDS = 12;
-// Telegram-подпись считается устаревшей через 24 часа.
-const TELEGRAM_AUTH_TTL_SECONDS = 24 * 60 * 60;
 
 @Injectable()
 export class AccountService {
@@ -87,35 +76,6 @@ export class AccountService {
     return { user: this.toPublic(user), token: this.buildToken(user) };
   }
 
-  async loginWithTelegram(dto: TelegramLoginDto): Promise<{ user: PublicUser; token: string }> {
-    const botToken = this.configService.get<string>('BOT_TOKEN');
-    if (!botToken) {
-      throw new ServiceUnavailableException('Вход через Telegram не настроен');
-    }
-
-    this.verifyTelegramSignature(dto, botToken);
-
-    const now = Math.floor(Date.now() / 1000);
-    if (now - dto.auth_date > TELEGRAM_AUTH_TTL_SECONDS) {
-      throw new UnauthorizedException('Данные Telegram устарели, попробуйте снова');
-    }
-
-    const telegramId = String(dto.id);
-    let user = await this.users.findOne({ where: { telegramId } });
-    if (!user) {
-      user = this.users.create({ telegramId });
-    }
-    user.firstName = dto.first_name ?? user.firstName;
-    user.lastName = dto.last_name ?? user.lastName;
-    user.username = dto.username ?? user.username;
-    user.avatarUrl = dto.photo_url ?? user.avatarUrl;
-    const saved = await this.users.save(user);
-    // Перечитываем с passwordHash, чтобы корректно отдать hasPassword.
-    const fresh = await this.findWithPassword(saved.id);
-
-    return { user: this.toPublic(fresh), token: this.buildToken(fresh) };
-  }
-
   async getProfile(userId: string): Promise<PublicUser> {
     return this.toPublic(await this.findWithPassword(userId));
   }
@@ -125,7 +85,7 @@ export class AccountService {
 
     if (dto.email !== user.email) {
       // Нельзя убрать e-mail, если по нему входят паролем, — иначе потеряется доступ.
-      if (!dto.email && user.passwordHash && !user.telegramId) {
+      if (!dto.email && user.passwordHash) {
         throw new BadRequestException('E-mail нужен для входа в аккаунт');
       }
       if (dto.email) {
@@ -176,24 +136,6 @@ export class AccountService {
     );
   }
 
-  private verifyTelegramSignature(dto: TelegramLoginDto, botToken: string): void {
-    const { hash, ...fields } = dto;
-    const dataCheckString = Object.entries(fields)
-      .filter(([, value]) => value !== undefined && value !== null)
-      .map(([key, value]) => `${key}=${value}`)
-      .sort()
-      .join('\n');
-
-    const secretKey = createHash('sha256').update(botToken).digest();
-    const computed = createHmac('sha256', secretKey).update(dataCheckString).digest('hex');
-
-    const computedBuf = Buffer.from(computed, 'hex');
-    const providedBuf = Buffer.from(hash, 'hex');
-    if (computedBuf.length !== providedBuf.length || !timingSafeEqual(computedBuf, providedBuf)) {
-      throw new UnauthorizedException('Не удалось проверить данные Telegram');
-    }
-  }
-
   private toPublic(user: User): PublicUser {
     return {
       id: user.id,
@@ -202,7 +144,6 @@ export class AccountService {
       lastName: user.lastName,
       username: user.username,
       avatarUrl: user.avatarUrl,
-      telegramId: user.telegramId,
       phone: user.phone,
       hasPassword: Boolean(user.passwordHash),
       createdAt: user.createdAt,

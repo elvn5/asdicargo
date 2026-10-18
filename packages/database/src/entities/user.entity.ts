@@ -11,7 +11,7 @@ import { Parcel } from './parcel.entity';
 
 /**
  * Способ, которым пользователь завёл аккаунт / вошёл в последний раз.
- * telegram — через бота или Telegram Login Widget на сайте;
+ * telegram — через бывшего бота или Telegram Login Widget (вход сейчас отключён);
  * email — регистрация по e-mail и паролю.
  */
 export type AuthProvider = 'telegram' | 'email';

@@ -14,18 +14,6 @@ export const loginSchema = z.object({
 });
 export type LoginDto = z.infer<typeof loginSchema>;
 
-// Полезная нагрузка Telegram Login Widget (data-onauth / callback).
-export const telegramLoginSchema = z.object({
-  id: z.coerce.number().int(),
-  first_name: z.string().optional(),
-  last_name: z.string().optional(),
-  username: z.string().optional(),
-  photo_url: z.string().url().optional(),
-  auth_date: z.coerce.number().int(),
-  hash: z.string().min(1),
-});
-export type TelegramLoginDto = z.infer<typeof telegramLoginSchema>;
-
 // Пустые строки из формы считаем «не заполнено».
 const optionalText = (max: number) =>
   z
@@ -56,7 +44,7 @@ export const updateProfileSchema = z.object({
 export type UpdateProfileDto = z.infer<typeof updateProfileSchema>;
 
 export const changePasswordSchema = z.object({
-  // Обязателен, если пароль уже был задан (пользователи Telegram задают его впервые).
+  // Обязателен, если пароль уже был задан.
   currentPassword: z.string().max(128).optional(),
   newPassword: z.string().min(8, 'Минимум 8 символов').max(128),
 });

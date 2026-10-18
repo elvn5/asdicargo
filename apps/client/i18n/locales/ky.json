@@ -112,7 +112,6 @@
     "loginButton": "Кирүү",
     "registerButton": "Катталуу",
     "logout": "Чыгуу",
-    "or": "же",
     "noAccount": "Аккаунт жокпу?",
     "registerLink": "Катталуу",
     "haveAccount": "Аккаунт барбы?",
@@ -126,7 +125,6 @@
     "errNameRequired": "Атыңызды киргизиңиз",
     "errInvalidCredentials": "E-mail же сырсөз туура эмес",
     "errEmailTaken": "Мындай e-mail менен колдонуучу бар",
-    "errProvider": "Кире алган жок. Кайра аракет кылыңыз",
     "errNetwork": "Тармак катасы. Кийинчерээк аракет кылыңыз"
   },
   "reviews": {
@@ -279,8 +277,6 @@
       "errCurrentPassword": "Учурдагы сырсөз туура эмес",
       "errEmailTaken": "Бул e-mail бош эмес",
       "errSave": "Сактоо мүмкүн болгон жок. Кайра аракет кылыңыз",
-      "telegram": "Telegram",
-      "telegramConnected": "Туташкан",
       "memberSince": "{date} бери биз менен"
     },
     "loadError": "Маалыматты жүктөө мүмкүн болгон жок",
