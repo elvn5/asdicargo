@@ -758,6 +758,45 @@
       "legalName": "AsDi Cargo LLC",
       "legalAddress": "Registered address",
       "legalNote": "A manager will provide company details for contracts and invoices on request."
+    },
+    "directionsPage": {
+      "kicker": "Route",
+      "hub": {
+        "ru": "Moscow and regions",
+        "kg": "Bishkek and regions"
+      },
+      "cities": {
+        "ru": "Moscow, Saint Petersburg, Novosibirsk, Yekaterinburg, Kazan",
+        "kg": "Bishkek, Osh, Jalal-Abad, Karakol, Tokmok"
+      },
+      "citiesLabel": "We accept cargo from",
+      "citiesMore": "and other cities",
+      "features": [
+        "Receiving and consolidation at the warehouse",
+        "Tracking at every step",
+        "Pickup point collection or cargo pickup on request"
+      ],
+      "calc": "Estimate",
+      "request": "Create a request",
+      "steps": {
+        "heading": "How your cargo travels",
+        "receive": {
+          "title": "Receiving",
+          "text": "We accept parcels and cargo at the warehouse"
+        },
+        "consolidate": {
+          "title": "Consolidation",
+          "text": "We weigh, pack and assemble the shipment"
+        },
+        "transit": {
+          "title": "In transit",
+          "text": "Your cargo is on its way — follow the status in your account"
+        },
+        "pickup": {
+          "title": "Pickup",
+          "text": "Collect your cargo at a convenient pickup point"
+        }
+      }
     }
   }
 }

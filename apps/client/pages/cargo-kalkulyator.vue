@@ -1,5 +1,14 @@
 <script setup lang="ts">
 const { t } = useI18n();
+const route = useRoute();
+
+// Маршрут из ссылок «Рассчитать» (например, со страницы «Направления»).
+const queryCity = (key: 'from' | 'to'): string => {
+  const value = route.query[key];
+  return typeof value === 'string' ? value.slice(0, 100) : '';
+};
+const initialFrom = queryCity('from') || 'Бишкек';
+const initialTo = queryCity('to');
 
 useSeoMeta({
   title: () => `${t('calculator.title')} — AsDi Cargo`,
@@ -18,7 +27,7 @@ useHead(() => ({ link: seoAlternates.value }));
 
     <SitePanel>
       <div class="grid items-start gap-4 lg:grid-cols-[1fr_20rem]">
-        <ShippingSearch initial-from="Бишкек" variant="light" />
+        <ShippingSearch :initial-from="initialFrom" :initial-to="initialTo" variant="light" />
 
         <!-- Тарифы и правила расчёта -->
         <aside class="site-card space-y-4 p-6">

@@ -114,6 +114,86 @@
 .card-notch {
   --notch-r: 1.875rem;
   --notch-c: calc(100% - 1.625rem);
-  -webkit-mask: radial-gradient(circle var(--notch-r) at var(--notch-c) var(--notch-c), #0000 calc(100% - 0.5px), #000);
-  mask: radial-gradient(circle var(--notch-r) at var(--notch-c) var(--notch-c), #0000 calc(100% - 0.5px), #000);
+  -webkit-mask: radial-gradient(
+    circle var(--notch-r) at var(--notch-c) var(--notch-c),
+    #0000 calc(100% - 0.5px),
+    #000
+  );
+  mask: radial-gradient(
+    circle var(--notch-r) at var(--notch-c) var(--notch-c),
+    #0000 calc(100% - 0.5px),
+    #000
+  );
+}
+
+/* Страница «Направления»: «бегущая» пунктирная линия маршрута и машинка,
+   которая едет по ней от точки отправки к точке назначения. */
+.route-line {
+  background-image: linear-gradient(90deg, currentColor 50%, transparent 50%);
+  background-size: 14px 2px;
+  background-repeat: repeat-x;
+  background-position: 0 50%;
+  animation: route-flow 0.9s linear infinite;
+}
+.route-truck {
+  animation: route-drive 4.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+.route-pulse {
+  animation: route-pulse 2.2s ease-out infinite;
+}
+@keyframes route-flow {
+  to {
+    background-position: 14px 50%;
+  }
+}
+@keyframes route-drive {
+  0% {
+    left: 0%;
+    opacity: 0;
+  }
+  8%,
+  88% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+@keyframes route-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+/* Появление блоков при прокрутке (класс is-visible ставит IntersectionObserver). */
+.reveal {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-line,
+  .route-truck,
+  .route-pulse {
+    animation: none;
+  }
+  .route-truck {
+    left: 50%;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
