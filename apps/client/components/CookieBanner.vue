@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { t } = useI18n();
+const localePath = useLocalePath();
 
 const accepted = ref(true); // start hidden to avoid flash
 
@@ -31,6 +32,9 @@ function accept() {
       >
         <p class="text-sm text-steel-600 dark:text-steel-300">
           {{ t('cookie.text') }}
+          <NuxtLink :to="localePath('/politika-konfidentsialnosti')" class="font-semibold text-brand-600 hover:underline dark:text-brand-400">
+            {{ t('site.privacy.cookieMore') }}
+          </NuxtLink>
         </p>
         <UButton
           color="primary"

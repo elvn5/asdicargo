@@ -20,10 +20,11 @@ const STATIC_PATHS = [
   '/cargo-uslugi',
   '/cargo-napravleniya',
   '/cargo-kalkulyator',
-  '/cargo-dokumenti',
   '/cargo-faq',
   '/cargo-kontakty',
+  '/cargo-o-nas',
   '/cargo-blog',
+  '/politika-konfidentsialnosti',
 ];
 
 function xmlEscape(value: string): string {

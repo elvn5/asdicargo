@@ -3,8 +3,8 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
 import { z } from 'zod';
 import { ApiError } from '~/composables/useApi';
-import type { TelegramAuthData } from '~/types/api';
 import { useAuthStore } from '~/stores/auth';
+import type { TelegramAuthData } from '~/types/api';
 
 const { t } = useI18n();
 const localePath = useLocalePath();
@@ -117,6 +117,12 @@ async function onTelegram(data: TelegramAuthData): Promise<void> {
       <UButton type="submit" :loading="loading" block class="justify-center">
         {{ t('auth.registerButton') }}
       </UButton>
+      <p class="text-center text-xs text-steel-500 dark:text-steel-400">
+        {{ t('site.privacy.consentPrefix') }}
+        <NuxtLink :to="localePath('/politika-konfidentsialnosti')" class="text-brand-600 hover:underline dark:text-brand-400">
+          {{ t('site.privacy.consentLink') }}
+        </NuxtLink>
+      </p>
     </form>
 
     <p class="mt-4 text-center text-sm text-steel-500 dark:text-steel-400">

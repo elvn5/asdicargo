@@ -5,7 +5,6 @@
     "contacts": "Contacts",
     "blog": "Blog",
     "directions": "Directions",
-    "documents": "Documents",
     "calculator": "Cost Calculator",
     "faq": "FAQ",
     "calculatorShort": "Calculator"
@@ -24,7 +23,6 @@
     "about": "About us",
     "reviews": "Reviews",
     "faq": "FAQ",
-    "documents": "Documents",
     "blog": "Blog",
     "contacts": "Contacts",
     "contactsTitle": "Contacts",
@@ -699,7 +697,6 @@
       "name": "Name",
       "phone": "Phone",
       "submit": "Send via WhatsApp",
-      "consent": "By clicking the button you agree to the processing of personal data",
       "errName": "Enter your name",
       "errPhone": "Enter your phone",
       "message": "Hello! Please contact me.\nTopic: {type}\nName: {name}\nPhone: {phone}"
@@ -765,6 +762,31 @@
         "to": "Moscow",
         "address": "Bishkek, Aibek-Ata 1/2"
       }
+    },
+    "privacy": {
+      "link": "Privacy Policy",
+      "consentPrefix": "By clicking the button you agree to the",
+      "consentLink": "Privacy Policy and the processing of personal data",
+      "cookieMore": "Learn more"
+    },
+    "contactsPage": {
+      "title": "Contacts",
+      "sub": "Get in touch in any convenient way — we'll answer your questions and help you book a shipment.",
+      "phone": "Phone",
+      "call": "Call",
+      "whatsapp": "WhatsApp",
+      "write": "Message",
+      "telegram": "Telegram",
+      "email": "E-mail",
+      "hours": "Working hours",
+      "hoursValue": "09:00–19:00 (GMT+6)",
+      "pointsTitle": "Addresses & pickup points",
+      "pointsSub": "Where to drop off cargo and collect parcels.",
+      "office": "Head office",
+      "legalTitle": "Legal information",
+      "legalName": "AsDi Cargo LLC",
+      "legalAddress": "Registered address",
+      "legalNote": "A manager will provide company details for contracts and invoices on request."
     }
   }
 }

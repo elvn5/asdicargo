@@ -7,6 +7,7 @@ const WHATSAPP_PHONE = '996552165165';
 const TYPES = ['delivery', 'status', 'docs', 'other'] as const;
 
 const { t } = useI18n();
+const localePath = useLocalePath();
 const type = ref<(typeof TYPES)[number]>('delivery');
 const name = ref('');
 const phone = ref('');
@@ -76,11 +77,16 @@ function submit(): void {
         <p v-if="submitted && errors.phone" class="mt-1 text-xs text-white/90">{{ errors.phone }}</p>
       </div>
       <div class="flex flex-col gap-3 sm:col-span-3 sm:flex-row sm:items-center">
-        <button type="submit" class="btn-ink sm:w-auto">
+        <button type="submit" class="btn-ink shrink-0 whitespace-nowrap sm:w-auto">
           <UIcon name="i-lucide-message-circle" class="size-5" />
           {{ t('site.contact.submit') }}
         </button>
-        <p class="text-xs text-white/70">{{ t('site.contact.consent') }}</p>
+        <p class="text-xs text-white/70">
+          {{ t('site.privacy.consentPrefix') }}
+          <NuxtLink :to="localePath('/politika-konfidentsialnosti')" class="underline underline-offset-2 hover:text-white">
+            {{ t('site.privacy.consentLink') }}
+          </NuxtLink>
+        </p>
       </div>
     </form>
   </div>

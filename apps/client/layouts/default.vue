@@ -10,7 +10,6 @@ const links = computed(
     { label: t('nav.services'), to: localePath('/cargo-uslugi') },
     { label: t('nav.directions'), to: localePath('/cargo-napravleniya') },
     { label: t('nav.calculatorShort'), to: localePath('/cargo-kalkulyator') },
-    { label: t('nav.documents'), to: localePath('/cargo-dokumenti') },
     { label: t('nav.faq'), to: localePath('/cargo-faq') },
     { label: t('nav.blog'), to: localePath('/cargo-blog') },
     { label: t('nav.contacts'), to: localePath('/cargo-kontakty') },
@@ -66,7 +65,6 @@ const footerColumns = computed(() => [
     title: t('site.footerExtra.clients'),
     items: [
       { label: t('site.footerExtra.account'), to: localePath('/account') },
-      { label: t('footer.documents'), to: localePath('/cargo-dokumenti') },
       { label: t('footer.faq'), to: localePath('/cargo-faq') },
       { label: t('footer.blog'), to: localePath('/cargo-blog') },
     ],
@@ -286,6 +284,9 @@ const footerColumns = computed(() => [
         <div class="border-t border-white/10">
           <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-white/50 sm:flex-row sm:px-8">
             <span>{{ t('footer.copyright') }}</span>
+            <NuxtLink :to="localePath('/politika-konfidentsialnosti')" class="transition hover:text-white">
+              {{ t('site.privacy.link') }}
+            </NuxtLink>
             <span v-if="versionLabel" class="select-none text-transparent transition-colors duration-300 hover:text-white/50">
               {{ versionLabel }}
             </span>
