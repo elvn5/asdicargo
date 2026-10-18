@@ -58,7 +58,6 @@ const footerColumns = computed(() => [
       { label: t('nav.services'), to: localePath('/cargo-uslugi') },
       { label: t('nav.directions'), to: localePath('/cargo-napravleniya') },
       { label: t('site.footerExtra.calculator'), to: localePath('/cargo-kalkulyator') },
-      { label: t('site.footerExtra.tracking'), to: `${localePath('/')}#tracking` },
     ],
   },
   {
@@ -87,15 +86,7 @@ const footerColumns = computed(() => [
       <div class="site-panel shadow-[0_8px_24px_-16px_rgba(0,0,0,0.25)]">
         <div class="mx-auto max-w-6xl px-4 sm:px-6">
           <!-- Служебная строка (десктоп) -->
-          <div class="hidden items-center justify-between border-b border-steel-100 py-2 text-xs lg:flex dark:border-steel-800">
-            <div class="flex items-center gap-1.5 text-steel-600 dark:text-steel-300">
-              <UIcon name="i-lucide-map-pin" class="size-4 text-brand-500" />
-              <span class="font-semibold text-steel-900 dark:text-white">{{ t('site.header.location') }}</span>
-              <span aria-hidden="true">·</span>
-              <NuxtLink :to="localePath('/cargo-kontakty')" class="text-brand-600 hover:underline dark:text-brand-400">
-                {{ t('site.header.points') }}
-              </NuxtLink>
-            </div>
+          <div class="hidden items-center justify-end border-b border-steel-100 py-2 text-xs lg:flex dark:border-steel-800">
             <div class="flex items-center gap-4 text-steel-700 dark:text-steel-200">
               <NuxtLink :to="`${localePath('/')}#contact`" class="font-medium hover:text-brand-600">
                 {{ t('site.header.callback') }}

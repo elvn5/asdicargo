@@ -56,7 +56,7 @@ const stats = computed(() =>
 const features = computed(() => [
   { key: 'f1', icon: 'i-lucide-award', to: localePath('/cargo-o-nas') },
   { key: 'f2', icon: 'i-lucide-calculator', to: localePath('/cargo-kalkulyator') },
-  { key: 'f3', icon: 'i-lucide-radar', to: '#tracking' },
+  { key: 'f3', icon: 'i-lucide-file-check', to: localePath('/cargo-uslugi') },
   { key: 'f4', icon: 'i-lucide-headset', to: localePath('/cargo-kontakty') },
 ]);
 
@@ -64,7 +64,7 @@ const features = computed(() => [
 const quickLinks = computed(() => [
   { key: 'f1', icon: 'i-lucide-boxes', to: localePath('/cargo-uslugi') },
   { key: 'f2', icon: 'i-lucide-clipboard-list', to: localePath('/account/requests/new') },
-  { key: 'f3', icon: 'i-lucide-radar', to: '#tracking' },
+  { key: 'f3', icon: 'i-lucide-calculator', to: localePath('/cargo-kalkulyator') },
 ]);
 
 // «3 шага к доставке».
@@ -121,7 +121,7 @@ const reviews = ['r1', 'r2', 'r3'] as const;
           </div>
         </div>
 
-        <!-- Расчёт, подсказка, трекинг -->
+        <!-- Расчёт и подсказка -->
         <div class="space-y-2">
           <ShippingSearch initial-from="Бишкек" variant="light" />
           <a
@@ -136,7 +136,6 @@ const reviews = ['r1', 'r2', 'r3'] as const;
               <span class="text-brand-600 dark:text-brand-400">{{ t('site.home.notice.link') }}</span>
             </span>
           </a>
-          <SiteTrackingWidget />
         </div>
       </div>
     </section>

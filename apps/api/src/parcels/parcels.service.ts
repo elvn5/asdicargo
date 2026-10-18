@@ -1,16 +1,9 @@
 import { NotificationsService } from '@/notifications/notifications.service';
-import { NotificationType, Parcel, ParcelStatus, ParcelStatusHistory } from '@app/database';
+import { NotificationType, Parcel, ParcelStatusHistory } from '@app/database';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 import type { CreateParcelDto, UpdateParcelDto } from './parcel.dto';
-
-export interface PublicTracking {
-  trackNumber: string;
-  status: ParcelStatus;
-  updatedAt: Date;
-  history: Array<{ status: ParcelStatus; createdAt: Date }>;
-}
 
 @Injectable()
 export class ParcelsService {
@@ -24,23 +17,6 @@ export class ParcelsService {
 
   findAll(): Promise<Parcel[]> {
     return this.repository.find({ relations: ['user'], order: { createdAt: 'DESC' } });
-  }
-
-  /** Поиск по трек-номеру без учёта регистра; только публичные поля. */
-  async findPublicTracking(trackNumber: string): Promise<PublicTracking | null> {
-    const parcel = await this.repository
-      .createQueryBuilder('parcel')
-      .leftJoinAndSelect('parcel.history', 'history')
-      .where('LOWER(parcel.trackNumber) = LOWER(:trackNumber)', { trackNumber })
-      .orderBy('history.createdAt', 'ASC')
-      .getOne();
-    if (!parcel) return null;
-    return {
-      trackNumber: parcel.trackNumber,
-      status: parcel.status,
-      updatedAt: parcel.updatedAt,
-      history: (parcel.history ?? []).map((h) => ({ status: h.status, createdAt: h.createdAt })),
-    };
   }
 
   async findOne(id: string): Promise<Parcel> {

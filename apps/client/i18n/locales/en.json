@@ -169,8 +169,8 @@
       "text": "Estimate the cost upfront with the online calculator — no hidden fees."
     },
     "f3": {
-      "title": "Real-time tracking",
-      "text": "Follow your parcel status on the website and in your account at every step."
+      "title": "Turnkey paperwork",
+      "text": "We prepare all the documents for your shipment — invoice, packing list, CMR and accompanying papers."
     },
     "f4": {
       "title": "24/7 support",
@@ -582,8 +582,6 @@
   },
   "site": {
     "header": {
-      "location": "Bishkek",
-      "points": "Pickup points",
       "callback": "Request a call",
       "account": "My account"
     },
@@ -602,8 +600,8 @@
           "text": "Estimate and book in a couple of minutes"
         },
         "f3": {
-          "title": "Tracking",
-          "text": "Parcel status at every stage"
+          "title": "Calculator",
+          "text": "Delivery cost in a minute"
         }
       },
       "promo": {
@@ -644,15 +642,6 @@
       },
       "statsHeading": "AsDi Cargo is"
     },
-    "tracking": {
-      "title": "Track your cargo",
-      "placeholder": "Tracking number, e.g. ASD-240001",
-      "search": "Find",
-      "notFound": "No parcel with this number. Please check the tracking number.",
-      "error": "Search failed. Please try later.",
-      "updated": "Updated {date}",
-      "account": "All your parcels are in your account"
-    },
     "contact": {
       "heading": "Contact us",
       "call": "Call us",
@@ -676,7 +665,6 @@
       "clients": "For clients",
       "account": "My account",
       "calculator": "Calculator",
-      "tracking": "Track cargo",
       "points": "Pickup points"
     },
     "servicesPage": {
@@ -778,7 +766,7 @@
       "citiesMore": "and other cities",
       "features": [
         "Receiving and consolidation at the warehouse",
-        "Tracking at every step",
+        "Shipping documents prepared for you",
         "Pickup point collection or cargo pickup on request"
       ],
       "calc": "Estimate",
